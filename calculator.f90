@@ -59,12 +59,12 @@ subroutine warizan()
 end subroutine warizan
 
 subroutine heihoukon()
-    real(8) :: x = 0
+    double precision :: x = 0
     write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     write (*,fmt='(a)', advance='no') '値を入力してください。\n'
     read *, x
     print*, '\n答え'
-    print*, sqrt(x)
+    print*, dsqrt(x)
     print*, '\nEnterを押してください。'
     read *
     write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
