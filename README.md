@@ -5,7 +5,7 @@
 Fortranコンパイラーインストール
 $ sudo apt install gfortran
 コンパイル
-$ gfortran -O3 calculator.f90 -o calculator
+$ gfortran -O3 -fbackslash calculator.f90 -o calculator
 実行
 $ ./calculator
 ```
