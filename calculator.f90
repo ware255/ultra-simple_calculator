@@ -1,6 +1,7 @@
 subroutine tasizan()
-    real(8) :: x = 0
-    real(8) :: y = 0
+    implicit none
+    real(16) :: x = 0
+    real(16) :: y = 0
     write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     write (*,fmt='(a)', advance='no') '値を入力してください。\n'
     read *, x
@@ -14,8 +15,9 @@ subroutine tasizan()
 end subroutine tasizan
 
 subroutine hikizan()
-    real(8) :: x = 0
-    real(8) :: y = 0
+    implicit none
+    real(16) :: x = 0
+    real(16) :: y = 0
     write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     write (*,fmt='(a)', advance='no') '値を入力してください。\n'
     read *, x
@@ -29,8 +31,9 @@ subroutine hikizan()
 end subroutine hikizan
 
 subroutine kakezan()
-    real(8) :: x = 0
-    real(8) :: y = 0
+    implicit none
+    real(16) :: x = 0
+    real(16) :: y = 0
     write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     write (*,fmt='(a)', advance='no') '値を入力してください。\n'
     read *, x
@@ -44,8 +47,9 @@ subroutine kakezan()
 end subroutine kakezan
 
 subroutine warizan()
-    real(8) :: x = 0
-    real(8) :: y = 0
+    implicit none
+    real(16) :: x = 0
+    real(16) :: y = 0
     write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     write (*,fmt='(a)', advance='no') '値を入力してください。\n'
     read *, x
@@ -59,19 +63,21 @@ subroutine warizan()
 end subroutine warizan
 
 subroutine heihoukon()
-    double precision :: x = 0
-    integer i, v1, v2
+    implicit none
+    real(16) :: x = 0 !double precision :: x = 0
+    integer(16) i
+    integer v1, v2
     v1 = 2;v2 = 3
     write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     write (*,fmt='(a)', advance='no') '値を入力してください。\n'
     read *, x
     print*, '\n近似値'
-    print*, dsqrt(x)
+    print*, sqrt(x)
     i = int(x)
     if (i .eq. v1) then
-        print*, '　一夜一夜に月見ごろ   <= 覚え方'
+        print*, '　一夜一夜に月見ごろ          <= 覚え方'
     else if (i .eq. v2) then
-        print*, '　人並みにおごれや     <= 覚え方'
+        print*, '　人並みにおごれや            <= 覚え方'
     end if
     print*, '\nEnterを押してください。'
     read *
@@ -79,6 +85,7 @@ subroutine heihoukon()
 end subroutine heihoukon
 
 program calculator
+    implicit none
     integer :: i = 0
     write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     do
