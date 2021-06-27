@@ -65,7 +65,7 @@ end subroutine warizan
 subroutine heihoukon()
     implicit none
     real(kind=16) :: x = 0 !double precision :: x = 0
-    integer(16) i
+    integer() i
     integer v1, v2
     v1 = 2;v2 = 3
     write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
