@@ -87,12 +87,12 @@ end subroutine heihoukon
 subroutine ensyuritu()
     implicit none
     real(kind=16), parameter :: pi = 3.1415926535897932384626433832795028
-    real(kind=16) x
+    real(kind=16) r
     write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     write (*,fmt='(a)', advance='no') '値を入力してください。\n'
-    read *, x
+    read *, r
     print*, '\n答え'
-    print*, x**2 * pi
+    print*, r**2 * pi
     print*, '\nEnterを押してください。'
     read *
     write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
@@ -113,7 +113,7 @@ program calculator
         print*, '4 割り算'
         print*, '5 平方根'
         print*, '6 π'
-        print*, '7 円周率の計算\n'
+        print*, '7 円周率の計算(πr^2)\n'
         print*, '99 終了'
         print*, '\n------------------------'
         read *, i
