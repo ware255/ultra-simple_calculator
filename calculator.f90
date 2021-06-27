@@ -1,7 +1,7 @@
 subroutine tasizan()
     implicit none
-    real(16) :: x = 0
-    real(16) :: y = 0
+    real(kind=16) :: x = 0
+    real(kind=16) :: y = 0
     write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     write (*,fmt='(a)', advance='no') '値を入力してください。\n'
     read *, x
@@ -16,8 +16,8 @@ end subroutine tasizan
 
 subroutine hikizan()
     implicit none
-    real(16) :: x = 0
-    real(16) :: y = 0
+    real(kind=16) :: x = 0
+    real(kind=16) :: y = 0
     write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     write (*,fmt='(a)', advance='no') '値を入力してください。\n'
     read *, x
@@ -32,8 +32,8 @@ end subroutine hikizan
 
 subroutine kakezan()
     implicit none
-    real(16) :: x = 0
-    real(16) :: y = 0
+    real(kind=16) :: x = 0
+    real(kind=16) :: y = 0
     write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     write (*,fmt='(a)', advance='no') '値を入力してください。\n'
     read *, x
@@ -48,8 +48,8 @@ end subroutine kakezan
 
 subroutine warizan()
     implicit none
-    real(16) :: x = 0
-    real(16) :: y = 0
+    real(kind=16) :: x = 0
+    real(kind=16) :: y = 0
     write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     write (*,fmt='(a)', advance='no') '値を入力してください。\n'
     read *, x
@@ -64,7 +64,7 @@ end subroutine warizan
 
 subroutine heihoukon()
     implicit none
-    real(16) :: x = 0 !double precision :: x = 0
+    real(kind=16) :: x = 0 !double precision :: x = 0
     integer(16) i
     integer v1, v2
     v1 = 2;v2 = 3
@@ -84,9 +84,25 @@ subroutine heihoukon()
     write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
 end subroutine heihoukon
 
+subroutine ensyuritu()
+    implicit none
+    real(kind=16), parameter :: pi = 3.1415926535897932384626433832795028
+    real(kind=16) x
+    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    write (*,fmt='(a)', advance='no') '値を入力してください。\n'
+    read *, x
+    print*, '\n答え'
+    print*, x**2 * pi
+    print*, '\nEnterを押してください。'
+    read *
+    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+end subroutine ensyuritu
+
 program calculator
+    use, intrinsic :: iso_fortran_env
     implicit none
     integer :: i = 0
+    real(real128), parameter :: PI = 3.14159265358979323846264338327950288_real128
     write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     do
         print*, '\n------------------------'
@@ -95,7 +111,9 @@ program calculator
         print*, '2 引き算'
         print*, '3 掛け算'
         print*, '4 割り算'
-        print*, '5 平方根\n'
+        print*, '5 平方根'
+        print*, '6 π'
+        print*, '7 円周率の計算\n'
         print*, '99 終了'
         print*, '\n------------------------'
         read *, i
@@ -110,6 +128,15 @@ program calculator
             call warizan()
         case (5)
             call heihoukon()
+        case (6)
+            write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+            print*, '\n円周率'
+            print '(2F40.36)', 2.0_real128*asin( 1.0_real128)
+            print*, '\nEnterを押してください。'
+            read *
+            write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+        case (7)
+            call ensyuritu()
         case (99)
             write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             exit
