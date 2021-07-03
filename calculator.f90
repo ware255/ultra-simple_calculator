@@ -64,8 +64,8 @@ end subroutine warizan
 
 subroutine heihoukon()
     implicit none
-    real(kind=16) :: x = 0 !double precision :: x = 0
-    integer(8) i
+    real(kind=16) x
+    integer(16) i
     integer v1, v2
     v1 = 2;v2 = 3
     write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
@@ -101,7 +101,8 @@ end subroutine ensyuritu
 program calculator
     use, intrinsic :: iso_fortran_env
     implicit none
-    integer :: i = 0
+    real(kind=16) x
+    character(256) i
     real(real128), parameter :: PI = 3.14159265358979323846264338327950288_real128
     write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     do
@@ -112,12 +113,13 @@ program calculator
         print*, '3 掛け算'
         print*, '4 割り算'
         print*, '5 平方根'
-        print*, '6 π'
-        print*, '7 円周率の計算(πr^2)\n'
+        print*, '6 円周率(π)'
+        print*, '7 円の面積(πr^2)'
         print*, '99 終了'
         print*, '\n------------------------'
-        read *, i
-        select case(i)
+        read (*, '(a)') i
+        x = func_henkan(i)
+        select case(int(x))
         case (1)
             call tasizan()
         case (2)
@@ -146,4 +148,12 @@ program calculator
             write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
         end select
     end do
+    contains
+    function func_henkan(i)
+        implicit none
+        real(kind=16) n, func_henkan
+        character(len=256) i
+        read (i, *) n
+        func_henkan = n
+    end function
 end program calculator
