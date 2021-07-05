@@ -137,12 +137,12 @@ subroutine game_1()
     hero_hp = 5;enemy1_hp = 10;
     hero_mp = 5;enemy1_mp = 10;
     write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-    print*, '\n超戦略ゲーム(クソゲー)\n\nEnterを押してください。'
+    print*, '\n超戦略ゲーム  ~ shit video game ~\n\n\nEnterを押してください。'
     read *
     write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     do
         if (hero_hp .le. 0) then
-            print*, 'GAME OVER'
+            print*, '\nGAME OVER'
             read *
             write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             exit
@@ -330,12 +330,12 @@ subroutine game_2()
     hero_hp = 5;enemy2_hp = 15
     hero_mp = 5;enemy2_mp = 15
     write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-    print*, '\n超戦略ゲーム(クソゲー)\n\nEnterを押してください。'
+    print*, '\n超戦略ゲーム  ~ shit video game ~\n\n\nEnterを押してください。'
     read *
     write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     do
         if (hero_hp .le. 0) then
-            print*, 'GAME OVER'
+            print*, '\nGAME OVER'
             read *
             write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             exit
@@ -523,12 +523,12 @@ subroutine game_3()
     hero_hp = 5;enemy3_hp = 20
     hero_mp = 5;enemy3_mp = 20
     write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-    print*, '\n超戦略ゲーム ~ shit video game ~\n\nEnterを押してください。'
+    print*, '\n超戦略ゲーム  ~ shit video game ~\n\n\nEnterを押してください。'
     read *
     write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     do
         if (hero_hp .le. 0) then
-            print*, 'GAME OVER'
+            print*, '\nGAME OVER'
             read *
             write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             exit
