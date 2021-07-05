@@ -1,7 +1,7 @@
 # ultra-simple_calculator
 これは、Fortranで書かれた超簡易計算機です。<br />
 CUIで機能します。「GUIの方がいい」と欲張らないでください。<br /><br />
-# ultra-simple_calculatorの使い方
+# 使い方
      Fortranコンパイラーインストール
      $ sudo apt install gfortran
      コンパイル
