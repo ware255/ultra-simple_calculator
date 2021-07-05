@@ -665,7 +665,7 @@ subroutine game_3()
                 write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             end select
         else if (d .eq. '4') then
-            n = add(1)
+            n = add(9)
             select case(n)
             case (0)
                 write (*,fmt='(a)', advance='no') '\n逃げ切れた\n'
