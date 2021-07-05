@@ -1,7 +1,7 @@
 # ultra-simple_calculator
 これは、Fortranで書かれた超簡易計算機です。<br />
 CUIで機能します。「GUIの方がいい」と欲張らないでください。<br /><br />
-==動作確認OS==
+# 動作確認OS
      ・WSL Debian
      ・Linux等
 <br /><br /><br />
