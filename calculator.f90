@@ -274,6 +274,7 @@ subroutine game_1()
                 write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             case default
                 write (*,fmt='(a)', advance='no') '\n防御失敗\n'
+                hero_hp = hero_hp - 1
                 write (*,fmt='(a)', advance='no') 'ワイのダメージ1\n'
                 read *
                 write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
@@ -467,6 +468,7 @@ subroutine game_2()
                 write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             case default
                 write (*,fmt='(a)', advance='no') '\n防御失敗\n'
+                hero_hp = hero_hp - 1
                 write (*,fmt='(a)', advance='no') 'ワイのダメージ1\n'
                 read *
                 write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
@@ -660,6 +662,7 @@ subroutine game_3()
                 write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             case default
                 write (*,fmt='(a)', advance='no') '\n防御失敗\n'
+                hero_hp = hero_hp - 1
                 write (*,fmt='(a)', advance='no') 'ワイのダメージ1\n'
                 read *
                 write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
