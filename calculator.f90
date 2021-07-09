@@ -64,9 +64,9 @@ end subroutine warizan
 
 subroutine heihoukon()
     implicit none
-    real(kind=16) x
-    integer(kind=8) i
-    integer v1, v2
+    real(kind=16) :: x = 0
+    integer(kind=8) :: i = 0
+    integer(kind=4) v1, v2
     v1 = 2;v2 = 3
     write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     write (*,fmt='(a)', advance='no') '値を入力してください。\n'
@@ -101,7 +101,7 @@ end subroutine ensyuritu
 subroutine syutyou()
     implicit none
     real(kind=16), parameter :: pi = 3.1415926535897932384626433832795028
-    real(kind=16) r
+    real(kind=16) :: r = 0
     write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     write (*,fmt='(a)', advance='no') '値を入力してください。\n'
     read *, r
@@ -117,7 +117,7 @@ subroutine nizyou()
     real(kind=16) :: x = 0
     real(kind=16) :: y = 0
     write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-    write (*,fmt='(a)', advance='no') '二乗する値を入力してください。\n'
+    write (*,fmt='(a)', advance='no') 'べき乗する値を入力してください。\n'
     read *, x
     write (*,fmt='(a)', advance='no') 'n乗する値を入力してください。\n'
     read *, y
@@ -743,6 +743,28 @@ subroutine game()
     end function
 end subroutine game
 
+subroutine nizihoutei()
+    implicit none
+    real(kind=16) :: a, b, c, bac, kai1, kai2 = 0
+    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    write (*,fmt='(a)', advance='no') '公式: ax^2 * bx * c = 0\n\n'
+    write (*,fmt='(a)', advance='no') 'a値を入力してください。\n'
+    read *, a
+    write (*,fmt='(a)', advance='no') 'b値を入力してください。\n'
+    read *, b
+    write (*,fmt='(a)', advance='no') 'c値を入力してください。\n'
+    read *, c
+    print*, '\n答え'
+    bac = b*b-4*a*c
+    kai1 = (-b+sqrt(bac)) / (2*a)
+    kai2 = (-b-sqrt(bac)) / (2*a)
+    print*, kai1
+    print*, kai2
+    print*, '\nEnterを押してください。'
+    read *
+    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+end subroutine nizihoutei
+
 program calculator
     use, intrinsic :: iso_fortran_env
     implicit none
@@ -762,7 +784,8 @@ program calculator
         print*, '7 円の面積(πr^2)'
         print*, '8 円の周長(2πr)'
         print*, '9 べき乗'
-        print*, '10 超戦略ゲーム'
+        print*, '10 2次方程式'
+        print*, '11 超戦略ゲーム\n'
         print*, '99 終了'
         print*, '\n------------------------'
         read *, x
@@ -792,6 +815,8 @@ program calculator
         case (9)
             call nizyou()
         case (10)
+            call nizihoutei()
+        case (11)
             call game()
         case (99)
             write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
