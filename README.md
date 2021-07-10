@@ -8,7 +8,7 @@ CUIで機能します。「GUIの方がいい」と欲張らないでくださ�
      $ gfortran -Ofast -march=native -fbackslash calculator.f90 -o calculator
      実行
      $ ./calculator
-# 動作確認OS
+# 動作確認済みOS
      ・WSL Debian
      ・Linux等
 <br /><br />
