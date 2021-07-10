@@ -66,7 +66,7 @@ subroutine heihoukon()
     implicit none
     real(kind=16) :: x = 0
     integer(kind=8) :: i = 0
-    integer(kind=4) v1, v2
+    integer(kind=4) :: v1, v2
     v1 = 2;v2 = 3
     write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     write (*,fmt='(a)', advance='no') '値を入力してください。\n'
@@ -86,8 +86,8 @@ end subroutine heihoukon
 
 subroutine ensyuritu()
     implicit none
-    real(kind=16), parameter :: pi = 3.1415926535897932384626433832795028
-    real(kind=16) r
+    real(kind=16), parameter :: pi = 4.0*atan(1.0)!3.1415926535897932384626433832795028
+    real(kind=16) :: r = 0
     write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     write (*,fmt='(a)', advance='no') '値を入力してください。\n'
     read *, r
@@ -100,7 +100,7 @@ end subroutine ensyuritu
 
 subroutine syutyou()
     implicit none
-    real(kind=16), parameter :: pi = 3.1415926535897932384626433832795028
+    real(kind=16), parameter :: pi = 4.0*atan(1.0)!3.1415926535897932384626433832795028
     real(kind=16) :: r = 0
     write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     write (*,fmt='(a)', advance='no') '値を入力してください。\n'
@@ -131,7 +131,7 @@ end subroutine nizyou
 subroutine game_1()
     implicit none
     character(len=10) d
-    integer(kind=8) hero_hp, hero_mp, enemy1_hp, enemy1_mp, n, x
+    integer(kind=8) :: hero_hp, hero_mp, enemy1_hp, enemy1_mp, n, x
     integer(kind=8) :: mp = 0
     n = 0;x = 0
     hero_hp = 5;enemy1_hp = 10;
@@ -304,9 +304,9 @@ subroutine game_1()
     contains
     function add(n)
         implicit none
-        integer(kind=4) add, rad, n
+        integer(kind=4) :: add, rad, n
         integer(kind=4) :: seedsize = 3
-        real(kind=16) y
+        real(kind=16) :: y
         real(kind=16) :: x
         integer,allocatable :: seed(:)
         call random_seed(size=seedsize)
@@ -325,7 +325,7 @@ end subroutine game_1
 subroutine game_2()
     implicit none
     character(len=10) d
-    integer(kind=8) hero_hp, hero_mp, enemy2_hp, enemy2_mp, n, x
+    integer(kind=8) :: hero_hp, hero_mp, enemy2_hp, enemy2_mp, n, x
     integer(kind=8) :: mp = 0
     n = 0;x = 0
     hero_hp = 5;enemy2_hp = 15
@@ -498,9 +498,9 @@ subroutine game_2()
     contains
     function add(n)
         implicit none
-        integer(kind=4) add, rad, n
+        integer(kind=4) :: add, rad, n
         integer(kind=4) :: seedsize = 3
-        real(kind=16) y
+        real(kind=16) :: y
         real(kind=16) :: x
         integer,allocatable :: seed(:)
         call random_seed(size=seedsize)
@@ -519,7 +519,7 @@ end subroutine game_2
 subroutine game_3()
     implicit none
     character(len=10) d
-    integer(kind=8) hero_hp, hero_mp, enemy3_hp, enemy3_mp, n, x
+    integer(kind=8) :: hero_hp, hero_mp, enemy3_hp, enemy3_mp, n, x
     integer(kind=8) :: mp = 0
     n = 0;x = 0
     hero_hp = 5;enemy3_hp = 20
@@ -692,9 +692,9 @@ subroutine game_3()
     contains
     function add(n)
         implicit none
-        integer(kind=4) add, rad, n
+        integer(kind=4) :: add, rad, n
         integer(kind=4) :: seedsize = 3
-        real(kind=16) y
+        real(kind=16) :: y
         real(kind=16) :: x
         integer,allocatable :: seed(:)
         call random_seed(size=seedsize)
@@ -712,7 +712,7 @@ end subroutine game_3
 
 subroutine game()
     implicit none
-    integer(kind=8) n
+    integer(kind=8) :: n
     n = add(9)
     select case(n)
     case (1)
@@ -725,9 +725,9 @@ subroutine game()
     contains !乱数
     function add(n)
         implicit none
-        integer(kind=4) add, rad, n
+        integer(kind=4) :: add, rad, n
         integer(kind=4) :: seedsize = 3
-        real(kind=16) y
+        real(kind=16) :: y
         real(kind=16) :: x
         integer,allocatable :: seed(:)
         call random_seed(size=seedsize)
@@ -765,60 +765,215 @@ subroutine nizihoutei()
     write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
 end subroutine nizihoutei
 
+subroutine n_sin()
+    implicit none
+    real(kind=16) :: n = 0
+    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    write (*,fmt='(a)', advance='no') '値を入力してください。\n'
+    read *, n
+    print*, '\n答え'
+    print*, sin(n)
+    print*, '\nEnterを押してください。'
+    read *
+    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+end subroutine n_sin
+
+subroutine n_cos()
+    implicit none
+    real(kind=16) :: n = 0
+    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    write (*,fmt='(a)', advance='no') '値を入力してください。\n'
+    read *, n
+    print*, '\n答え'
+    print*, cos(n)
+    print*, '\nEnterを押してください。'
+    read *
+    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+end subroutine n_cos
+
+subroutine  n_tan()
+    implicit none
+    real(kind=16) :: n = 0
+    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    write (*,fmt='(a)', advance='no') '値を入力してください。\n'
+    read *, n
+    print*, '\n答え'
+    print*, tan(n)
+    print*, '\nEnterを押してください。'
+    read *
+    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+end subroutine n_tan
+
+subroutine n_asin()
+    implicit none
+    real(kind=16) :: n = 0
+    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    write (*,fmt='(a)', advance='no') '値を入力してください。\n'
+    read *, n
+    print*, '\n答え'
+    print*, asin(n)
+    print*, '\nEnterを押してください。'
+    read *
+    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+end subroutine n_asin
+
+subroutine n_acos()
+    implicit none
+    real(kind=16) :: n = 0
+    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    write (*,fmt='(a)', advance='no') '値を入力してください。\n'
+    read *, n
+    print*, '\n答え'
+    print*, acos(n)
+    print*, '\nEnterを押してください。'
+    read *
+    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+end subroutine n_acos
+
+subroutine n_atan()
+    implicit none
+    real(kind=16) :: n = 0
+    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    write (*,fmt='(a)', advance='no') '値を入力してください。\n'
+    read *, n
+    print*, '\n答え'
+    print*, atan(n)
+    print*, '\nEnterを押してください。'
+    read *
+    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+end subroutine n_atan
+
+subroutine n_atan2()
+    implicit none
+    real(kind=16) :: x = 0
+    real(kind=16) :: y = 0
+    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    write (*,fmt='(a)', advance='no') 'y値を入力してください。\n'
+    read (*, *) x
+    write (*,fmt='(a)', advance='no') 'x値を入力してください。\n'
+    read (*, *) y
+    print*, '\n答え'
+    print*, atan2(y, x)
+    print*, '\nEnterを押してください。'
+    read *
+    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+end subroutine n_atan2
+
+subroutine n_aimag()
+    implicit none
+    complex(kind=8)  :: z
+    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    write (*,fmt='(a)', advance='no') '入力例: (2.71, 0.99)\n\n'
+    write (*,fmt='(a)', advance='no') '値を入力してください。\n'
+    read (*, *) z
+    print*, '\n答え'
+    print*, aimag(z)
+    print*, '\nEnterを押してください。'
+    read *
+    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+end subroutine n_aimag
+
+subroutine n_log10()
+    implicit none
+    real(kind=16) :: n = 0
+    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    write (*,fmt='(a)', advance='no') '値を入力してください。\n'
+    read (*, *) n
+    print*, '\n答え'
+    print*, log10(n)
+    print*, '\nEnterを押してください。'
+    read *
+    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+end subroutine n_log10
+
+subroutine n_log()
+    implicit none
+    real(kind=16) :: n = 0
+    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    write (*,fmt='(a)', advance='no') '値を入力してください。\n'
+    read (*, *) n
+    print*, '\n答え'
+    print*, log(n)
+    print*, '\nEnterを押してください。'
+    read *
+    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+end subroutine n_log
+
 program calculator
     use, intrinsic :: iso_fortran_env
     implicit none
-    integer(kind=8) :: n = 0
-    real(kind=16) x
+    character(len=256) :: str
+    !integer(kind=8) :: n = 0
+    !real(kind=16) :: x = 0
     real(real128), parameter :: PI = 3.14159265358979323846264338327950288_real128
     write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     do
-        print*, '\n------------------------'
-        write (*,fmt='(a)', advance='no') '何の計算をしますか？\n'
-        print*, '1 足し算'
-        print*, '2 引き算'
-        print*, '3 掛け算'
-        print*, '4 割り算'
-        print*, '5 平方根'
-        print*, '6 円周率(π)'
-        print*, '7 円の面積(πr^2)'
-        print*, '8 円の周長(2πr)'
-        print*, '9 べき乗'
-        print*, '10 2次方程式'
+        print*, '\n-----------------------------------------'
+        !write (*,fmt='(a)', advance='no') '何の計算をしますか？\n'
+        print*, '1 足し算          12 三角関数(sin)'
+        print*, '2 引き算          13 三角関数(cos)'
+        print*, '3 掛け算          14 三角関数(tan)'
+        print*, '4 割り算          15 逆三角関数(asin)'
+        print*, '5 平方根          16 逆三角関数(acos)'
+        print*, '6 円周率          17 逆三角関数(atan)'
+        print*, '7 円の面積        18 逆三角関数(atan2(y,x))'
+        print*, '8 円の周長        19 虚数部(z = (x, iy))'
+        print*, '9 べき乗          20 常用対数(log10)'
+        print*, '10 2次方程式      21 自然対数(log)'
         print*, '11 超戦略ゲーム\n'
         print*, '99 終了'
-        print*, '\n------------------------'
-        read *, x
-        n = int(x)
-        select case(n)
-        case (1)
+        write (*,fmt='(a)', advance='no') '-----------------------------------------\n'
+        write(*,fmt='(a)', advance='no') ': '
+        read (*, '(a)') str
+        select case(str)
+        case ('1')
             call tasizan()
-        case (2)
+        case ('2')
             call hikizan()
-        case (3)
+        case ('3')
             call kakezan()
-        case (4)
+        case ('4')
             call warizan()
-        case (5)
+        case ('5')
             call heihoukon()
-        case (6)
+        case ('6')
             write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             print*, '\n円周率'
             print '(2F40.36)', 2.0_real128*asin(1.0_real128)
             print*, '\nEnterを押してください。'
             read *
             write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-        case (7)
+        case ('7')
             call ensyuritu()
-        case (8)
+        case ('8')
             call syutyou()
-        case (9)
+        case ('9')
             call nizyou()
-        case (10)
+        case ('10')
             call nizihoutei()
-        case (11)
+        case ('11')
             call game()
-        case (99)
+        case ('12')
+            call n_sin()
+        case ('13')
+            call n_cos()
+        case ('14')
+            call n_tan()
+        case ('15')
+            call n_asin()
+        case ('16')
+            call n_acos()
+        case ('17')
+            call n_atan()
+        case ('18')
+            call n_atan2()
+        case ('19')
+            call n_aimag()
+        case ('20')
+            call n_log10()
+        case ('21')
+            call n_log()
+        case ('99')
             write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             exit
         case default
