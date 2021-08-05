@@ -2,64 +2,64 @@ subroutine tasizan()
     implicit none
     real(kind=16) :: x = 0
     real(kind=16) :: y = 0
-    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-    write (*,fmt='(a)', advance='no') '値を入力してください。\n'
+    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    print '(A)',  '値を入力してください。'
     read *, x
-    write (*,fmt='(a)', advance='no') '値を入力してください。\n'
+    print '(A)', '値を入力してください。'
     read *, y
     print*, '\n答え'
     print*, x + y
     print*, '\nEnterを押してください。'
     read *
-    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
 end subroutine tasizan
 
 subroutine hikizan()
     implicit none
     real(kind=16) :: x = 0
     real(kind=16) :: y = 0
-    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-    write (*,fmt='(a)', advance='no') '値を入力してください。\n'
+    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    print '(A)', '値を入力してください。'
     read *, x
-    write (*,fmt='(a)', advance='no') '値を入力してください。\n'
+    print '(A)', '値を入力してください。'
     read *, y
     print*, '\n答え'
     print*, x - y
     print*, '\nEnterを押してください。'
     read *
-    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
 end subroutine hikizan
 
 subroutine kakezan()
     implicit none
     real(kind=16) :: x = 0
     real(kind=16) :: y = 0
-    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-    write (*,fmt='(a)', advance='no') '値を入力してください。\n'
+    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    print '(A)', '値を入力してください。'
     read *, x
-    write (*,fmt='(a)', advance='no') '値を入力してください。\n'
+    print '(A)', '値を入力してください。'
     read *, y
     print*, '\n答え'
     print*, x * y
     print*, '\nEnterを押してください。'
     read *
-    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
 end subroutine kakezan
 
 subroutine warizan()
     implicit none
     real(kind=16) :: x = 0
     real(kind=16) :: y = 0
-    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-    write (*,fmt='(a)', advance='no') '値を入力してください。\n'
+    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    print '(A)', '値を入力してください。'
     read *, x
-    write (*,fmt='(a)', advance='no') '値を入力してください。\n'
+    print '(A)', '値を入力してください。'
     read *, y
     print*, '\n答え'
     print*, x / y
     print*, '\nEnterを押してください。'
     read *
-    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
 end subroutine warizan
 
 subroutine heihoukon()
@@ -68,8 +68,8 @@ subroutine heihoukon()
     integer(kind=8) :: i = 0
     integer(kind=4) :: v1, v2
     v1 = 2;v2 = 3
-    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-    write (*,fmt='(a)', advance='no') '値を入力してください。\n'
+    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    print '(A)', '値を入力してください。'
     read *, x
     print*, '\n近似値'
     print*, sqrt(x)
@@ -81,139 +81,138 @@ subroutine heihoukon()
     end if
     print*, '\nEnterを押してください。'
     read *
-    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
 end subroutine heihoukon
 
 subroutine ensyuritu()
     implicit none
-    real(kind=16), parameter :: pi = 4.0*atan(1.0)!3.1415926535897932384626433832795028
+    real(kind=16), parameter :: pi = 3.1415926535897932384626433832795028!4.0*atan(1.0)
     real(kind=16) :: r = 0
-    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-    write (*,fmt='(a)', advance='no') '値を入力してください。\n'
+    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    print '(A)', '値を入力してください。'
     read *, r
     print*, '\n答え'
-    print*, r**2 * pi
+    print*, r**2 * pi !公式:πr^2
     print*, '\nEnterを押してください。'
     read *
-    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
 end subroutine ensyuritu
 
 subroutine syutyou()
     implicit none
-    real(kind=16), parameter :: pi = 4.0*atan(1.0)!3.1415926535897932384626433832795028
+    real(kind=16), parameter :: pi = 3.1415926535897932384626433832795028!4.0*atan(1.0)
     real(kind=16) :: r = 0
-    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-    write (*,fmt='(a)', advance='no') '値を入力してください。\n'
+    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    print '(A)', '値を入力してください。'
     read *, r
     print*, '\n答え'
     print*, 2*pi*r
     print*, '\nEnterを押してください。'
     read *
-    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
 end subroutine syutyou
 
 subroutine nizyou()
     implicit none
     real(kind=16) :: x = 0
     real(kind=16) :: y = 0
-    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-    write (*,fmt='(a)', advance='no') 'べき乗する値を入力してください。\n'
+    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    print '(A)', 'べき乗する値を入力してください。'
     read *, x
-    write (*,fmt='(a)', advance='no') 'n乗する値を入力してください。\n'
+    print '(A)', 'n乗する値を入力してください。'
     read *, y
     print*, '\n答え'
-    print*, x ** y
+    print*, x**y
     print*, '\nEnterを押してください。'
     read *
-    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
 end subroutine nizyou
 
 subroutine game_1()
     implicit none
     character(len=10) d
     integer(kind=8) :: hero_hp, hero_mp, enemy1_hp, enemy1_mp, n, x
-    integer(kind=8) :: mp = 0
+    integer(kind=8) :: mp = 0, y
     n = 0;x = 0
     hero_hp = 5;enemy1_hp = 10;
     hero_mp = 5;enemy1_mp = 10;
-    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print*, '\n超戦略ゲーム  ~ shit video game ~\n\n\nEnterを押してください。'
     read *
-    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     do
         if (hero_hp .le. 0) then
             print*, '\nGAME OVER'
             read *
-            write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+            write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             exit
         else if (enemy1_hp .le. 0) then
-            print*, '敵を撲殺することが出来た。ワイの勝利！！！'
+            print '(A)', '敵を撲殺することが出来た。ワイの勝利！！！'
             read *
-            write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+            write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             exit
         end if
-        print*, ''
-        print*, '敵が現れた！'
-        print*, 'HP: ', enemy1_hp
-        print*, 'MP: ', enemy1_mp
-        print*, ''
-        print*, '\nワイのステータス'
-        print*, 'HP: ', hero_hp
-        print*, 'MP: ', hero_mp
-        print*, '1:攻撃, 2:魔法, 3:防御, 4:逃げる'
-        write (*,fmt='(a)', advance='no') '\n:'
-        read (*, '(a)') d
+        print '(A)', '\n敵が現れた！'
+        print *, 'HP: ', enemy1_hp
+        print *, 'MP: ', enemy1_mp
+        print '(A)', ''
+        print '(A)', '\nワイのステータス'
+        print *, 'HP: ', hero_hp
+        print *, 'MP: ', hero_mp
+        print '(A)', '1:攻撃, 2:魔法, 3:防御, 4:逃げる'
+        write (*,fmt='(A)', advance='no') ':'
+        read (*, '(A)') d
         if (d .eq. '1') then
             n = add(5)
             select case(n)
             case (1)
                 enemy1_hp = enemy1_hp - 1
-                write (*,fmt='(a)', advance='no') '\n敵のダメージ1\n'
+                print '(A)', '\n敵のダメージ1'
                 x = add(5)
                 hero_hp = hero_hp - x
                 print "('ワイのダメージ',i0)", x
                 read *
-                write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+                write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             case (2)
                 enemy1_hp = enemy1_hp - 2
                 x = add(5)
                 hero_hp = hero_hp - x
-                write (*,fmt='(a)', advance='no') '\n敵のダメージ2\n'
+                print '(A)', '\n敵のダメージ2'
                 print "('ワイのダメージ',i0)", x
                 read *
-                write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+                write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             case (3)
                 enemy1_hp = enemy1_hp - 3
                 x = add(5)
                 hero_hp = hero_hp - x
-                write (*,fmt='(a)', advance='no') '\n敵のダメージ3\n'
+                print '(A)', '\n敵のダメージ3'
                 print "('ワイのダメージ',i0)", x
                 read *
-                write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+                write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             case (4)
                 enemy1_hp = enemy1_hp - 4
                 x = add(5)
                 hero_hp = hero_hp - x
-                write (*,fmt='(a)', advance='no') '\n敵のダメージ4\n'
+                print '(A)', '\n敵のダメージ4'
                 print "('ワイのダメージ',i0)", x
                 read *
-                write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+                write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             case (5)
                 enemy1_hp = enemy1_hp - 5
                 x = add(5)
                 hero_hp = hero_hp - x
-                write (*,fmt='(a)', advance='no') '\n敵のダメージ5\n'
+                print '(A)', '\n敵のダメージ5'
                 print "('ワイのダメージ',i0)", x
                 read *
-                write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+                write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             case default
                 enemy1_hp = enemy1_hp - 0
-                write (*,fmt='(a)', advance='no') '\n敵のダメージ0\n'
+                print '(A)', '\n敵のダメージ0'
                 x = add(5)
                 hero_hp = hero_hp - x
                 print "('ワイのダメージ',i0)", x
                 read *
-                write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+                write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             end select
         else if (d .eq. '2') then
             n = add(3)
@@ -221,84 +220,89 @@ subroutine game_1()
             case (1)
                 enemy1_hp = enemy1_hp - 5
                 hero_mp = hero_mp - 1
-                write (*,fmt='(a)', advance='no') '\n敵のダメージ5\n'
-                write (*,fmt='(a)', advance='no') 'MP: 1消費\n'
+                print '(A)', '\n敵のダメージ5'
+                print '(A)', 'MP: 1消費'
                 x = add(5)
                 hero_hp = hero_hp - x
                 print "('ワイのダメージ',i0)", x
                 read *
-                write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+                write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             case (2)
                 enemy1_hp = enemy1_hp - 6
                 hero_mp = hero_mp - 1
                 x = add(5)
                 hero_hp = hero_hp - x
-                write (*,fmt='(a)', advance='no') '\n敵のダメージ6\n'
-                write (*,fmt='(a)', advance='no') 'MP: 1消費\n'
+                print '(A)', '\n敵のダメージ6'
+                print '(A)', 'MP: 1消費'
                 print "('ワイのダメージ',i0)", x
                 read *
-                write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+                write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             case (3)
                 enemy1_hp = enemy1_hp - 7
                 hero_mp = hero_mp - 1
-                write (*,fmt='(a)', advance='no') '\n敵のダメージ7\n'
-                write (*,fmt='(a)', advance='no') 'MP: 1消費\n'
+                print '(A)', '\n敵のダメージ7'
+                print '(A)', 'MP: 1消費'
                 x = add(5)
                 hero_hp = hero_hp - x
                 print "('ワイのダメージ',i0)", x
                 read *
-                write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+                write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             case default
                 enemy1_hp = enemy1_hp - 0
                 hero_mp = hero_mp - 1
-                write (*,fmt='(a)', advance='no') '\n敵のダメージ0\n'
-                write (*,fmt='(a)', advance='no') 'MP: 1消費\n'
+                print '(A)', '\n敵のダメージ0'
+                print '(A)', 'MP: 1消費'
                 x = add(5)
                 hero_hp = hero_hp - x
                 print "('ワイのダメージ',i0)", x
                 read *
-                write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+                write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             end select
         else if (d .eq. '3') then
             mp = mp + 1
             n = add(1)
             select case(n)
             case (1)
-                write (*,fmt='(a)', advance='no') '\n防御成功\n'
-                write (*,fmt='(a)', advance='no') 'HP: 1回復\n'
-                if (mp .eq. 5 .or. mp .eq. 10 .or. mp .eq. 15 .or. mp .eq. 20 .or. mp .eq. 25 .or. mp .eq. 30) then
-                    write (*,fmt='(a)', advance='no') 'MP: 1回復\n'
-                    hero_mp = hero_mp + 1
-                end if
+                write (*,fmt='(A)', advance='no') '\n防御成功\n'
+                write (*,fmt='(A)', advance='no') 'HP: 1回復\n'
+                do y = 5, 100000000
+                    if (mp .eq. y) then
+                        print '(A)', 'MP: 1回復'
+                        hero_mp = hero_mp + 1
+                        exit
+                    else if (mp .lt. y) then
+                        exit
+                    end if
+                end do
                 read *
-                write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+                write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             case default
-                write (*,fmt='(a)', advance='no') '\n防御失敗\n'
+                print '(A)', '\n防御失敗'
                 hero_hp = hero_hp - 1
-                write (*,fmt='(a)', advance='no') 'ワイのダメージ1\n'
+                print '(A)', 'ワイのダメージ1'
                 read *
-                write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+                write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             end select
         else if (d .eq. '4') then
             n = add(1)
             select case(n)
             case (0)
-                write (*,fmt='(a)', advance='no') '\n逃げ切れた\n'
+                print '(A)', '\n逃げ切れた'
                 read *
-                write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+                write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
                 exit
             case default
-                write (*,fmt='(a)', advance='no') '\n逃走失敗\n'
+                print '(A)', '\n逃走失敗'
                 x = add(5)
                 hero_hp = hero_hp - x
                 print "('ワイのダメージ',i0)", x
                 read *
-                write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+                write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             end select
         else
-            write (*,fmt='(a)', advance='no') '\nそんなもんねぇよｗ\n'
+            print '(A)', '\nそんなもんねぇよｗ'
             call sleep(1)
-            write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+            write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
         end if
     end do
     contains
@@ -326,88 +330,88 @@ subroutine game_2()
     implicit none
     character(len=10) d
     integer(kind=8) :: hero_hp, hero_mp, enemy2_hp, enemy2_mp, n, x
-    integer(kind=8) :: mp = 0
+    integer(kind=8) :: mp = 0, y
     n = 0;x = 0
     hero_hp = 5;enemy2_hp = 15
     hero_mp = 5;enemy2_mp = 15
-    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-    print*, '\n超戦略ゲーム  ~ shit video game ~\n\n\nEnterを押してください。'
+    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    print *, '\n超戦略ゲーム  ~ shit video game ~\n\n\nEnterを押してください。'
     read *
-    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     do
         if (hero_hp .le. 0) then
-            print*, '\nGAME OVER'
+            print *, '\nGAME OVER'
             read *
-            write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+            write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             exit
         else if (enemy2_hp .le. 0) then
-            print*, '敵を撲殺することが出来た。ワイの勝利！！！'
+            print '(A)', '敵を撲殺することが出来た。ワイの勝利！！！'
             read *
             write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             exit
         end if
         print*, ''
-        print*, '敵が現れた！'
-        print*, 'HP: ', enemy2_hp
-        print*, 'MP: ', enemy2_mp
-        print*, ''
-        print*, '\nワイのステータス'
-        print*, 'HP: ', hero_hp
-        print*, 'MP: ', hero_mp
-        print*, '1:攻撃, 2:魔法, 3:防御, 4:逃げる'
-        write (*,fmt='(a)', advance='no') '\n:'
-        read (*, '(a)') d
+        print '(A)', '敵が現れた！'
+        print *, 'HP: ', enemy2_hp
+        print *, 'MP: ', enemy2_mp
+        print '(A)', ''
+        print '(A)', '\nワイのステータス'
+        print *, 'HP: ', hero_hp
+        print *, 'MP: ', hero_mp
+        print '(A)', '1:攻撃, 2:魔法, 3:防御, 4:逃げる'
+        write (*,fmt='(A)', advance='no') ':'
+        read (*, '(A)') d
         if (d .eq. '1') then
             n = add(5)
             select case(n)
             case (1)
                 enemy2_hp = enemy2_hp - 1
-                write (*,fmt='(a)', advance='no') '\n敵のダメージ1\n'
+                print '(A)', '\n敵のダメージ1'
                 x = add(5)
                 hero_hp = hero_hp - x
                 print "('ワイのダメージ',i0)", x
                 read *
-                write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+                write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             case (2)
                 enemy2_hp = enemy2_hp - 2
                 x = add(5)
                 hero_hp = hero_hp - x
-                write (*,fmt='(a)', advance='no') '\n敵のダメージ2\n'
+                print '(A)', '\n敵のダメージ2'
                 print "('ワイのダメージ',i0)", x
                 read *
-                write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+                write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             case (3)
                 enemy2_hp = enemy2_hp - 3
                 x = add(5)
                 hero_hp = hero_hp - x
-                write (*,fmt='(a)', advance='no') '\n敵のダメージ3\n'
+                print '(A)', '\n敵のダメージ3'
                 print "('ワイのダメージ',i0)", x
                 read *
-                write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+                write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             case (4)
                 enemy2_hp = enemy2_hp - 4
                 x = add(5)
                 hero_hp = hero_hp - x
-                write (*,fmt='(a)', advance='no') '\n敵のダメージ4\n'
+                print '(A)', '\n敵のダメージ4'
                 print "('ワイのダメージ',i0)", x
                 read *
-                write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+                write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             case (5)
                 enemy2_hp = enemy2_hp - 5
                 x = add(5)
                 hero_hp = hero_hp - x
-                write (*,fmt='(a)', advance='no') '\n敵のダメージ5\n'
+                print '(A)', '\n敵のダメージ5'
                 print "('ワイのダメージ',i0)", x
                 read *
-                write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+                write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             case default
                 enemy2_hp = enemy2_hp - 0
-                write (*,fmt='(a)', advance='no') '\n敵のダメージ0\n'
+                print '(A)', '\n敵のダメージ0'
                 x = add(5)
                 hero_hp = hero_hp - x
                 print "('ワイのダメージ',i0)", x
                 read *
-                write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+                write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             end select
         else if (d .eq. '2') then
             n = add(3)
@@ -415,84 +419,88 @@ subroutine game_2()
             case (1)
                 enemy2_hp = enemy2_hp - 5
                 hero_mp = hero_mp - 1
-                write (*,fmt='(a)', advance='no') '\n敵のダメージ5\n'
-                write (*,fmt='(a)', advance='no') 'MP: 1消費\n'
+                print '(A)', '\n敵のダメージ5'
+                print '(A)', 'MP: 1消費'
                 x = add(5)
                 hero_hp = hero_hp - x
                 print "('ワイのダメージ',i0)", x
                 read *
-                write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+                write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             case (2)
                 enemy2_hp = enemy2_hp - 6
                 hero_mp = hero_mp - 1
                 x = add(5)
                 hero_hp = hero_hp - x
-                write (*,fmt='(a)', advance='no') '\n敵のダメージ6\n'
-                write (*,fmt='(a)', advance='no') 'MP: 1消費\n'
+                print '(A)', '\n敵のダメージ6'
+                print '(A)', 'MP: 1消費'
                 print "('ワイのダメージ',i0)", x
                 read *
-                write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+                write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             case (3)
                 enemy2_hp = enemy2_hp - 7
                 hero_mp = hero_mp - 1
-                write (*,fmt='(a)', advance='no') '\n敵のダメージ7\n'
-                write (*,fmt='(a)', advance='no') 'MP: 1消費\n'
+                print '(A)', '\n敵のダメージ7'
+                print '(A)', 'MP: 1消費'
                 x = add(5)
                 hero_hp = hero_hp - x
                 print "('ワイのダメージ',i0)", x
                 read *
-                write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+                write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             case default
                 enemy2_hp = enemy2_hp - 0
                 hero_mp = hero_mp - 1
-                write (*,fmt='(a)', advance='no') '\n敵のダメージ0\n'
-                write (*,fmt='(a)', advance='no') 'MP: 1消費\n'
+                print '(A)', '\n敵のダメージ0'
+                print '(A)', 'MP: 1消費'
                 x = add(5)
                 hero_hp = hero_hp - x
                 print "('ワイのダメージ',i0)", x
                 read *
-                write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+                write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             end select
         else if (d .eq. '3') then
             mp = mp + 1
             n = add(1)
             select case(n)
             case (1)
-                write (*,fmt='(a)', advance='no') '\n防御成功\n'
-                write (*,fmt='(a)', advance='no') 'HP: 1回復\n'
-                if (mp .eq. 5 .or. mp .eq. 10 .or. mp .eq. 15 .or. mp .eq. 20 .or. mp .eq. 25 .or. mp .eq. 30) then
-                    write (*,fmt='(a)', advance='no') 'MP: 1回復\n'
-                    hero_mp = hero_mp + 1
-                end if
+                print '(A)', '\n防御成功'
+                print '(A)', 'HP: 1回復'
+                do y = 5, 100000000
+                    if (mp .eq. y) then
+                        print '(A)', 'MP: 1回復'
+                        hero_mp = hero_mp + 2
+                    else if (mp .lt. y) then
+                        exit
+                    end if
+                end do
                 read *
-                write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+                write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             case default
-                write (*,fmt='(a)', advance='no') '\n防御失敗\n'
+                print '(A)', '\n防御失敗'
                 hero_hp = hero_hp - 1
-                write (*,fmt='(a)', advance='no') 'ワイのダメージ1\n'
+                print '(A)', 'ワイのダメージ1'
                 read *
-                write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+                write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             end select
         else if (d .eq. '4') then
             n = add(1)
             select case(n)
             case (0)
-                write (*,fmt='(a)', advance='no') '\n逃げ切れた\n'
+                print '(A)', '\n逃げ切れた'
                 read *
-                write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+                write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
                 exit
             case default
-                write (*,fmt='(a)', advance='no') '\n逃走失敗\n'
+                print '(A)', '\n逃走失敗'
                 x = add(5)
                 hero_hp = hero_hp - x
                 print "('ワイのダメージ',i0)", x
                 read *
-                write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+                write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             end select
         else
-            write (*,fmt='(a)', advance='no') '\nそんなもんねぇよｗ\n'
+            print '(A)', '\nそんなもんねぇよｗ'
             call sleep(1)
-            write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+            write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
         end if
     end do
     contains
@@ -520,88 +528,86 @@ subroutine game_3()
     implicit none
     character(len=10) d
     integer(kind=8) :: hero_hp, hero_mp, enemy3_hp, enemy3_mp, n, x
-    integer(kind=8) :: mp = 0
+    integer(kind=8) :: mp = 0, y
     n = 0;x = 0
     hero_hp = 5;enemy3_hp = 20
     hero_mp = 5;enemy3_mp = 20
-    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print*, '\n超戦略ゲーム  ~ shit video game ~\n\n\nEnterを押してください。'
     read *
-    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     do
         if (hero_hp .le. 0) then
             print*, '\nGAME OVER'
             read *
-            write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+            write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             exit
         else if (enemy3_hp .le. 0) then
-            print*, '敵を撲殺することが出来た。ワイの勝利！！！'
+            print '(A)', '敵を撲殺することが出来た。ワイの勝利！！！'
             read *
-            write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+            write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             exit
         end if
-        print*, ''
-        print*, '敵が現れた！'
-        print*, 'HP: ', enemy3_hp
-        print*, 'MP: ', enemy3_mp
-        print*, ''
-        print*, '\nワイのステータス'
-        print*, 'HP: ', hero_hp
-        print*, 'MP: ', hero_mp
-        print*, '1:攻撃, 2:魔法, 3:防御, 4:逃げる'
-        write (*,fmt='(a)', advance='no') '\n:'
-        read (*, '(a)') d
+        print '(A)', '\n敵が現れた！'
+        print *, 'HP: ', enemy3_hp
+        print *, 'MP: ', enemy3_mp
+        print '(A)', '\nワイのステータス'
+        print *, 'HP: ', hero_hp
+        print *, 'MP: ', hero_mp
+        print '(A)', '1:攻撃, 2:魔法, 3:防御, 4:逃げる'
+        write(*, fmt='(A)', advance='no') ':'
+        read (*, '(A)') d
         if (d .eq. '1') then
             n = add(5)
             select case(n)
             case (1)
                 enemy3_hp = enemy3_hp - 1
-                write (*,fmt='(a)', advance='no') '\n敵のダメージ1\n'
+                print '(A)', '\n敵のダメージ1'
                 x = add(5)
                 hero_hp = hero_hp - x
                 print "('ワイのダメージ',i0)", x
                 read *
-                write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+                write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             case (2)
                 enemy3_hp = enemy3_hp - 2
                 x = add(5)
                 hero_hp = hero_hp - x
-                write (*,fmt='(a)', advance='no') '\n敵のダメージ2\n'
+                print '(A)', '\n敵のダメージ2'
                 print "('ワイのダメージ',i0)", x
                 read *
-                write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+                write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             case (3)
                 enemy3_hp = enemy3_hp - 3
                 x = add(5)
                 hero_hp = hero_hp - x
-                write (*,fmt='(a)', advance='no') '\n敵のダメージ3\n'
+                print '(A)', '\n敵のダメージ3'
                 print "('ワイのダメージ',i0)", x
                 read *
-                write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+                write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             case (4)
                 enemy3_hp = enemy3_hp - 4
                 x = add(5)
                 hero_hp = hero_hp - x
-                write (*,fmt='(a)', advance='no') '\n敵のダメージ4\n'
+                print '(A)', '\n敵のダメージ4'
                 print "('ワイのダメージ',i0)", x
                 read *
-                write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+                write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             case (5)
                 enemy3_hp = enemy3_hp - 5
                 x = add(5)
                 hero_hp = hero_hp - x
-                write (*,fmt='(a)', advance='no') '\n敵のダメージ5\n'
+                print '(A)', '\n敵のダメージ5'
                 print "('ワイのダメージ',i0)", x
                 read *
-                write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+                write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             case default
                 enemy3_hp = enemy3_hp - 0
-                write (*,fmt='(a)', advance='no') '\n敵のダメージ0\n'
+                print '(A)', '\n敵のダメージ0'
                 x = add(5)
                 hero_hp = hero_hp - x
                 print "('ワイのダメージ',i0)", x
                 read *
-                write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+                write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             end select
         else if (d .eq. '2') then
             n = add(3)
@@ -609,84 +615,88 @@ subroutine game_3()
             case (1)
                 enemy3_hp = enemy3_hp - 5
                 hero_mp = hero_mp - 1
-                write (*,fmt='(a)', advance='no') '\n敵のダメージ5\n'
-                write (*,fmt='(a)', advance='no') 'MP: 1消費\n'
+                print '(A)', '\n敵のダメージ5'
+                print '(A)', 'MP: 1消費'
                 x = add(5)
                 hero_hp = hero_hp - x
                 print "('ワイのダメージ',i0)", x
                 read *
-                write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+                write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             case (2)
                 enemy3_hp = enemy3_hp - 6
                 hero_mp = hero_mp - 1
                 x = add(5)
                 hero_hp = hero_hp - x
-                write (*,fmt='(a)', advance='no') '\n敵のダメージ6\n'
-                write (*,fmt='(a)', advance='no') 'MP: 1消費\n'
+                print '(A)', '\n敵のダメージ6'
+                print '(A)', 'MP: 1消費'
                 print "('ワイのダメージ',i0)", x
                 read *
-                write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+                write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             case (3)
                 enemy3_hp = enemy3_hp - 7
                 hero_mp = hero_mp - 1
-                write (*,fmt='(a)', advance='no') '\n敵のダメージ7\n'
-                write (*,fmt='(a)', advance='no') 'MP: 1消費\n'
+                print '(A)', '\n敵のダメージ7'
+                print '(A)', 'MP: 1消費'
                 x = add(5)
                 hero_hp = hero_hp - x
                 print "('ワイのダメージ',i0)", x
                 read *
-                write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+                write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             case default
                 enemy3_hp = enemy3_hp - 0
                 hero_mp = hero_mp - 1
-                write (*,fmt='(a)', advance='no') '\n敵のダメージ0\n'
-                write (*,fmt='(a)', advance='no') 'MP: 1消費\n'
+                print '(A)', '\n敵のダメージ0'
+                print '(A)', 'MP: 1消費'
                 x = add(5)
                 hero_hp = hero_hp - x
                 print "('ワイのダメージ',i0)", x
                 read *
-                write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+                write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             end select
         else if (d .eq. '3') then
             mp = mp + 1
             n = add(1)
             select case(n)
             case (1)
-                write (*,fmt='(a)', advance='no') '\n防御成功\n'
-                write (*,fmt='(a)', advance='no') 'HP: 1回復\n'
-                if (mp .eq. 5 .or. mp .eq. 10 .or. mp .eq. 15 .or. mp .eq. 20 .or. mp .eq. 25 .or. mp .eq. 30) then
-                    write (*,fmt='(a)', advance='no') 'MP: 1回復\n'
-                    hero_mp = hero_mp + 1
-                end if
+                print '(A)', '\n防御成功'
+                print '(A)', 'HP: 1回復'
+                do y = 5, 100000000
+                    if (mp .eq. y) then
+                        print '(A)', 'MP: 1回復'
+                        hero_mp = hero_mp + 1
+                    else if (mp .lt. y) then
+                        exit
+                    end if
+                end do
                 read *
-                write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+                write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             case default
-                write (*,fmt='(a)', advance='no') '\n防御失敗\n'
+                print '(A)', '\n防御失敗'
                 hero_hp = hero_hp - 1
-                write (*,fmt='(a)', advance='no') 'ワイのダメージ1\n'
+                print '(A)', 'ワイのダメージ1'
                 read *
-                write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+                write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             end select
         else if (d .eq. '4') then
             n = add(9)
             select case(n)
             case (0)
-                write (*,fmt='(a)', advance='no') '\n逃げ切れた\n'
+                print '(A)', '\n逃げ切れた'
                 read *
-                write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+                write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
                 exit
             case default
-                write (*,fmt='(a)', advance='no') '\n逃走失敗\n'
+                print '(A)', '\n逃走失敗'
                 x = add(5)
                 hero_hp = hero_hp - x
                 print "('ワイのダメージ',i0)", x
                 read *
-                write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+                write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             end select
         else
-            write (*,fmt='(a)', advance='no') '\nそんなもんねぇよｗ\n'
+            print '(A)', '\nそんなもんねぇよｗ'
             call sleep(1)
-            write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+            write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
         end if
     end do
     contains
@@ -744,97 +754,98 @@ subroutine game()
 end subroutine game
 
 subroutine nizihoutei()
+    use, intrinsic :: ieee_arithmetic
     implicit none
     real(kind=16) :: a, b, c, bac, kai1, kai2 = 0
-    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-    write (*,fmt='(a)', advance='no') '公式: ax^2 * bx * c = 0\n\n'
-    write (*,fmt='(a)', advance='no') 'a値を入力してください。\n'
+    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    print '(A)', '公式: ax^2 * bx * c = 0\n'
+    print '(A)', 'a値を入力してください。'
     read *, a
-    write (*,fmt='(a)', advance='no') 'b値を入力してください。\n'
+    print '(A)', 'b値を入力してください。'
     read *, b
-    write (*,fmt='(a)', advance='no') 'c値を入力してください。\n'
+    print '(A)', 'c値を入力してください。'
     read *, c
-    print*, '\n答え'
+    print '(A)', '\n答え'
     bac = b*b-4*a*c
     kai1 = (-b+sqrt(bac)) / (2*a)
     kai2 = (-b-sqrt(bac)) / (2*a)
     print*, kai1
     print*, kai2
-    print*, '\nEnterを押してください。'
+    print '(A)', '\nEnterを押してください。'
     read *
-    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
 end subroutine nizihoutei
 
 subroutine n_sin()
     implicit none
     real(kind=16) :: n = 0
-    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-    write (*,fmt='(a)', advance='no') '値を入力してください。\n'
+    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    print '(A)', '値を入力してください。'
     read *, n
     print*, '\n答え'
     print*, sin(n)
-    print*, '\nEnterを押してください。'
+    print '(A)', '\nEnterを押してください。'
     read *
-    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
 end subroutine n_sin
 
 subroutine n_cos()
     implicit none
     real(kind=16) :: n = 0
-    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-    write (*,fmt='(a)', advance='no') '値を入力してください。\n'
+    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    print '(A)', '値を入力してください。'
     read *, n
-    print*, '\n答え'
+    print '(A)', '\n答え'
     print*, cos(n)
     print*, '\nEnterを押してください。'
     read *
-    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
 end subroutine n_cos
 
 subroutine  n_tan()
     implicit none
     real(kind=16) :: n = 0
-    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-    write (*,fmt='(a)', advance='no') '値を入力してください。\n'
+    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    print '(A)', '値を入力してください。'
     read *, n
     print*, '\n答え'
     print*, tan(n)
     print*, '\nEnterを押してください。'
     read *
-    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
 end subroutine n_tan
 
 subroutine n_asin()
     implicit none
     real(kind=16) :: n = 0
-    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-    write (*,fmt='(a)', advance='no') '値を入力してください。\n'
+    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    print '(A)', '値を入力してください。'
     read *, n
     print*, '\n答え'
     print*, asin(n)
     print*, '\nEnterを押してください。'
     read *
-    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
 end subroutine n_asin
 
 subroutine n_acos()
     implicit none
     real(kind=16) :: n = 0
-    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-    write (*,fmt='(a)', advance='no') '値を入力してください。\n'
+    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    print '(A)', '値を入力してください。'
     read *, n
     print*, '\n答え'
     print*, acos(n)
     print*, '\nEnterを押してください。'
     read *
-    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
 end subroutine n_acos
 
 subroutine n_atan()
     implicit none
     real(kind=16) :: n = 0
-    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-    write (*,fmt='(a)', advance='no') '値を入力してください。\n'
+    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    print '(A)', '値を入力してください。'
     read *, n
     print*, '\n答え'
     print*, atan(n)
@@ -847,69 +858,66 @@ subroutine n_atan2()
     implicit none
     real(kind=16) :: x = 0
     real(kind=16) :: y = 0
-    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-    write (*,fmt='(a)', advance='no') 'y値を入力してください。\n'
+    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    print '(A)', 'y値を入力してください。'
     read (*, *) x
-    write (*,fmt='(a)', advance='no') 'x値を入力してください。\n'
+    print '(A)', 'x値を入力してください。'
     read (*, *) y
     print*, '\n答え'
     print*, atan2(y, x)
     print*, '\nEnterを押してください。'
     read *
-    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
 end subroutine n_atan2
 
 subroutine n_aimag()
     implicit none
     complex(kind=8)  :: z
-    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-    write (*,fmt='(a)', advance='no') '入力例: (2.71, 0.99)\n\n'
-    write (*,fmt='(a)', advance='no') '値を入力してください。\n'
+    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    print '(A)',  '入力例: (2.71, 0.99)\n'
+    print '(A)', '値を入力してください。'
     read (*, *) z
     print*, '\n答え'
     print*, aimag(z)
     print*, '\nEnterを押してください。'
     read *
-    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
 end subroutine n_aimag
 
 subroutine n_log10()
     implicit none
     real(kind=16) :: n = 0
-    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-    write (*,fmt='(a)', advance='no') '値を入力してください。\n'
+    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    print '(A)', '値を入力してください。'
     read (*, *) n
     print*, '\n答え'
     print*, log10(n)
     print*, '\nEnterを押してください。'
     read *
-    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
 end subroutine n_log10
 
 subroutine n_log()
     implicit none
     real(kind=16) :: n = 0
-    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-    write (*,fmt='(a)', advance='no') '値を入力してください。\n'
+    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    print '(A)', '値を入力してください。'
     read (*, *) n
     print*, '\n答え'
     print*, log(n)
     print*, '\nEnterを押してください。'
     read *
-    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
 end subroutine n_log
 
 program calculator
     use, intrinsic :: iso_fortran_env
     implicit none
     character(len=256) :: str
-    !integer(kind=8) :: n = 0
-    !real(kind=16) :: x = 0
     real(real128), parameter :: PI = 3.14159265358979323846264338327950288_real128
-    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     do
-        print*, '\n-----------------------------------------'
-        !write (*,fmt='(a)', advance='no') '何の計算をしますか？\n'
+        print '(A)', '\n-----------------------------------------'
         print*, '1 足し算          12 三角関数(sin)'
         print*, '2 引き算          13 三角関数(cos)'
         print*, '3 掛け算          14 三角関数(tan)'
@@ -922,9 +930,9 @@ program calculator
         print*, '10 2次方程式      21 自然対数(log)'
         print*, '11 超戦略ゲーム\n'
         print*, '99 終了'
-        write (*,fmt='(a)', advance='no') '-----------------------------------------\n'
-        write(*,fmt='(a)', advance='no') ': '
-        read (*, '(a)') str
+        print '(A)', '-----------------------------------------'
+        write (*,fmt='(A)', advance='no') ': '
+        read (*, '(A)') str
         select case(str)
         case ('1')
             call tasizan()
@@ -937,12 +945,12 @@ program calculator
         case ('5')
             call heihoukon()
         case ('6')
-            write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-            print*, '\n円周率'
+            print '(A)', '\x1b[2J\x1b[3J\x1b[H'
+            print*, '円周率'
             print '(2F40.36)', 2.0_real128*asin(1.0_real128)
             print*, '\nEnterを押してください。'
             read *
-            write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+            print '(A)', '\x1b[2J\x1b[3J\x1b[H'
         case ('7')
             call ensyuritu()
         case ('8')
@@ -974,12 +982,12 @@ program calculator
         case ('21')
             call n_log()
         case ('99')
-            write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+            write(*, fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             exit
         case default
             print*, 'そんなもんねぇよｗ'
             call sleep(1)
-            write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+            print '(A)', '\x1b[2J\x1b[3J\x1b[H'
         end select
     end do
 end program calculator
