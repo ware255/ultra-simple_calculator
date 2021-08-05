@@ -915,8 +915,8 @@ program calculator
     implicit none
     character(len=256) :: str
     real(real128), parameter :: PI = 3.14159265358979323846264338327950288_real128
-    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     do
+        write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
         print '(A)', '\n-----------------------------------------'
         print*, '1 足し算          12 三角関数(sin)'
         print*, '2 引き算          13 三角関数(cos)'
