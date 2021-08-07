@@ -5,12 +5,13 @@ CUIで機能します。「GUIの方がいい」と欲張らないでくださ�
      Fortranコンパイラーインストール
      $ sudo apt install gfortran
      コンパイル
-     $ gfortran -Ofast -march=native -fbackslash calculator.f90 -o calculator
+     $ gfortran -O3 -march=native -fbackslash calculator.f90 -o calculator
      実行
      $ ./calculator
 # 動作確認済みOS
      ・WSL Debian
      ・Linux等
+Windowsではエスケープシーケンスが対応しておりませんので使用しないでください。(バグるかも？)
 <br /><br />
 2021 08/05　無駄なコードをなるべく減らしました。<br />
 2021 07/10　関数電卓っぽく機能を追加しました。<br />
