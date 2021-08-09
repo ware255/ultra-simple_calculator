@@ -4,9 +4,9 @@ subroutine tasizan()
     real(kind=16) :: y = 0
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)',  '値を入力してください。'
-    read *, x
+    read (*, *) x
     print '(A)', '値を入力してください。'
-    read *, y
+    read (*, *) y
     print*, '\n答え'
     print*, x + y
     print*, '\nEnterを押してください。'
@@ -20,9 +20,9 @@ subroutine hikizan()
     real(kind=16) :: y = 0
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
-    read *, x
+    read (*, *) x
     print '(A)', '値を入力してください。'
-    read *, y
+    read (*, *) y
     print*, '\n答え'
     print*, x - y
     print*, '\nEnterを押してください。'
@@ -34,16 +34,25 @@ subroutine kakezan()
     implicit none
     real(kind=16) :: x = 0
     real(kind=16) :: y = 0
+    character(len=256) :: str
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
-    read *, x
+    read (*, *) x
     print '(A)', '値を入力してください。'
-    read *, y
+    read (*, '(A)') str
+    if (str .eq. '') then
+        print*, '\n答え'
+        print*, x**2
+        print*, '\nEnterを押してください。'
+        read *
+        goto 11
+    end if
+    read (str, *) y
     print*, '\n答え'
     print*, x * y
     print*, '\nEnterを押してください。'
     read *
-    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+11  write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
 end subroutine kakezan
 
 subroutine warizan()
@@ -52,9 +61,9 @@ subroutine warizan()
     real(kind=16) :: y = 0
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
-    read *, x
+    read (*, *) x
     print '(A)', '値を入力してください。'
-    read *, y
+    read (*, *) y
     print*, '\n答え'
     print*, x / y
     print*, '\nEnterを押してください。'
@@ -66,17 +75,15 @@ subroutine heihoukon()
     implicit none
     real(kind=16) :: x = 0
     integer(kind=8) :: i = 0
-    integer(kind=4) :: v1, v2
-    v1 = 2;v2 = 3
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
-    read *, x
+    read (*, *) x
     print*, '\n近似値'
     print*, sqrt(x)
     i = int(x)
-    if (i .eq. v1) then
+    if (i .eq. 2) then
         print*, '　一夜一夜に月見ごろ          <= 覚え方'
-    else if (i .eq. v2) then
+    else if (i .eq. 3) then
         print*, '　人並みにおごれや            <= 覚え方'
     end if
     print*, '\nEnterを押してください。'
@@ -85,12 +92,13 @@ subroutine heihoukon()
 end subroutine heihoukon
 
 subroutine ensyuritu()
+    use, intrinsic :: iso_fortran_env
     implicit none
-    real(kind=16), parameter :: pi = 3.1415926535897932384626433832795028!4.0*atan(1.0)
+    real(kind=16), parameter :: pi = 2.0_real128*asin(1.0_real128)
     real(kind=16) :: r = 0
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
-    read *, r
+    read (*, *) r
     print*, '\n答え'
     print*, r**2 * pi !公式:πr^2
     print*, '\nEnterを押してください。'
@@ -99,12 +107,13 @@ subroutine ensyuritu()
 end subroutine ensyuritu
 
 subroutine syutyou()
+    use, intrinsic :: iso_fortran_env
     implicit none
-    real(kind=16), parameter :: pi = 3.1415926535897932384626433832795028!4.0*atan(1.0)
     real(kind=16) :: r = 0
+    real(kind=16), parameter :: pi = 2.0_real128*asin(1.0_real128)
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
-    read *, r
+    read (*, *) r
     print*, '\n答え'
     print*, 2*pi*r
     print*, '\nEnterを押してください。'
@@ -118,9 +127,9 @@ subroutine nizyou()
     real(kind=16) :: y = 0
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', 'べき乗する値を入力してください。'
-    read *, x
+    read (*, *) x
     print '(A)', 'n乗する値を入力してください。'
-    read *, y
+    read (*, *) y
     print*, '\n答え'
     print*, x**y
     print*, '\nEnterを押してください。'
@@ -732,7 +741,7 @@ subroutine game()
     case default
         call game_3()
     end select
-    contains !乱数
+    contains
     function add(n)
         implicit none
         integer(kind=4) :: add, rad, n
@@ -754,23 +763,25 @@ subroutine game()
 end subroutine game
 
 subroutine nizihoutei()
-    use, intrinsic :: ieee_arithmetic
     implicit none
-    real(kind=16) :: a, b, c, bac, kai1, kai2 = 0
+    real(kind=16) :: a, b, c, kai1, kai2 = 0
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-    print '(A)', '公式: ax^2 * bx * c = 0\n'
+    print '(A)', '公式: ax^2 + bx + c = 0\n'
     print '(A)', 'a値を入力してください。'
-    read *, a
+    read (*, *) a
     print '(A)', 'b値を入力してください。'
-    read *, b
+    read (*, *) b
     print '(A)', 'c値を入力してください。'
-    read *, c
+    read (*, *) c
     print '(A)', '\n答え'
-    bac = b*b-4*a*c
-    kai1 = (-b+sqrt(bac)) / (2*a)
-    kai2 = (-b-sqrt(bac)) / (2*a)
-    print*, kai1
-    print*, kai2
+    kai1 = (-b+sqrt((b**2)-4*a*c)) / (2*a)
+    kai2 = (-b-sqrt((b**2)-4*a*c)) / (2*a)
+    open (11, file='nizihoutei.txt', status='replace')
+        write (11, *) kai1
+        write (11, *) kai2
+    close (11)
+    print *, kai1
+    print *, kai2
     print '(A)', '\nEnterを押してください。'
     read *
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
@@ -781,7 +792,7 @@ subroutine n_sin()
     real(kind=16) :: n = 0
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
-    read *, n
+    read (*, *) n
     print*, '\n答え'
     print*, sin(n)
     print '(A)', '\nEnterを押してください。'
@@ -794,7 +805,7 @@ subroutine n_cos()
     real(kind=16) :: n = 0
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
-    read *, n
+    read (*, *) n
     print '(A)', '\n答え'
     print*, cos(n)
     print*, '\nEnterを押してください。'
@@ -807,7 +818,7 @@ subroutine  n_tan()
     real(kind=16) :: n = 0
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
-    read *, n
+    read (*, *) n
     print*, '\n答え'
     print*, tan(n)
     print*, '\nEnterを押してください。'
@@ -820,7 +831,7 @@ subroutine n_asin()
     real(kind=16) :: n = 0
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
-    read *, n
+    read (*, *) n
     print*, '\n答え'
     print*, asin(n)
     print*, '\nEnterを押してください。'
@@ -833,7 +844,7 @@ subroutine n_acos()
     real(kind=16) :: n = 0
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
-    read *, n
+    read (*, *) n
     print*, '\n答え'
     print*, acos(n)
     print*, '\nEnterを押してください。'
@@ -846,7 +857,7 @@ subroutine n_atan()
     real(kind=16) :: n = 0
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
-    read *, n
+    read (*, *) n
     print*, '\n答え'
     print*, atan(n)
     print*, '\nEnterを押してください。'
@@ -872,7 +883,7 @@ end subroutine n_atan2
 
 subroutine n_aimag()
     implicit none
-    complex(kind=8)  :: z
+    complex(kind=8) :: z
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)',  '入力例: (2.71, 0.99)\n'
     print '(A)', '値を入力してください。'
@@ -910,6 +921,53 @@ subroutine n_log()
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
 end subroutine n_log
 
+subroutine mozuro
+    implicit none
+    real(kind=16) :: a, n = 0
+    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    print '(A)', '値aを入力してください。'
+    read (*, *) a
+    print '(A)', '値nを入力してください。'
+    read (*, *) n
+    print*, '\n答え'
+    print*, mod(a, n)
+    print*, '\nEnterを押してください。'
+    read *
+    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+end subroutine mozuro
+
+subroutine page_01()
+    implicit none
+    character(len=256) :: str
+    do
+        write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+        print '(A)', '\n-----------------------------------------'
+        print*, '1 モジュロ演算(a mod n)'
+        print*, '2 ???\n'
+        print*, '99 終了           00 Back'
+        print '(A)', '-----------------------------------------'
+        write (*,fmt='(A)', advance='no') ': '
+        read (*, '(A)') str
+        select case(str)
+        case ('1')
+            call mozuro()
+        case ('2')
+            print '(A)', '\n制作者:ware255\n\n???ってなんだろう、って思ったでしょｗ\n&
+            &思っちゃったやつソースコード見てねぇって分かっちまうから気お付けろよｗ'
+            read *
+            exit
+        case ('00')
+            exit
+        case ('99')
+            write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+            stop
+        case default
+            print*, 'そんなもんねぇよｗ'
+            call sleep(1)
+        end select
+    end do
+end subroutine page_01
+
 program calculator
     use, intrinsic :: iso_fortran_env
     implicit none
@@ -929,7 +987,7 @@ program calculator
         print*, '9 べき乗          20 常用対数(log10)'
         print*, '10 2次方程式      21 自然対数(log)'
         print*, '11 超戦略ゲーム\n'
-        print*, '99 終了'
+        print*, '99 終了           01 Next_page'
         print '(A)', '-----------------------------------------'
         write (*,fmt='(A)', advance='no') ': '
         read (*, '(A)') str
@@ -984,10 +1042,11 @@ program calculator
         case ('99')
             write(*, fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             exit
+        case ('01')
+            call page_01()
         case default
             print*, 'そんなもんねぇよｗ'
             call sleep(1)
-            print '(A)', '\x1b[2J\x1b[3J\x1b[H'
         end select
     end do
 end program calculator
