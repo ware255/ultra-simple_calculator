@@ -289,7 +289,7 @@ subroutine game_1()
         else if (d .eq. '4') then
             n = add(1)
             select case(n)
-            case (0)
+            case (1)
                 print '(A)', '\n逃げ切れた'
                 read *
                 write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
@@ -488,7 +488,7 @@ subroutine game_2()
         else if (d .eq. '4') then
             n = add(1)
             select case(n)
-            case (0)
+            case (1)
                 print '(A)', '\n逃げ切れた'
                 read *
                 write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
@@ -685,7 +685,7 @@ subroutine game_3()
         else if (d .eq. '4') then
             n = add(9)
             select case(n)
-            case (0)
+            case (1)
                 print '(A)', '\n逃げ切れた'
                 read *
                 write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
@@ -936,7 +936,7 @@ subroutine page_01()
         case ('1')
             call mozuro()
         case ('2')
-            print '(A)', '\n制作者:ware255\n\n???ってなんだろう、って思ったでしょｗ\n&
+            print '(A)', '\n制作者:ware255(われ)\n\n???ってなんだろう、って思ったでしょｗ\n&
             &思っちゃったやつソースコード見てねぇって分かっちまうから気お付けろよｗ'
             read *
             exit
