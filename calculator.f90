@@ -1,7 +1,7 @@
 subroutine tasizan()
     implicit none
-    real(kind=16) :: x = 0
-    real(kind=16) :: y = 0
+    real(kind=16) :: x = 0.0d0
+    real(kind=16) :: y = 0.0d0
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)',  '値を入力してください。'
     read (*, *) x
@@ -11,13 +11,12 @@ subroutine tasizan()
     print*, x + y
     print*, '\nEnterを押してください。'
     read *
-    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
 end subroutine tasizan
 
 subroutine hikizan()
     implicit none
-    real(kind=16) :: x = 0
-    real(kind=16) :: y = 0
+    real(kind=16) :: x = 0.0d0
+    real(kind=16) :: y = 0.0d0
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
     read (*, *) x
@@ -27,13 +26,12 @@ subroutine hikizan()
     print*, x - y
     print*, '\nEnterを押してください。'
     read *
-    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
 end subroutine hikizan
 
 subroutine kakezan()
     implicit none
-    real(kind=16) :: x = 0
-    real(kind=16) :: y = 0
+    real(kind=16) :: x = 0.0d0
+    real(kind=16) :: y = 0.0d0
     character(len=256) :: str
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
@@ -57,8 +55,8 @@ end subroutine kakezan
 
 subroutine warizan()
     implicit none
-    real(kind=16) :: x = 0
-    real(kind=16) :: y = 0
+    real(kind=16) :: x = 0.0d0
+    real(kind=16) :: y = 0.0d0
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
     read (*, *) x
@@ -68,12 +66,11 @@ subroutine warizan()
     print*, x / y
     print*, '\nEnterを押してください。'
     read *
-    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
 end subroutine warizan
 
 subroutine heihoukon()
     implicit none
-    real(kind=16) :: x = 0
+    real(kind=16) :: x = 0.0d0
     integer(kind=8) :: i = 0
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
@@ -88,7 +85,6 @@ subroutine heihoukon()
     end if
     print*, '\nEnterを押してください。'
     read *
-    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
 end subroutine heihoukon
 
 subroutine ensyuritu()
@@ -103,13 +99,12 @@ subroutine ensyuritu()
     print*, r**2 * pi !公式:πr^2
     print*, '\nEnterを押してください。'
     read *
-    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
 end subroutine ensyuritu
 
 subroutine syutyou()
     use, intrinsic :: iso_fortran_env
     implicit none
-    real(kind=16) :: r = 0
+    real(kind=16) :: r = 0.0d0
     real(kind=16), parameter :: pi = 2.0_real128*asin(1.0_real128)
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
@@ -118,13 +113,12 @@ subroutine syutyou()
     print*, 2*pi*r
     print*, '\nEnterを押してください。'
     read *
-    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
 end subroutine syutyou
 
 subroutine nizyou()
     implicit none
-    real(kind=16) :: x = 0
-    real(kind=16) :: y = 0
+    real(kind=16) :: x = 0.0d0
+    real(kind=16) :: y = 0.0d0
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', 'べき乗する値を入力してください。'
     read (*, *) x
@@ -134,7 +128,6 @@ subroutine nizyou()
     print*, x**y
     print*, '\nEnterを押してください。'
     read *
-    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
 end subroutine nizyou
 
 subroutine game_1()
@@ -156,7 +149,8 @@ subroutine game_1()
             write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             exit
         else if (enemy1_hp .le. 0) then
-            print '(A)', '敵を撲殺することが出来た。ワイの勝利！！！'
+            print '(A)', '\n敵を撲殺することが出来た。ワイの勝利！！！'
+            print '(A)', 'Ураааааааааааааааа!'
             read *
             write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             exit
@@ -319,8 +313,8 @@ subroutine game_1()
         implicit none
         integer(kind=4) :: add, rad, n
         integer(kind=4) :: seedsize = 3
-        real(kind=16) :: y
-        real(kind=16) :: x
+        real(kind=4) :: y
+        real(kind=4) :: x
         integer,allocatable :: seed(:)
         call random_seed(size=seedsize)
         allocate(seed(seedsize))
@@ -354,7 +348,8 @@ subroutine game_2()
             write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             exit
         else if (enemy2_hp .le. 0) then
-            print '(A)', '敵を撲殺することが出来た。ワイの勝利！！！'
+            print '(A)', '\n敵を撲殺することが出来た。ワイの勝利！！！'
+            print '(A)', 'Ураааааааааааааааа!'
             read *
             write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             exit
@@ -517,8 +512,8 @@ subroutine game_2()
         implicit none
         integer(kind=4) :: add, rad, n
         integer(kind=4) :: seedsize = 3
-        real(kind=16) :: y
-        real(kind=16) :: x
+        real(kind=4) :: y
+        real(kind=4) :: x
         integer,allocatable :: seed(:)
         call random_seed(size=seedsize)
         allocate(seed(seedsize))
@@ -552,7 +547,8 @@ subroutine game_3()
             write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             exit
         else if (enemy3_hp .le. 0) then
-            print '(A)', '敵を撲殺することが出来た。ワイの勝利！！！'
+            print '(A)', '\n敵を撲殺することが出来た。ワイの勝利！！！'
+            print '(A)', 'Ураааааааааааааааа!'
             read *
             write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             exit
@@ -713,8 +709,8 @@ subroutine game_3()
         implicit none
         integer(kind=4) :: add, rad, n
         integer(kind=4) :: seedsize = 3
-        real(kind=16) :: y
-        real(kind=16) :: x
+        real(kind=4) :: y
+        real(kind=4) :: x
         integer,allocatable :: seed(:)
         call random_seed(size=seedsize)
         allocate(seed(seedsize))
@@ -746,15 +742,15 @@ subroutine game()
         implicit none
         integer(kind=4) :: add, rad, n
         integer(kind=4) :: seedsize = 3
-        real(kind=16) :: y
-        real(kind=16) :: x
+        real(kind=4) :: y
+        real(kind=4) :: x
         integer,allocatable :: seed(:)
         call random_seed(size=seedsize)
         allocate(seed(seedsize))
         do
             call random_seed(get=seed)
             call random_number(x)
-            y = x*10
+            y = x*100
             rad = int(y)
             if (rad .lt. n) exit
         end do
@@ -764,7 +760,7 @@ end subroutine game
 
 subroutine nizihoutei()
     implicit none
-    real(kind=16) :: a, b, c, kai1, kai2 = 0
+    real(kind=16) :: a, b, c, kai1, kai2 = 0.0d0
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '公式: ax^2 + bx + c = 0\n'
     print '(A)', 'a値を入力してください。'
@@ -784,12 +780,11 @@ subroutine nizihoutei()
     print *, kai2
     print '(A)', '\nEnterを押してください。'
     read *
-    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
 end subroutine nizihoutei
 
 subroutine n_sin()
     implicit none
-    real(kind=16) :: n = 0
+    real(kind=16) :: n = 0.0d0
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
     read (*, *) n
@@ -797,12 +792,11 @@ subroutine n_sin()
     print*, sin(n)
     print '(A)', '\nEnterを押してください。'
     read *
-    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
 end subroutine n_sin
 
 subroutine n_cos()
     implicit none
-    real(kind=16) :: n = 0
+    real(kind=16) :: n = 0.0d0
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
     read (*, *) n
@@ -810,12 +804,11 @@ subroutine n_cos()
     print*, cos(n)
     print*, '\nEnterを押してください。'
     read *
-    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
 end subroutine n_cos
 
 subroutine  n_tan()
     implicit none
-    real(kind=16) :: n = 0
+    real(kind=16) :: n = 0.0d0
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
     read (*, *) n
@@ -823,12 +816,11 @@ subroutine  n_tan()
     print*, tan(n)
     print*, '\nEnterを押してください。'
     read *
-    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
 end subroutine n_tan
 
 subroutine n_asin()
     implicit none
-    real(kind=16) :: n = 0
+    real(kind=16) :: n = 0.0d0
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
     read (*, *) n
@@ -836,12 +828,11 @@ subroutine n_asin()
     print*, asin(n)
     print*, '\nEnterを押してください。'
     read *
-    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
 end subroutine n_asin
 
 subroutine n_acos()
     implicit none
-    real(kind=16) :: n = 0
+    real(kind=16) :: n = 0.0d0
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
     read (*, *) n
@@ -849,12 +840,11 @@ subroutine n_acos()
     print*, acos(n)
     print*, '\nEnterを押してください。'
     read *
-    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
 end subroutine n_acos
 
 subroutine n_atan()
     implicit none
-    real(kind=16) :: n = 0
+    real(kind=16) :: n = 0.0d0
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
     read (*, *) n
@@ -862,13 +852,12 @@ subroutine n_atan()
     print*, atan(n)
     print*, '\nEnterを押してください。'
     read *
-    write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
 end subroutine n_atan
 
 subroutine n_atan2()
     implicit none
-    real(kind=16) :: x = 0
-    real(kind=16) :: y = 0
+    real(kind=16) :: x = 0.0d0
+    real(kind=16) :: y = 0.0d0
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', 'y値を入力してください。'
     read (*, *) x
@@ -878,7 +867,6 @@ subroutine n_atan2()
     print*, atan2(y, x)
     print*, '\nEnterを押してください。'
     read *
-    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
 end subroutine n_atan2
 
 subroutine n_aimag()
@@ -892,12 +880,11 @@ subroutine n_aimag()
     print*, aimag(z)
     print*, '\nEnterを押してください。'
     read *
-    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
 end subroutine n_aimag
 
 subroutine n_log10()
     implicit none
-    real(kind=16) :: n = 0
+    real(kind=16) :: n = 0.0d0
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
     read (*, *) n
@@ -905,12 +892,11 @@ subroutine n_log10()
     print*, log10(n)
     print*, '\nEnterを押してください。'
     read *
-    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
 end subroutine n_log10
 
 subroutine n_log()
     implicit none
-    real(kind=16) :: n = 0
+    real(kind=16) :: n = 0.0d0
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
     read (*, *) n
@@ -918,12 +904,11 @@ subroutine n_log()
     print*, log(n)
     print*, '\nEnterを押してください。'
     read *
-    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
 end subroutine n_log
 
 subroutine mozuro
     implicit none
-    real(kind=16) :: a, n = 0
+    real(kind=16) :: a, n = 0.0d0
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値aを入力してください。'
     read (*, *) a
@@ -933,7 +918,6 @@ subroutine mozuro
     print*, mod(a, n)
     print*, '\nEnterを押してください。'
     read *
-    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
 end subroutine mozuro
 
 subroutine page_01()
@@ -972,7 +956,7 @@ program calculator
     use, intrinsic :: iso_fortran_env
     implicit none
     character(len=256) :: str
-    real(real128), parameter :: PI = 3.14159265358979323846264338327950288_real128
+    real(real128), parameter :: PI = 2.0_real128*asin(1.0_real128)
     do
         write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
         print '(A)', '\n-----------------------------------------'
@@ -1005,10 +989,9 @@ program calculator
         case ('6')
             print '(A)', '\x1b[2J\x1b[3J\x1b[H'
             print*, '円周率'
-            print '(2F40.36)', 2.0_real128*asin(1.0_real128)
+            print '(2F40.36)', PI
             print*, '\nEnterを押してください。'
             read *
-            print '(A)', '\x1b[2J\x1b[3J\x1b[H'
         case ('7')
             call ensyuritu()
         case ('8')
