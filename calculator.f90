@@ -1,7 +1,8 @@
 subroutine tasizan()
+    use, intrinsic :: iso_fortran_env
     implicit none
-    real(kind=16) :: x = 0.0d0
-    real(kind=16) :: y = 0.0d0
+    real(real128) :: x
+    real(real128) :: y
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)',  '値を入力してください。'
     read (*, *) x
@@ -14,9 +15,10 @@ subroutine tasizan()
 end subroutine tasizan
 
 subroutine hikizan()
+    use, intrinsic :: iso_fortran_env
     implicit none
-    real(kind=16) :: x = 0.0d0
-    real(kind=16) :: y = 0.0d0
+    real(real128) :: x
+    real(real128) :: y
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
     read (*, *) x
@@ -29,9 +31,10 @@ subroutine hikizan()
 end subroutine hikizan
 
 subroutine kakezan()
+    use, intrinsic :: iso_fortran_env
     implicit none
-    real(kind=16) :: x = 0.0d0
-    real(kind=16) :: y = 0.0d0
+    real(real128) :: x
+    real(real128) :: y
     character(len=256) :: str
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
@@ -54,9 +57,10 @@ subroutine kakezan()
 end subroutine kakezan
 
 subroutine warizan()
+    use, intrinsic :: iso_fortran_env
     implicit none
-    real(kind=16) :: x = 0.0d0
-    real(kind=16) :: y = 0.0d0
+    real(real128) :: x
+    real(real128) :: y
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
     read (*, *) x
@@ -69,9 +73,10 @@ subroutine warizan()
 end subroutine warizan
 
 subroutine heihoukon()
+    use, intrinsic :: iso_fortran_env
     implicit none
-    real(kind=16) :: x = 0.0d0
-    integer(kind=8) :: i = 0
+    real(real128) :: x
+    integer(int64) :: i
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
     read (*, *) x
@@ -90,13 +95,13 @@ end subroutine heihoukon
 subroutine ensyuritu()
     use, intrinsic :: iso_fortran_env
     implicit none
-    real(kind=16), parameter :: pi = 2.0_real128*asin(1.0_real128)
-    real(kind=16) :: r = 0
+    real(real128), parameter :: pi = 4.0_real128*atan(1.0_real128)
+    real(real128) :: r
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
     read (*, *) r
     print*, '\n答え'
-    print*, r**2 * pi !公式:πr^2
+    print*, r**2 * pi
     print*, '\nEnterを押してください。'
     read *
 end subroutine ensyuritu
@@ -104,8 +109,8 @@ end subroutine ensyuritu
 subroutine syutyou()
     use, intrinsic :: iso_fortran_env
     implicit none
-    real(kind=16) :: r = 0.0d0
-    real(kind=16), parameter :: pi = 2.0_real128*asin(1.0_real128)
+    real(real128), parameter :: pi = 4.0_real128*atan(1.0_real128)
+    real(real128) :: r
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
     read (*, *) r
@@ -116,9 +121,10 @@ subroutine syutyou()
 end subroutine syutyou
 
 subroutine nizyou()
+    use, intrinsic :: iso_fortran_env
     implicit none
-    real(kind=16) :: x = 0.0d0
-    real(kind=16) :: y = 0.0d0
+    real(real128) :: x
+    real(real128) :: y
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', 'べき乗する値を入力してください。'
     read (*, *) x
@@ -131,10 +137,11 @@ subroutine nizyou()
 end subroutine nizyou
 
 subroutine game_1()
+    use, intrinsic :: iso_fortran_env
     implicit none
     character(len=10) d
-    integer(kind=8) :: hero_hp, hero_mp, enemy1_hp, enemy1_mp, n, x
-    integer(kind=8) :: mp = 0, y
+    integer(int64) :: hero_hp, hero_mp, enemy1_hp, enemy1_mp, n, x
+    integer(int64) :: mp = 0, y
     n = 0;x = 0
     hero_hp = 5;enemy1_hp = 10;
     hero_mp = 5;enemy1_mp = 10;
@@ -311,10 +318,10 @@ subroutine game_1()
     contains
     function add(n)
         implicit none
-        integer(kind=4) :: add, rad, n
-        integer(kind=4) :: seedsize = 3
-        real(kind=4) :: y
-        real(kind=4) :: x
+        integer(int32) :: add, rad, n
+        integer(int32) :: seedsize = 3
+        real(real32) :: y
+        real(real32) :: x
         integer,allocatable :: seed(:)
         call random_seed(size=seedsize)
         allocate(seed(seedsize))
@@ -330,10 +337,11 @@ subroutine game_1()
 end subroutine game_1
 
 subroutine game_2()
+    use, intrinsic :: iso_fortran_env
     implicit none
     character(len=10) d
-    integer(kind=8) :: hero_hp, hero_mp, enemy2_hp, enemy2_mp, n, x
-    integer(kind=8) :: mp = 0, y
+    integer(int64) :: hero_hp, hero_mp, enemy2_hp, enemy2_mp, n, x
+    integer(int64) :: mp = 0, y
     n = 0;x = 0
     hero_hp = 5;enemy2_hp = 15
     hero_mp = 5;enemy2_mp = 15
@@ -510,10 +518,10 @@ subroutine game_2()
     contains
     function add(n)
         implicit none
-        integer(kind=4) :: add, rad, n
-        integer(kind=4) :: seedsize = 3
-        real(kind=4) :: y
-        real(kind=4) :: x
+        integer(int32) :: add, rad, n
+        integer(int32) :: seedsize = 3
+        real(real32) :: y
+        real(real32) :: x
         integer,allocatable :: seed(:)
         call random_seed(size=seedsize)
         allocate(seed(seedsize))
@@ -529,10 +537,11 @@ subroutine game_2()
 end subroutine game_2
 
 subroutine game_3()
+    use, intrinsic :: iso_fortran_env
     implicit none
     character(len=10) d
-    integer(kind=8) :: hero_hp, hero_mp, enemy3_hp, enemy3_mp, n, x
-    integer(kind=8) :: mp = 0, y
+    integer(int64) :: hero_hp, hero_mp, enemy3_hp, enemy3_mp, n, x
+    integer(int64) :: mp = 0, y
     n = 0;x = 0
     hero_hp = 5;enemy3_hp = 20
     hero_mp = 5;enemy3_mp = 20
@@ -707,10 +716,10 @@ subroutine game_3()
     contains
     function add(n)
         implicit none
-        integer(kind=4) :: add, rad, n
-        integer(kind=4) :: seedsize = 3
-        real(kind=4) :: y
-        real(kind=4) :: x
+        integer(int32) :: add, rad, n
+        integer(int32) :: seedsize = 3
+        real(real32) :: y
+        real(real32) :: x
         integer,allocatable :: seed(:)
         call random_seed(size=seedsize)
         allocate(seed(seedsize))
@@ -726,8 +735,9 @@ subroutine game_3()
 end subroutine game_3
 
 subroutine game()
+    use, intrinsic :: iso_fortran_env
     implicit none
-    integer(kind=8) :: n
+    integer(int64) :: n
     n = add(9)
     select case(n)
     case (1)
@@ -740,10 +750,10 @@ subroutine game()
     contains
     function add(n)
         implicit none
-        integer(kind=4) :: add, rad, n
-        integer(kind=4) :: seedsize = 3
-        real(kind=4) :: y
-        real(kind=4) :: x
+        integer(int32) :: add, rad, n
+        integer(int32) :: seedsize = 3
+        real(int32) :: y
+        real(int32) :: x
         integer,allocatable :: seed(:)
         call random_seed(size=seedsize)
         allocate(seed(seedsize))
@@ -759,8 +769,9 @@ subroutine game()
 end subroutine game
 
 subroutine nizihoutei()
+    use, intrinsic :: iso_fortran_env
     implicit none
-    real(kind=16) :: a, b, c, kai1, kai2 = 0.0d0
+    real(real128) :: a, b, c, kai1, kai2
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '公式: ax^2 + bx + c = 0\n'
     print '(A)', 'a値を入力してください。'
@@ -783,8 +794,9 @@ subroutine nizihoutei()
 end subroutine nizihoutei
 
 subroutine n_sin()
+    use, intrinsic :: iso_fortran_env
     implicit none
-    real(kind=16) :: n = 0.0d0
+    real(real128) :: n
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
     read (*, *) n
@@ -795,8 +807,9 @@ subroutine n_sin()
 end subroutine n_sin
 
 subroutine n_cos()
+    use, intrinsic :: iso_fortran_env
     implicit none
-    real(kind=16) :: n = 0.0d0
+    real(real128) :: n
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
     read (*, *) n
@@ -807,8 +820,9 @@ subroutine n_cos()
 end subroutine n_cos
 
 subroutine  n_tan()
+    use, intrinsic :: iso_fortran_env
     implicit none
-    real(kind=16) :: n = 0.0d0
+    real(real128) :: n
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
     read (*, *) n
@@ -819,8 +833,9 @@ subroutine  n_tan()
 end subroutine n_tan
 
 subroutine n_asin()
+    use, intrinsic :: iso_fortran_env
     implicit none
-    real(kind=16) :: n = 0.0d0
+    real(real128) :: n
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
     read (*, *) n
@@ -831,8 +846,9 @@ subroutine n_asin()
 end subroutine n_asin
 
 subroutine n_acos()
+    use, intrinsic :: iso_fortran_env
     implicit none
-    real(kind=16) :: n = 0.0d0
+    real(real128) :: n
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
     read (*, *) n
@@ -843,8 +859,9 @@ subroutine n_acos()
 end subroutine n_acos
 
 subroutine n_atan()
+    use, intrinsic :: iso_fortran_env
     implicit none
-    real(kind=16) :: n = 0.0d0
+    real(real128) :: n
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
     read (*, *) n
@@ -855,9 +872,10 @@ subroutine n_atan()
 end subroutine n_atan
 
 subroutine n_atan2()
+    use, intrinsic :: iso_fortran_env
     implicit none
-    real(kind=16) :: x = 0.0d0
-    real(kind=16) :: y = 0.0d0
+    real(real128) :: x
+    real(real128) :: y
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', 'y値を入力してください。'
     read (*, *) x
@@ -883,8 +901,9 @@ subroutine n_aimag()
 end subroutine n_aimag
 
 subroutine n_log10()
+    use, intrinsic :: iso_fortran_env
     implicit none
-    real(kind=16) :: n = 0.0d0
+    real(real128) :: n
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
     read (*, *) n
@@ -895,8 +914,9 @@ subroutine n_log10()
 end subroutine n_log10
 
 subroutine n_log()
+    use, intrinsic :: iso_fortran_env
     implicit none
-    real(kind=16) :: n = 0.0d0
+    real(real128) :: n
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
     read (*, *) n
@@ -907,8 +927,9 @@ subroutine n_log()
 end subroutine n_log
 
 subroutine mozuro
+    use, intrinsic :: iso_fortran_env
     implicit none
-    real(kind=16) :: a, n = 0.0d0
+    real(real128) :: a, n
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値aを入力してください。'
     read (*, *) a
@@ -920,6 +941,104 @@ subroutine mozuro
     read *
 end subroutine mozuro
 
+subroutine randsu()
+    use, intrinsic :: iso_fortran_env
+    implicit none
+    integer(int64) :: x, n
+    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    print '(A)', 'xを入力してください。(1～x)'
+    read (*, *) x
+    n = randon(x)
+    print*, '\n出力'
+    print*, n
+    print*, '\nEnterを押してください。'
+    read *
+    contains
+    function randon(n)
+        implicit none
+        integer(int64) :: randon, rad, n
+        integer(int32) :: seedsize = 3
+        real(real128) :: y, x
+        integer,allocatable :: seed(:)
+        call random_seed(size=seedsize)
+        allocate(seed(seedsize))
+        if (n .le. 1024) then
+            do
+                call random_seed(get=seed)
+                call random_number(x)
+                y = x*1024
+                rad = int(y)
+                if (rad .lt. n) exit
+            end do
+        else if (n .le. 7812524) then
+            do
+                call random_seed(get=seed)
+                call random_number(x)
+                y = x*7812524
+                rad = int(y)
+                if (rad .lt. n) exit
+            end do
+        else if (n .le. 15625024) then
+            do
+                call random_seed(get=seed)
+                call random_number(x)
+                y = x*15625024
+                rad = int(y)
+                if (rad .lt. n) exit
+            end do
+        else if (n .le. 31250024) then
+            do
+                call random_seed(get=seed)
+                call random_number(x)
+                y = x*31250024
+                rad = int(y)
+                if (rad .lt. n) exit
+            end do
+        else if (n .le. 62500024) then
+            do
+                call random_seed(get=seed)
+                call random_number(x)
+                y = x*62500024
+                rad = int(y)
+                if (rad .lt. n) exit
+            end do
+        else if (n .le. 125000024) then
+            do
+                call random_seed(get=seed)
+                call random_number(x)
+                y = x*125000024
+                rad = int(y)
+                if (rad .lt. n) exit
+            end do
+        else if (n .le. 250000024) then
+            do
+                call random_seed(get=seed)
+                call random_number(x)
+                y = x*250000024
+                rad = int(y)
+                if (rad .lt. n) exit
+            end do
+        else if (n .le. 500000024) then
+            do
+                call random_seed(get=seed)
+                call random_number(x)
+                y = x*500000024
+                rad = int(y)
+                if (rad .lt. n) exit
+            end do
+        else
+            do
+                call random_seed(get=seed)
+                call random_number(x)
+                y = x*1000000024
+                rad = int(y)
+                if (rad .lt. n) exit
+            end do
+        end if
+        randon = rad
+    end function
+end subroutine randsu
+
 subroutine page_01()
     implicit none
     character(len=256) :: str
@@ -927,7 +1046,8 @@ subroutine page_01()
         write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
         print '(A)', '\n-----------------------------------------'
         print*, '1 モジュロ演算(a mod n)'
-        print*, '2 ???\n'
+        print*, '2 乱数(1～x)'
+        print*, '3 ???\n'
         print*, '99 終了           00 Back'
         print '(A)', '-----------------------------------------'
         write (*,fmt='(A)', advance='no') ': '
@@ -936,6 +1056,8 @@ subroutine page_01()
         case ('1')
             call mozuro()
         case ('2')
+            call randsu()
+        case ('3')
             print '(A)', '\n制作者:ware255(われ)\n\n???ってなんだろう、って思ったでしょｗ\n&
             &思っちゃったやつソースコード見てねぇって分かっちまうから気お付けろよｗ'
             read *
@@ -952,11 +1074,11 @@ subroutine page_01()
     end do
 end subroutine page_01
 
-program calculator
+subroutine page_00()
     use, intrinsic :: iso_fortran_env
     implicit none
     character(len=256) :: str
-    real(real128), parameter :: PI = 2.0_real128*asin(1.0_real128)
+    real(real128), parameter :: PI = 4.0_real128*atan(1.0_real128)
     do
         write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
         print '(A)', '\n-----------------------------------------'
@@ -1032,4 +1154,14 @@ program calculator
             call sleep(1)
         end select
     end do
+end subroutine page_00
+
+program calculator
+    implicit none
+    if (.not. getuid() .eq. 0) then !権限なし
+        call page_00()
+    else                            !root権限
+        print '(A)', '\n※いつでもどこでも電卓が使えるようにして\n&
+        &　いるためroot権限は実装しておりません。\n'
+    end if
 end program calculator
