@@ -66,14 +66,8 @@ subroutine warizan()
     read (*, *) x
     print '(A)', '値を入力してください。'
     read (*, *) y
-    if (x .eq. 0 .and. y .eq. 0) then
-        print '(A)', '\n 結果が定義されていません（ーωー 1）'
-    else if (y .eq. 0) then
-        print '(A)', '\n\tInfinity'
-    else
-        print*, '\n答え'
-        print*, x / y
-    end if
+    print*, '\n答え'
+    print*, x / y
     print*, '\nEnterを押してください。'
     read *
 end subroutine warizan
@@ -960,10 +954,14 @@ subroutine randsu()
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', 'xを入力してください。(1～x)'
     read (*, *) x
+    if (x .le. 0) then
+        print '(A)', '\n1以上にしてください。\n'
+        goto 11
+    end if
     n = randon(x)
     print*, '\n出力'
     print*, n
-    print*, '\nEnterを押してください。'
+11  print*, '\nEnterを押してください。'
     read *
     contains
     function randon(n)
@@ -1052,6 +1050,23 @@ subroutine randsu()
     end function
 end subroutine randsu
 
+subroutine neipia() ! e = lim n->Infinity [ (1+1/n)**n ]
+    implicit none
+    integer(kind=8) :: a, num
+    real(kind=16) :: b = 1, e
+    print '(A)', '\x1b[2J\x1b[3J\x1b[H'
+    num = 1024
+    e = 1
+    do a = 1, num
+        b = b * a
+        e = e + 1 / b
+    end do
+    print*, 'ネイピア数(誤差あり)'
+    print*, e
+    print*, '\nEnterを押してください。'
+    read *
+end subroutine neipia
+
 subroutine page_01()
     implicit none
     character(len=256) :: str
@@ -1060,7 +1075,8 @@ subroutine page_01()
         print '(A)', '\n-----------------------------------------'
         print*, '1 モジュロ演算(a mod n)'
         print*, '2 乱数(1～x)'
-        print*, '3 ???\n'
+        print*, '3 e(ネイピア数)'
+        print*, '4 ???\n'
         print*, '99 終了           00 Back'
         print '(A)', '-----------------------------------------'
         write (*,fmt='(A)', advance='no') ': '
@@ -1071,6 +1087,8 @@ subroutine page_01()
         case ('2')
             call randsu()
         case ('3')
+            call neipia()
+        case ('4')
             print '(A)', '\n制作者:ware255(われ)\n\n???ってなんだろう、って思ったでしょｗ\n&
             &思っちゃったやつソースコード見てねぇって分かっちまうから気お付けろよｗ'
             read *
