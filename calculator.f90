@@ -66,8 +66,14 @@ subroutine warizan()
     read (*, *) x
     print '(A)', '値を入力してください。'
     read (*, *) y
-    print*, '\n答え'
-    print*, x / y
+    if (x .eq. 0 .and. y .eq. 0) then
+        print '(A)', '\n 結果が定義されていません（ーωー 1）'
+    else if (y .eq. 0) then
+        print '(A)', '\n `0`で割ることはできません（ーωー 1）'
+    else
+        print*, '\n答え'
+        print*, x / y
+    end if
     print*, '\nEnterを押してください。'
     read *
 end subroutine warizan
@@ -773,7 +779,7 @@ subroutine nizihoutei()
     implicit none
     real(real128) :: a, b, c, kai1, kai2
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-    print '(A)', '公式: ax^2 + bx + c = 0\n'
+    print '(A)', '一般: ax^2 + bx + c = 0\n'
     print '(A)', 'a値を入力してください。'
     read (*, *) a
     print '(A)', 'b値を入力してください。'
@@ -956,12 +962,13 @@ subroutine randsu()
     contains
     function randon(n)
         implicit none
-        integer(int64) :: randon, rad, n
+        integer(int64) :: randon, rad, n, L
         integer(int32) :: seedsize = 3
         real(real128) :: y, x
         integer,allocatable :: seed(:)
         call random_seed(size=seedsize)
         allocate(seed(seedsize))
+        L = 2147483624!1999999999
         if (n .le. 1024) then
             do
                 call random_seed(get=seed)
@@ -1030,7 +1037,7 @@ subroutine randsu()
             do
                 call random_seed(get=seed)
                 call random_number(x)
-                y = x*1000000024
+                y = x*L!1000000024
                 rad = int(y)
                 if (rad .lt. n) exit
             end do
