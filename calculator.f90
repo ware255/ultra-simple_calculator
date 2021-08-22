@@ -69,7 +69,7 @@ subroutine warizan()
     if (x .eq. 0 .and. y .eq. 0) then
         print '(A)', '\n 結果が定義されていません（ーωー 1）'
     else if (y .eq. 0) then
-        print '(A)', '\n `0`で割ることはできません（ーωー 1）'
+        print '(A)', '\n\tInfinity'
     else
         print*, '\n答え'
         print*, x / y
@@ -941,8 +941,14 @@ subroutine mozuro
     read (*, *) a
     print '(A)', '値nを入力してください。'
     read (*, *) n
-    print*, '\n答え'
-    print*, mod(a, n)
+    if (a .eq. 0 .and. n .eq. 0) then
+        print '(A)', '\n 結果が定義されていません（ーωー 1）'
+    else if (n .eq. 0) then
+        print '(A)', '\n\tInfinity'
+    else
+        print*, '\n答え'
+        print*, mod(a, n)
+    end if
     print*, '\nEnterを押してください。'
     read *
 end subroutine mozuro
