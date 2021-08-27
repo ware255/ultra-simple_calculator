@@ -1,8 +1,7 @@
 subroutine tasizan()
     use, intrinsic :: iso_fortran_env
     implicit none
-    real(real128) :: x
-    real(real128) :: y
+    real(real128) :: x, y
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)',  '値を入力してください。'
     read (*, *) x
@@ -17,8 +16,7 @@ end subroutine tasizan
 subroutine hikizan()
     use, intrinsic :: iso_fortran_env
     implicit none
-    real(real128) :: x
-    real(real128) :: y
+    real(real128) :: x, y
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
     read (*, *) x
@@ -33,8 +31,7 @@ end subroutine hikizan
 subroutine kakezan()
     use, intrinsic :: iso_fortran_env
     implicit none
-    real(real128) :: x
-    real(real128) :: y
+    real(real128) :: x, y
     character(len=256) :: str
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
@@ -59,8 +56,7 @@ end subroutine kakezan
 subroutine warizan()
     use, intrinsic :: iso_fortran_env
     implicit none
-    real(real128) :: x
-    real(real128) :: y
+    real(real128) :: x, y
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
     read (*, *) x
@@ -123,8 +119,7 @@ end subroutine syutyou
 subroutine nizyou()
     use, intrinsic :: iso_fortran_env
     implicit none
-    real(real128) :: x
-    real(real128) :: y
+    real(real128) :: x, y
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', 'べき乗する値を入力してください。'
     read (*, *) x
@@ -874,8 +869,7 @@ end subroutine n_atan
 subroutine n_atan2()
     use, intrinsic :: iso_fortran_env
     implicit none
-    real(real128) :: x
-    real(real128) :: y
+    real(real128) :: x, y
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', 'y値を入力してください。'
     read (*, *) x
@@ -966,13 +960,12 @@ subroutine randsu()
     contains
     function randon(n)
         implicit none
-        integer(int64) :: randon, rad, n, L
+        integer(int64) :: randon, rad, n
         integer(int32) :: seedsize = 3
         real(real128) :: y, x
         integer,allocatable :: seed(:)
         call random_seed(size=seedsize)
         allocate(seed(seedsize))
-        L = 2147483624!1999999999
         if (n .le. 1024) then
             do
                 call random_seed(get=seed)
@@ -1041,7 +1034,7 @@ subroutine randsu()
             do
                 call random_seed(get=seed)
                 call random_number(x)
-                y = x*L!1000000024
+                y = x*2147483624!1000000000024.
                 rad = int(y)
                 if (rad .lt. n) exit
             end do
@@ -1050,22 +1043,113 @@ subroutine randsu()
     end function
 end subroutine randsu
 
-subroutine neipia() ! e = lim n->Infinity [ (1+1/n)**n ]
+subroutine neipia() ! e = lim n->Infinity [ (1+1/n)**n ] | Σn=0 ∞ [ 1/n! ]
+    use, intrinsic :: iso_fortran_env
     implicit none
-    integer(kind=8) :: a, num
-    real(kind=16) :: b = 1, e
+    integer(int64) :: a, n
+    real(real128) :: b = 1, e
     print '(A)', '\x1b[2J\x1b[3J\x1b[H'
-    num = 1024
+    n = 1024
     e = 1
-    do a = 1, num
+    do a = 1, n
         b = b * a
         e = e + 1 / b
     end do
-    print*, 'ネイピア数(誤差あり)'
+    print*, 'ネイピア数(テイラー展開n=1024まで)'
     print*, e
+    print*, '\n Wikipediaでは以下(上の桁数に合わせた)'
+    print '(A)', '   2.71828182845904523536028747135266249'
     print*, '\nEnterを押してください。'
     read *
 end subroutine neipia
+
+subroutine y_zyoukon()
+    use, intrinsic :: iso_fortran_env
+    implicit none
+    real(real128) :: x, y
+    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    print '(A)', 'n乗根のnの値を入力してください。()'
+    read (*, *) y
+    if (y .eq. 1) then
+        print '(A)', '\n1は平方根や立方根にならねぇよ！'
+        goto 19
+    else if (y .eq. 2) then
+        print '(A)', '\n2だと平方根になるのでpage_00に移動して&
+        &5を押して下さい。'
+        goto 19
+    end if
+    print '(A)', 'n乗根するx値を入力してください。'
+    read (*, *) x
+    print*, '答え'
+    print*, x**(1./y)
+19  print*, '\nEnterを押してください。'
+    read *
+end subroutine y_zyoukon
+
+subroutine zettaiti()
+    use, intrinsic :: iso_fortran_env
+    implicit none
+    real(real128) :: x
+    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    print '(A)',  '値を入力してください。'
+    read (*, *) x
+    print*, '\n答え'
+    print*, abs(x)
+    print*, '\nEnterを押してください。'
+    read *
+end subroutine zettaiti
+
+subroutine sisu()
+    use, intrinsic :: iso_fortran_env
+    implicit none
+    real(real128) :: x
+    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    print '(A)',  '値を入力してください。'
+    read (*, *) x
+    print*, '\n答え'
+    print*, exp(x)
+    print*, '\nEnterを押してください。'
+    read *
+end subroutine sisu
+
+subroutine soukyokusin()
+    use, intrinsic :: iso_fortran_env
+    implicit none
+    real(real128) :: x
+    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    print '(A)',  '値を入力してください。'
+    read (*, *) x
+    print*, '\n答え'
+    print*, sinh(x)
+    print*, '\nEnterを押してください。'
+    read *
+end subroutine soukyokusin
+
+subroutine soukyokucos()
+    use, intrinsic :: iso_fortran_env
+    implicit none
+    real(real128) :: x
+    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    print '(A)',  '値を入力してください。'
+    read (*, *) x
+    print*, '\n答え'
+    print*, cosh(x)
+    print*, '\nEnterを押してください。'
+    read *
+end subroutine soukyokucos
+
+subroutine soukyokutan()
+    use, intrinsic :: iso_fortran_env
+    implicit none
+    real(real128) :: x
+    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    print '(A)',  '値を入力してください。'
+    read (*, *) x
+    print*, '\n答え'
+    print*, tanh(x)
+    print*, '\nEnterを押してください。'
+    read *
+end subroutine soukyokutan
 
 subroutine page_01()
     implicit none
@@ -1076,7 +1160,13 @@ subroutine page_01()
         print*, '1 モジュロ演算(a mod n)'
         print*, '2 乱数(1～x)'
         print*, '3 e(ネイピア数)'
-        print*, '4 ???\n'
+        print*, '4 立方根(三乗根)'
+        print*, '5 絶対値'
+        print*, '6 指数'
+        print*, '7 双曲線正弦(sinh)'
+        print*, '8 双曲線余弦(cosh)'
+        print*, '9 双曲線正接(tanh)'
+        print*, '11 ???\n'
         print*, '99 終了           00 Back'
         print '(A)', '-----------------------------------------'
         write (*,fmt='(A)', advance='no') ': '
@@ -1089,8 +1179,21 @@ subroutine page_01()
         case ('3')
             call neipia()
         case ('4')
-            print '(A)', '\n制作者:ware255(われ)\n\n???ってなんだろう、って思ったでしょｗ\n&
-            &思っちゃったやつソースコード見てねぇって分かっちまうから気お付けろよｗ'
+            call y_zyoukon()
+        case ('5')
+            call zettaiti()
+        case ('6')
+            call sisu()
+        case ('7')
+            call soukyokusin()
+        case ('8')
+            call soukyokucos()
+        case ('9')
+            call soukyokutan()
+        case ('11')
+            print '(A)', '\n制作者:ware255(われ)\n\n???ってなんだろ&
+            &う、って思ったでしょｗ\n思っちゃったやつソースコード見てね&
+            &ぇって分かっちまうから気お付けろよｗ'
             read *
             exit
         case ('00')
