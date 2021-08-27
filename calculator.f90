@@ -929,14 +929,8 @@ subroutine mozuro
     read (*, *) a
     print '(A)', '値nを入力してください。'
     read (*, *) n
-    if (a .eq. 0 .and. n .eq. 0) then
-        print '(A)', '\n 結果が定義されていません（ーωー 1）'
-    else if (n .eq. 0) then
-        print '(A)', '\n\tInfinity'
-    else
-        print*, '\n答え'
-        print*, mod(a, n)
-    end if
+    print*, '\n答え'
+    print*, mod(a, n)
     print*, '\nEnterを押してください。'
     read *
 end subroutine mozuro
