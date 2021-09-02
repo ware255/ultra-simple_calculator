@@ -72,16 +72,14 @@ subroutine heihoukon()
     use, intrinsic :: iso_fortran_env
     implicit none
     real(real128) :: x
-    integer(int64) :: i
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
     read (*, *) x
     print*, '\n近似値'
     print*, sqrt(x)
-    i = int(x)
-    if (i .eq. 2) then
+    if (x .eq. 2.) then
         print*, '　一夜一夜に月見ごろ          <= 覚え方'
-    else if (i .eq. 3) then
+    else if (x .eq. 3.) then
         print*, '　人並みにおごれや            <= 覚え方'
     end if
     print*, '\nEnterを押してください。'
@@ -1040,16 +1038,15 @@ end subroutine randsu
 subroutine neipia() ! e = lim n->Infinity [ (1+1/n)**n ] | Σn=0 ∞ [ 1/n! ]
     use, intrinsic :: iso_fortran_env
     implicit none
-    integer(int64) :: a, n
-    real(real128) :: b = 1, e
+    integer(int64), parameter :: n = 1024
+    integer(int64) :: a
+    real(real128) :: b = 1, e = 1
     print '(A)', '\x1b[2J\x1b[3J\x1b[H'
-    n = 1024
-    e = 1
     do a = 1, n
         b = b * a
         e = e + 1 / b
     end do
-    print*, 'ネイピア数(テイラー展開n=1024まで)'
+    print*, 'ネイピア数(総和は1から1024まで)'
     print*, e
     print*, '\n Wikipediaでは以下(上の桁数に合わせた)'
     print '(A)', '   2.71828182845904523536028747135266249'
@@ -1145,9 +1142,116 @@ subroutine soukyokutan()
     read *
 end subroutine soukyokutan
 
-subroutine page_01()
+subroutine gamma_f()
+    use, intrinsic :: iso_fortran_env
+    implicit none
+    integer(int64), parameter :: n = 1024
+    integer(int64) :: a
+    real(real128), parameter :: pi = 4.0_real128*atan(1.0_real128)
+    real(real128) :: z, gamma1, gamma2
+    real(real128) :: b = 1, e = 1
+    print '(A)', '\x1b[2J\x1b[3J\x1b[H'
+    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    print '(A)',  '値を入力してください。'
+    read (*, *) z
+    do a = 1, n
+        b = b * a
+        e = e + 1 / b
+    end do
+    gamma1 = sqrt(2*pi/z)
+    gamma2 = (z/e)**z
+    print*, '\n答え'
+    print*, gamma1 * gamma2
+    print*, '\nEnterを押してください。'
+    read *
+end subroutine gamma_f
+
+subroutine joke()
+    use, intrinsic :: iso_fortran_env
+    implicit none
+    integer(int64) :: x, n
+    n = 5
+24  x = randon(n)
+    select case(x)
+    case (0)
+        print*, '\n  women = time * money\n'
+        print '(A)', 'Women are the product of time and money.'
+        read *
+    case (1)
+        print*, '\n  time = money\n'
+        print '(A)', 'Time is money.'
+        read *
+    case (2)
+        print*, '\n  women = money^2\n'
+        print '(A)', 'So women are money squared.'
+        read *
+    case (3)
+        print*, '\n  money = √evil\n'
+        print '(A)', 'Money is the root of all evil.'
+        read *
+    case (4)
+        print*, '\n  women = (√evil)^2 = evil\n'
+        print '(A)', 'So women are evil.'
+        read *
+    case default
+        goto 24
+    end select
+    contains
+    function randon(n)
+        implicit none
+        integer(int64) :: randon, rad, n
+        integer(int32) :: seedsize = 3
+        real(real128) :: y, x
+        integer,allocatable :: seed(:)
+        call random_seed(size=seedsize)
+        allocate(seed(seedsize))
+        if (n .le. 10) then
+            do
+                call random_seed(get=seed)
+                call random_number(x)
+                y = x*10
+                rad = int(y)
+                if (rad .lt. n) exit
+            end do
+        end if
+        randon = rad
+    end function
+end subroutine joke
+
+subroutine page_02()
     implicit none
     character(len=256) :: str
+    do
+        write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+        print '(A)', '\n-----------------------------------------'
+        print*, '1 Γ(z) ~ √2π/z(z/e)^z'
+        print*, '11 ジョーク'
+        print*, '99 終了           01 Back'
+        print '(A)', '-----------------------------------------'
+        write (*,fmt='(A)', advance='no') ': '
+        read (*, '(A)') str
+        select case(str)
+        case ('1')
+            call gamma_f()
+        case ('11')
+            call joke()
+        case ('01')
+            call page_01()
+        case ('99')
+            write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+            stop
+        case default
+            print*, 'そんなもんねぇよｗ'
+            call sleep(1)
+        end select
+    end do
+end subroutine page_02
+
+subroutine page_01()
+    use, intrinsic :: iso_fortran_env
+    implicit none
+    character(len=256) :: str
+    real(real128), parameter :: fai = (1.0_real128+sqrt(5.0_real128))/2.0_real128
     do
         write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
         print '(A)', '\n-----------------------------------------'
@@ -1160,8 +1264,9 @@ subroutine page_01()
         print*, '7 双曲線正弦(sinh)'
         print*, '8 双曲線余弦(cosh)'
         print*, '9 双曲線正接(tanh)'
+        print*, '10 φ(黄金数)'
         print*, '11 ???\n'
-        print*, '99 終了           00 Back'
+        print*, '99 終了       00 Back       02 Next_page'
         print '(A)', '-----------------------------------------'
         write (*,fmt='(A)', advance='no') ': '
         read (*, '(A)') str
@@ -1184,6 +1289,12 @@ subroutine page_01()
             call soukyokucos()
         case ('9')
             call soukyokutan()
+        case ('10')
+            print '(A)', '\x1b[2J\x1b[3J\x1b[H'
+            print*, 'φ(黄金数)'
+            print '(2F40.36)', fai
+            print*, '\nEnterを押してください。'
+            read *
         case ('11')
             print '(A)', '\n制作者:ware255(われ)\n\n???ってなんだろ&
             &う、って思ったでしょｗ\n思っちゃったやつソースコード見てね&
@@ -1191,10 +1302,12 @@ subroutine page_01()
             read *
             exit
         case ('00')
-            exit
+            call page_00()
         case ('99')
             write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             stop
+        case ('02')
+            call page_02()
         case default
             print*, 'そんなもんねぇよｗ'
             call sleep(1)
@@ -1219,7 +1332,7 @@ subroutine page_00()
         print*, '7 円の面積        18 逆三角関数(atan2(y,x))'
         print*, '8 円の周長        19 虚数部(z = (x, iy))'
         print*, '9 べき乗          20 常用対数(log10)'
-        print*, '10 2次方程式      21 自然対数(log)'
+        print*, '10 2次方程式      21 自然対数(log = ln)'
         print*, '11 超戦略ゲーム\n'
         print*, '99 終了           01 Next_page'
         print '(A)', '-----------------------------------------'
@@ -1238,7 +1351,7 @@ subroutine page_00()
             call heihoukon()
         case ('6')
             print '(A)', '\x1b[2J\x1b[3J\x1b[H'
-            print*, '円周率'
+            print*, 'π(円周率)'
             print '(2F40.36)', PI
             print*, '\nEnterを押してください。'
             read *
@@ -1274,7 +1387,7 @@ subroutine page_00()
             call n_log()
         case ('99')
             write(*, fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-            exit
+            stop
         case ('01')
             call page_01()
         case default
@@ -1286,8 +1399,20 @@ end subroutine page_00
 
 program calculator
     implicit none
+    character(len=256) :: str
     if (.not. getuid() .eq. 0) then !権限なし
-        call page_00()
+        call getarg(1, str)
+        if (iargc() .eq. 0) then
+            call page_00()
+        else if (str .eq. 'page_00') then
+            call page_00()
+        else if (str .eq. 'page_01') then
+            call page_01()
+        else if (str .eq. 'page_02') then
+            call page_02()
+        else
+            print '(A)', '\nこの引数はありません。\n'
+        end if
     else                            !root権限
         print '(A)', '\n※いつでもどこでも電卓が使えるようにして\n&
         &　いるためroot権限は実装しておりません。\n'
