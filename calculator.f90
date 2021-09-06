@@ -1225,7 +1225,7 @@ subroutine undouhouteisiki()
     real(real128), parameter :: pi = 4.0_real128*atan(1.0_real128)
     real(real128) :: g, V, angle, theta, x, z, u, w&
     &, dxdt, dzdt, dudt, dwdt
-    print '(A)', '\x1b[2J\x1b[3J\x1b[H'
+    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '初期速度 [m/s]'
     read (*, *) V
     print '(A)', '仰角 [deg]'
@@ -1244,7 +1244,7 @@ subroutine undouhouteisiki()
 
     write(11, *) x, z
 
-    do i = 1, 10000
+    do i = 1, 6000
         dxdt = u
         dzdt = w
         dudt = 0.0
@@ -1276,6 +1276,32 @@ subroutine undouplot()
     read *
 end subroutine undouplot
 
+subroutine TX()
+    use, intrinsic :: iso_fortran_env
+    implicit none
+    real(real128), parameter :: pi = 4.0_real128*atan(1.0_real128)
+    real(real128) :: g, V, angle, theta, T, X
+    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    print '(A)', '初期速度 [m/s]'
+    read (*, *) V
+    print '(A)', '仰角 [deg]'
+    read (*, *) angle
+
+    g = 9.806
+
+    theta = pi / 180.0 * angle
+
+    T = 2.0 * V * sin(theta) / g
+    X = V * V * sin(2.0 * theta)
+
+    print*, '\n滞空時間'
+    print*, T
+    print*, '\n飛距離'
+    print*, X
+    print*, '\nEnterを押してください。'
+    read *
+end subroutine TX
+
 subroutine page_02()
     implicit none
     character(len=256) :: str
@@ -1283,8 +1309,9 @@ subroutine page_02()
         write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
         print '(A)', '\n-----------------------------------------'
         print*, '1 Γ(z) ~ √2π/z(z/e)^z'
-        print*, '2 運動方程式(放物運動)'
-        print*, '3 運動方程式のグラフをみる(gnuplot)'
+        print*, '2 滞空時間と飛距離'
+        print*, '3 運動方程式(放物運動)'
+        print*, '4 運動方程式のグラフをみる(gnuplot)'
         print*, '11 ジョーク\n'
         print*, '99 終了           01 Back'
         print '(A)', '-----------------------------------------'
@@ -1293,9 +1320,9 @@ subroutine page_02()
         select case(str)
         case ('1')
             call gamma_f()
-        case ('2')
-            call undouhouteisiki()
         case ('3')
+            call undouhouteisiki()
+        case ('4')
             write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             print '(A)', '以下のコマンドを入力してください。\n'
             print '(A)', '================================'
@@ -1307,8 +1334,12 @@ subroutine page_02()
             print '(A)', 'exit                   //終了コマンド'
             print '(A)', '================================'
             call undouplot()
+        case ('2')
+            call TX()
         case ('11')
             call joke()
+        case ('00')
+            call page_00()
         case ('01')
             call page_01()
         case ('99')
@@ -1464,6 +1495,8 @@ subroutine page_00()
             stop
         case ('01')
             call page_01()
+        case ('02')
+            call page_02()
         case default
             print*, 'そんなもんねぇよｗ'
             call sleep(1)
