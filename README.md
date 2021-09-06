@@ -13,7 +13,8 @@ CUIで機能します。「GUIの方がいい」と欲張らないでくださ�
      $ ./calculator
 ## 動作確認済みOS
      ・WSL Debian
-     ・Linux等
+     ・Linux Mint
+     ・その他Linux
 ※Windowsではエスケープシーケンスが対応しておりませんので使用しないでください。(バグるかも？)
 ## LICENSE
       MIT License 
