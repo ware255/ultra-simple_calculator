@@ -1218,6 +1218,64 @@ subroutine joke()
     end function
 end subroutine joke
 
+subroutine undouhouteisiki()
+    use, intrinsic :: iso_fortran_env
+    implicit none
+    integer(int64) :: i
+    real(real128), parameter :: pi = 4.0_real128*atan(1.0_real128)
+    real(real128) :: g, V, angle, theta, x, z, u, w&
+    &, dxdt, dzdt, dudt, dwdt
+    print '(A)', '\x1b[2J\x1b[3J\x1b[H'
+    print '(A)', '速度 [m/s],'
+    read (*, *) V
+    print '(A)', '仰角 [deg.]?'
+    read (*, *) angle
+
+    g = 9.3
+
+    theta = pi / 180.0 * angle
+
+    x = 0.0
+    z = 0.0
+    u = V * cos(theta)
+    w = V * sin(theta)
+
+    open(11, file='output.txt', status='replace')
+
+    write(11, *) x, z
+
+    do i = 1, 10000
+        dxdt = u
+        dzdt = w
+        dudt = 0.0
+        dwdt = -g
+
+        x = x + 0.01 * dxdt
+        z = z + 0.01 * dzdt
+        u = u + 0.01 * dudt
+        w = w + 0.01 * dwdt
+
+        print*, x, z
+        write(11, *) x, z
+    end do
+
+    close(11)
+
+    print*, '\nEnterを押してください。'
+    read *
+end subroutine undouhouteisiki
+
+subroutine undouplot()
+    implicit none
+    open(11, file='output.txt', status='old', err=110)
+    close(11)
+    call system('gnuplot')
+    goto 120
+110 print*, '運動方程式を計算してください。'
+120 print*, '\nEnterを入力してください。'
+    read *
+end subroutine undouplot
+
 subroutine page_02()
     implicit none
     character(len=256) :: str
@@ -1225,7 +1283,9 @@ subroutine page_02()
         write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
         print '(A)', '\n-----------------------------------------'
         print*, '1 Γ(z) ~ √2π/z(z/e)^z'
-        print*, '11 ジョーク'
+        print*, '2 運動方程式(放物運動)'
+        print*, '3 運動方程式のグラフをみる(gnuplot)'
+        print*, '11 ジョーク\n'
         print*, '99 終了           01 Back'
         print '(A)', '-----------------------------------------'
         write (*,fmt='(A)', advance='no') ': '
@@ -1233,6 +1293,20 @@ subroutine page_02()
         select case(str)
         case ('1')
             call gamma_f()
+        case ('2')
+            call undouhouteisiki()
+        case ('3')
+            write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+            print '(A)', '以下のコマンドを入力してください。\n'
+            print '(A)', '================================'
+            print '(A)', 'set style data lines   //グラフを線で表示'
+            print '(A)', 'set xrange [0:60]      //x軸を0~60'
+            print '(A)', 'set yrange [0:30]      //y軸を0~30'
+            print '(A)', 'plot "output.txt"      //グラフを表示'
+            print '(A)', '================================'
+            print '(A)', 'exit                   //終了コマンド'
+            print '(A)', '================================'
+            call undouplot()
         case ('11')
             call joke()
         case ('01')
