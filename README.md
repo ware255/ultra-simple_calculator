@@ -2,9 +2,8 @@
 これは、Fortranで書かれた超簡易計算機です。<br />
 CUIで機能します。「GUIの方がいい」と欲張らないでください。あと、小数第三十二まではだいたいあってます。<br /><br />
 ## 使い方
-     依存関係のツールをインストール
+     インストール
      $ sudo apt install gfortran gnuplot
-     ultra-simple_calculatorをダウンロード
      $ git clone https://github.com/ware255/ultra-simple_calculator.git
      移動
      $ cd ultra-simple_calculator
