@@ -4,6 +4,10 @@ CUIで機能します。「GUIの方がいい」と欲張らないでくださ�
 ## 使い方
      依存関係のツールをインストール
      $ sudo apt install gfortran gnuplot
+     ultra-simple_calculatorをダウンロード
+     $ git clone https://github.com/ware255/ultra-simple_calculator.git
+     移動
+     $ cd ultra-simple_calculator
      コンパイル
      $ gfortran -O3 -march=native -fbackslash calculator.f90 -o calculator
      実行
