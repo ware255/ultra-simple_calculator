@@ -1,18 +1,18 @@
 # ultra-simple_calculator
 これは、Fortranで書かれた超簡易計算機です。<br />
 CUIで機能します。「GUIの方がいい」と欲張らないでください。あと、小数第三十二まではだいたいあってます。<br /><br />
-# 使い方
+## 使い方
      依存関係のツールをインストール
      $ sudo apt install gfortran gnuplot
      コンパイル
      $ gfortran -O3 -march=native -fbackslash calculator.f90 -o calculator
      実行
      $ ./calculator
-# 動作確認済みOS
+## 動作確認済みOS
      ・WSL Debian
      ・Linux等
 ※Windowsではエスケープシーケンスが対応しておりませんので使用しないでください。(バグるかも？)
-# LICENSE
+## LICENSE
       MIT License 
 <br /><br />
 2021 09/06 物体の運動を求められるようになりました。(運動方程式)<br />
