@@ -1226,12 +1226,12 @@ subroutine undouhouteisiki()
     real(real128) :: g, V, angle, theta, x, z, u, w&
     &, dxdt, dzdt, dudt, dwdt
     print '(A)', '\x1b[2J\x1b[3J\x1b[H'
-    print '(A)', '速度 [m/s]'
+    print '(A)', '初期速度 [m/s]'
     read (*, *) V
-    print '(A)', '仰角(初期角度?) [deg]'
+    print '(A)', '仰角 [deg]'
     read (*, *) angle
 
-    g = 9.3
+    g = 9.806
 
     theta = pi / 180.0 * angle
 
@@ -1244,7 +1244,7 @@ subroutine undouhouteisiki()
 
     write(11, *) x, z
 
-    do i = 1, 100000
+    do i = 1, 10000
         dxdt = u
         dzdt = w
         dudt = 0.0
@@ -1300,7 +1300,7 @@ subroutine page_02()
             print '(A)', '以下のコマンドを入力してください。\n'
             print '(A)', '================================'
             print '(A)', 'set style data lines   //グラフを線で表示'
-            print '(A)', 'set xrange [0:60]      //x軸を0~60'
+            print '(A)', 'set xrange [0:50]      //x軸を0~60'
             print '(A)', 'set yrange [0:30]      //y軸を0~30'
             print '(A)', 'plot "output.txt"      //グラフを表示'
             print '(A)', '================================'
