@@ -1226,9 +1226,9 @@ subroutine undouhouteisiki()
     real(real128) :: g, V, angle, theta, x, z, u, w&
     &, dxdt, dzdt, dudt, dwdt
     print '(A)', '\x1b[2J\x1b[3J\x1b[H'
-    print '(A)', '速度 [m/s],'
+    print '(A)', '速度 [m/s]'
     read (*, *) V
-    print '(A)', '仰角 [deg.]?'
+    print '(A)', '仰角(初期角度?) [deg]'
     read (*, *) angle
 
     g = 9.3
@@ -1244,7 +1244,7 @@ subroutine undouhouteisiki()
 
     write(11, *) x, z
 
-    do i = 1, 10000
+    do i = 1, 100000
         dxdt = u
         dzdt = w
         dudt = 0.0
