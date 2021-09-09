@@ -1233,10 +1233,10 @@ subroutine undouhouteisiki()
 
     g = 9.806
 
-    theta = pi / 180.0 * angle
+    theta = pi / 180.d0 * angle
 
-    x = 0.0
-    z = 0.0
+    x = 0.d0
+    z = 0.d0
     u = V * cos(theta)
     w = V * sin(theta)
 
@@ -1244,16 +1244,16 @@ subroutine undouhouteisiki()
 
     write(11, *) x, z
 
-    do i = 1, 6000
+    do i = 1, 60000 ! 一分間だから60000 * 0.001
         dxdt = u
         dzdt = w
         dudt = 0.0
         dwdt = -g
 
-        x = x + 0.01 * dxdt
-        z = z + 0.01 * dzdt
-        u = u + 0.01 * dudt
-        w = w + 0.01 * dwdt
+        x = x + 0.001 * dxdt
+        z = z + 0.001 * dzdt
+        u = u + 0.001 * dudt
+        w = w + 0.001 * dwdt
 
         print*, x, z
         write(11, *) x, z
@@ -1302,6 +1302,56 @@ subroutine TX()
     read *
 end subroutine TX
 
+subroutine free_()
+    use, intrinsic :: iso_fortran_env
+    implicit none
+    character(len=256) :: func, x1_, x2_
+    real(real128) :: x1, x2
+    do
+        write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+        print '(A)', '\nコマンド\n'
+        print '(A)', 'add         //足し算'
+        print '(A)', 'sub         //引き算'
+        print '(A)', 'mul         //掛け算'
+        print '(A)', 'div         //割り算'
+        print '(A)', 'exit ^ ^    //終わルー☆\n'
+        print '(A)', '入力例: addition 1 1\n'
+        write (*,fmt='(A)', advance='no') ': '
+        read (*, *) func, x1_, x2_
+
+        if (func .eq. 'exit' .and. x1_ .eq. &
+        &'^' .and. x2_ .eq. '^') exit
+
+        read (x1_, *) x1
+        read (x2_, *) x2
+
+        if (func .eq. 'add') then
+            print*, '\n答え'
+            print*, x1 + x2
+            print*, '\nEnterを押してください。'
+            read *
+        else if (func .eq. 'sub') then
+            print*, '\n答え'
+            print*, x1 - x2
+            print*, '\nEnterを押してください。'
+            read *
+        else if (func .eq. 'mul') then
+            print*, '\n答え'
+            print*, x1 * x2
+            print*, '\nEnterを押してください。'
+            read *
+        else if (func .eq. 'div') then
+            print*, '\n答え'
+            print*, x1 / x2
+            print*, '\nEnterを押してください。'
+            read *
+        else
+            print*, 'は？'
+            call sleep(1)
+        end if
+    end do
+end subroutine free_
+
 subroutine page_02()
     implicit none
     character(len=256) :: str
@@ -1312,6 +1362,7 @@ subroutine page_02()
         print*, '2 滞空時間と飛距離'
         print*, '3 運動方程式(放物運動)'
         print*, '4 運動方程式のグラフをみる(gnuplot)'
+        !print*, '5 微分方程式(Runge-Kutta法)'
         print*, '11 ジョーク\n'
         print*, '99 終了           01 Back'
         print '(A)', '-----------------------------------------'
@@ -1497,6 +1548,8 @@ subroutine page_00()
             call page_01()
         case ('02')
             call page_02()
+        case ('free')
+            call free_()
         case default
             print*, 'そんなもんねぇよｗ'
             call sleep(1)
