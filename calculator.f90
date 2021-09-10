@@ -763,8 +763,10 @@ end subroutine game
 
 subroutine nizihoutei()
     use, intrinsic :: iso_fortran_env
+    use, intrinsic :: ieee_arithmetic
     implicit none
-    real(real128) :: a, b, c, kai1, kai2
+    real(real128) :: a, b, c, k1, k2
+    call ieee_set_rounding_mode(ieee_nearest)
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '一般: ax^2 + bx + c = 0\n'
     print '(A)', 'a値を入力してください。'
@@ -774,14 +776,14 @@ subroutine nizihoutei()
     print '(A)', 'c値を入力してください。'
     read (*, *) c
     print '(A)', '\n答え'
-    kai1 = (-b+sqrt((b**2)-4*a*c)) / (2*a)
-    kai2 = (-b-sqrt((b**2)-4*a*c)) / (2*a)
+    k1 = (-b+sqrt((b*b)-4*a*c)) / (2*a)
+    k2 = (-b-sqrt((b*b)-4*a*c)) / (2*a)
     open (11, file='nizihoutei.txt', status='replace')
-        write (11, *) kai1
-        write (11, *) kai2
+        write (11, *) k1
+        write (11, *) k2
     close (11)
-    print *, kai1
-    print *, kai2
+    print *, k1
+    print *, k2
     print '(A)', '\nEnterを押してください。'
     read *
 end subroutine nizihoutei
@@ -1037,10 +1039,12 @@ end subroutine randsu
 
 subroutine neipia() ! e = lim n->Infinity [ (1+1/n)**n ] | Σn=0 ∞ [ 1/n! ]
     use, intrinsic :: iso_fortran_env
+    use, intrinsic :: ieee_arithmetic
     implicit none
     integer(int64), parameter :: n = 1024
     integer(int64) :: a
-    real(real128) :: b = 1, e = 1
+    real(real128) :: b = 1.e0, e = 1.e0
+    call ieee_set_rounding_mode(ieee_nearest)
     print '(A)', '\x1b[2J\x1b[3J\x1b[H'
     do a = 1, n
         b = b * a
@@ -1144,12 +1148,14 @@ end subroutine soukyokutan
 
 subroutine gamma_f()
     use, intrinsic :: iso_fortran_env
+    use, intrinsic :: ieee_arithmetic
     implicit none
     integer(int64), parameter :: n = 1024
     integer(int64) :: a
     real(real128), parameter :: pi = 4.0_real128*atan(1.0_real128)
     real(real128) :: z, gamma1, gamma2
-    real(real128) :: b = 1, e = 1
+    real(real128) :: b = 1.e0, e = 1.e0
+    call ieee_set_rounding_mode(ieee_nearest)
     print '(A)', '\x1b[2J\x1b[3J\x1b[H'
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)',  '値を入力してください。'
@@ -1220,11 +1226,13 @@ end subroutine joke
 
 subroutine undouhouteisiki()
     use, intrinsic :: iso_fortran_env
+    use, intrinsic :: ieee_arithmetic
     implicit none
     integer(int64) :: i
     real(real128), parameter :: pi = 4.0_real128*atan(1.0_real128)
     real(real128) :: g, V, angle, theta, x, z, u, w&
     &, dxdt, dzdt, dudt, dwdt
+    call ieee_set_rounding_mode(ieee_nearest)
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '初期速度 [m/s]'
     read (*, *) V
@@ -1233,10 +1241,10 @@ subroutine undouhouteisiki()
 
     g = 9.806
 
-    theta = pi / 180.d0 * angle
+    theta = pi / 180.e0 * angle
 
-    x = 0.d0
-    z = 0.d0
+    x = 0.e0
+    z = 0.e0
     u = V * cos(theta)
     w = V * sin(theta)
 
@@ -1278,9 +1286,11 @@ end subroutine undouplot
 
 subroutine TX()
     use, intrinsic :: iso_fortran_env
+    use, intrinsic :: ieee_arithmetic
     implicit none
     real(real128), parameter :: pi = 4.0_real128*atan(1.0_real128)
     real(real128) :: g, V, angle, theta, T, X
+    call ieee_set_rounding_mode(ieee_nearest)
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '初期速度 [m/s]'
     read (*, *) V
@@ -1289,7 +1299,7 @@ subroutine TX()
 
     g = 9.806
 
-    theta = pi / 180.0 * angle
+    theta = pi / 180.e0 * angle
 
     T = 2.0 * V * sin(theta) / g
     X = V * V * sin(2.0 * theta)
@@ -1304,9 +1314,11 @@ end subroutine TX
 
 subroutine free_()
     use, intrinsic :: iso_fortran_env
+    use, intrinsic :: ieee_arithmetic
     implicit none
     character(len=256) :: func, x1_, x2_
-    real(real128) :: x1, x2
+    real(real128) :: x1 = 0.e0, x2 = 0.e0
+    call ieee_set_rounding_mode(ieee_nearest)
     do
         write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
         print '(A)', '\nコマンド\n'
@@ -1362,7 +1374,6 @@ subroutine page_02()
         print*, '2 滞空時間と飛距離'
         print*, '3 運動方程式(放物運動)'
         print*, '4 運動方程式のグラフをみる(gnuplot)'
-        !print*, '5 微分方程式(Runge-Kutta法)'
         print*, '11 ジョーク\n'
         print*, '99 終了           01 Back'
         print '(A)', '-----------------------------------------'
