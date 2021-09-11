@@ -4,7 +4,7 @@ CUIで機能します。「GUIの方がいい」と欲張らないでくださ�
 ## 使い方
      インストール
      $ sudo apt install gfortran gnuplot
-     $ git clone https://github.com/ware255/ultra-simple_calculator.git
+     $ git clone https://github.com/ware255/ultra-simple_calculator
      移動
      $ cd ultra-simple_calculator
      コンパイル
