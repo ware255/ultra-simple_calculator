@@ -70,6 +70,7 @@ end subroutine warizan
 
 subroutine heihoukon()
     use, intrinsic :: iso_fortran_env
+    use, intrinsic :: ieee_features, only:ieee_sqrt
     implicit none
     real(real128) :: x
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
@@ -764,6 +765,7 @@ end subroutine game
 subroutine nizihoutei()
     use, intrinsic :: iso_fortran_env
     use, intrinsic :: ieee_arithmetic
+    use, intrinsic :: ieee_features, only:ieee_divide
     implicit none
     real(real128) :: a, b, c, k1, k2
     call ieee_set_rounding_mode(ieee_nearest)
@@ -1225,13 +1227,16 @@ subroutine joke()
 end subroutine joke
 
 subroutine undouhouteisiki()
+    !$ use omp_lib
     use, intrinsic :: iso_fortran_env
     use, intrinsic :: ieee_arithmetic
+    use, intrinsic :: ieee_features, only:ieee_sqrt
     implicit none
     integer(int64) :: i
     real(real128), parameter :: pi = 4.0_real128*atan(1.0_real128)
     real(real128) :: g, V, angle, theta, x, z, u, w&
     &, dxdt, dzdt, dudt, dwdt
+    !$ double precision st, en
     call ieee_set_rounding_mode(ieee_nearest)
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '初期速度 [m/s]'
@@ -1251,8 +1256,11 @@ subroutine undouhouteisiki()
     open(11, file='output.txt', status='replace')
 
     write(11, *) x, z
-
+    !$ st = omp_get_wtime()
+!$omp parallel num_threads(8) private(x,z)
+!$omp do
     do i = 1, 60000 ! 一分間だから60000 * 0.001
+!$omp critical
         dxdt = u
         dzdt = w
         dudt = 0.0
@@ -1262,12 +1270,18 @@ subroutine undouhouteisiki()
         z = z + 0.001 * dzdt
         u = u + 0.001 * dudt
         w = w + 0.001 * dwdt
+!$omp end critical
 
         print*, x, z
         write(11, *) x, z
     end do
+!$omp end do
+!$omp end parallel
+    !$ en = omp_get_wtime()
 
     close(11)
+
+    !$ print *, "Elapsed time :", en-st
 
     print*, '\nEnterを押してください。'
     read *
@@ -1311,6 +1325,34 @@ subroutine TX()
     print*, '\nEnterを押してください。'
     read *
 end subroutine TX
+
+subroutine ensyu()
+    use, intrinsic :: iso_fortran_env
+    implicit none
+    integer(int64), parameter :: vmax = 404800, bmax = 51456
+    integer(int64) :: vect(vmax) = 2, buffer(bmax)
+    integer(int64) :: carry, n, L, k, more = 0, num
+    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    print '(A)', 'ちょっと待っててね\n終わったあとは、メモ帳を&
+    &大画面にした方がええで\n'
+    do n = 1,  bmax!buffer()
+        carry = 0
+        do L = vmax, 1, -1 !vect()
+            num = 100000 * vect(L) + carry * L
+            carry = num / (2*L - 1)
+            vect(L) = num - carry * (2*L - 1)
+        end do
+        k = carry / 100000
+        buffer(n) = more + k
+        more = carry - k * 100000
+    end do
+    open(11, file="pi.txt", status="replace")
+        write(11, "(1x, I1, '.'/(1x, 39I5.5))") buffer
+    close(11)
+    write(*, "(1x, I1, '.'/(1x, 12I5.5))") buffer
+    print*, '\nEnterを押してください。'
+    read *
+end subroutine ensyu
 
 subroutine free_()
     use, intrinsic :: iso_fortran_env
@@ -1374,6 +1416,7 @@ subroutine page_02()
         print*, '2 滞空時間と飛距離'
         print*, '3 運動方程式(放物運動)'
         print*, '4 運動方程式のグラフをみる(gnuplot)'
+        print*, '5 円周率をtxtファイルで出力(桁数多め)'
         print*, '11 ジョーク\n'
         print*, '99 終了           01 Back'
         print '(A)', '-----------------------------------------'
@@ -1389,8 +1432,8 @@ subroutine page_02()
             print '(A)', '以下のコマンドを入力してください。\n'
             print '(A)', '================================'
             print '(A)', 'set style data lines   //グラフを線で表示'
-            print '(A)', 'set xrange [0:50]      //x軸を0~60'
-            print '(A)', 'set yrange [0:30]      //y軸を0~30'
+            !print '(A)', 'set xrange [0:50]      //x軸を0~60'
+            !print '(A)', 'set yrange [0:30]      //y軸を0~30'
             print '(A)', 'plot "output.txt"      //グラフを表示'
             print '(A)', '================================'
             print '(A)', 'exit                   //終了コマンド'
@@ -1398,12 +1441,16 @@ subroutine page_02()
             call undouplot()
         case ('2')
             call TX()
+        case ('5')
+            call ensyu()
         case ('11')
             call joke()
         case ('00')
             call page_00()
         case ('01')
-            call page_01()
+            !call page_01()
+            write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+            exit
         case ('99')
             write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             stop
@@ -1469,7 +1516,9 @@ subroutine page_01()
             read *
             exit
         case ('00')
-            call page_00()
+            !call page_00()
+            write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+            exit
         case ('99')
             write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             stop
