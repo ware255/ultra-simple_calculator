@@ -8,7 +8,7 @@ CUIで機能します。「GUIの方がいい」と欲張らないでくださ�
      移動
      $ cd ultra-simple_calculator
      コンパイル
-     $ gfortran -O3 -march=native -fbackslash calculator.f90 -o calculator
+     $ gfortran -O3 -fopenmp -fbackslash calculator.f90 -o calculator
      実行
      $ ./calculator
 ## 動作確認済みOS
