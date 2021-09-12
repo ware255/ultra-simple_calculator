@@ -30,9 +30,11 @@ end subroutine hikizan
 
 subroutine kakezan()
     use, intrinsic :: iso_fortran_env
+    use, intrinsic :: ieee_arithmetic
     implicit none
     real(real128) :: x, y
     character(len=256) :: str
+    call ieee_set_rounding_mode(ieee_nearest)
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
     read (*, *) x
@@ -40,7 +42,7 @@ subroutine kakezan()
     read (*, '(A)') str
     if (str .eq. '') then
         print*, '\n答え'
-        print*, x**2
+        print*, x * x
         print*, '\nEnterを押してください。'
         read *
         goto 11
@@ -55,8 +57,10 @@ end subroutine kakezan
 
 subroutine warizan()
     use, intrinsic :: iso_fortran_env
+    use, intrinsic :: ieee_arithmetic
     implicit none
     real(real128) :: x, y
+    call ieee_set_rounding_mode(ieee_nearest)
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
     read (*, *) x
@@ -89,23 +93,27 @@ end subroutine heihoukon
 
 subroutine ensyuritu()
     use, intrinsic :: iso_fortran_env
+    use, intrinsic :: ieee_arithmetic
     implicit none
     real(real128), parameter :: pi = 4.0_real128*atan(1.0_real128)
     real(real128) :: r
+    call ieee_set_rounding_mode(ieee_nearest)
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
     read (*, *) r
     print*, '\n答え'
-    print*, r**2 * pi
+    print*, r * r * pi
     print*, '\nEnterを押してください。'
     read *
 end subroutine ensyuritu
 
 subroutine syutyou()
     use, intrinsic :: iso_fortran_env
+    use, intrinsic :: ieee_arithmetic
     implicit none
     real(real128), parameter :: pi = 4.0_real128*atan(1.0_real128)
     real(real128) :: r
+    call ieee_set_rounding_mode(ieee_nearest)
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
     read (*, *) r
@@ -117,8 +125,10 @@ end subroutine syutyou
 
 subroutine nizyou()
     use, intrinsic :: iso_fortran_env
+    use, intrinsic :: ieee_arithmetic
     implicit none
     real(real128) :: x, y
+    call ieee_set_rounding_mode(ieee_nearest)
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', 'べき乗する値を入力してください。'
     read (*, *) x
@@ -1045,7 +1055,7 @@ subroutine neipia() ! e = lim n->Infinity [ (1+1/n)**n ] | Σn=0 ∞ [ 1/n! ]
     implicit none
     integer(int64), parameter :: n = 1024
     integer(int64) :: a
-    real(real128) :: b = 1.e0, e = 1.e0
+    real(real128) :: b = 1.0_real128, e = 1.0_real128
     call ieee_set_rounding_mode(ieee_nearest)
     print '(A)', '\x1b[2J\x1b[3J\x1b[H'
     do a = 1, n
@@ -1062,8 +1072,10 @@ end subroutine neipia
 
 subroutine y_zyoukon()
     use, intrinsic :: iso_fortran_env
+    use, intrinsic :: ieee_arithmetic
     implicit none
     real(real128) :: x, y
+    call ieee_set_rounding_mode(ieee_nearest)
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', 'n乗根のnの値を入力してください。()'
     read (*, *) y
@@ -1078,7 +1090,7 @@ subroutine y_zyoukon()
     print '(A)', 'n乗根するx値を入力してください。'
     read (*, *) x
     print*, '答え'
-    print*, x**(1./y)
+    print*, x**(1/y)
 19  print*, '\nEnterを押してください。'
     read *
 end subroutine y_zyoukon
@@ -1246,10 +1258,10 @@ subroutine undouhouteisiki()
 
     g = 9.806
 
-    theta = pi / 180.e0 * angle
+    theta = pi / 180.0 * angle
 
-    x = 0.e0
-    z = 0.e0
+    x = 0.0_real128
+    z = 0.0_real128
     u = V * cos(theta)
     w = V * sin(theta)
 
@@ -1257,7 +1269,7 @@ subroutine undouhouteisiki()
 
     write(11, *) x, z
     !$ st = omp_get_wtime()
-!$omp parallel num_threads(8)
+!$omp parallel num_threads(16)
 !$omp do
     do i = 1, 60000 ! 一分間だから60000 * 0.001
 !$omp critical
@@ -1313,7 +1325,7 @@ subroutine TX()
 
     g = 9.806
 
-    theta = pi / 180.e0 * angle
+    theta = pi / 180.0 * angle
 
     T = 2.0 * V * sin(theta) / g
     X = V * V * sin(2.0 * theta)
@@ -1329,7 +1341,7 @@ end subroutine TX
 subroutine ensyu()
     use, intrinsic :: iso_fortran_env
     implicit none
-    integer(int64), parameter :: vmax = 404800, bmax = 51456
+    integer(int64), parameter :: vmax = 809600, bmax = 102912
     integer(int64) :: vect(vmax) = 2, buffer(bmax)
     integer(int64) :: carry, n, L, k, more = 0, num
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
@@ -1347,7 +1359,7 @@ subroutine ensyu()
         more = carry - k * 100000
     end do
     open(11, file="pi.txt", status="replace")
-        write(11, "(1x, I1, '.'/(1x, 39I5.5))") buffer
+        write(11, "(1x, I1, '.'/(1x, 32I5.5))") buffer
     close(11)
     write(*, "(1x, I1, '.'/(1x, 12I5.5))") buffer
     print*, '\nEnterを押してください。'
@@ -1358,8 +1370,9 @@ subroutine free_()
     use, intrinsic :: iso_fortran_env
     use, intrinsic :: ieee_arithmetic
     implicit none
-    character(len=256) :: func, x1_, x2_
-    real(real128) :: x1 = 0.e0, x2 = 0.e0
+    character(len=256) :: func, x1_, x2_!, x(5)
+    !integer(int64) :: i = 0
+    real(real128) :: x1 = 0.e0, x2 = 0.e0!, z(5)
     call ieee_set_rounding_mode(ieee_nearest)
     do
         write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
@@ -1372,6 +1385,14 @@ subroutine free_()
         print '(A)', '入力例: addition 1 1\n'
         write (*,fmt='(A)', advance='no') ': '
         read (*, *) func, x1_, x2_
+
+        !do i = 1, 5
+        !    read (*, *) x(i)
+        !    if (x(i) .eq. 'exit') call page_00()
+        !    if (i .eq. 2) then
+        !        read (x(i), *) z(i)
+        !    end if
+        !end do
 
         if (func .eq. 'exit' .and. x1_ .eq. &
         &'^' .and. x2_ .eq. '^') exit
@@ -1431,7 +1452,7 @@ subroutine page_02()
             write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             print '(A)', '以下のコマンドを入力してください。\n'
             print '(A)', '================================'
-            print '(A)', 'set style data dots    //グラフを点で表示'
+            print '(A)', 'set style data dots    //グラフを線で表示'
             print '(A)', 'set xrange [0:50]      //x軸を0~50'
             print '(A)', 'set yrange [0:30]      //y軸を0~30'
             print '(A)', 'plot "output.txt"      //グラフを表示'
@@ -1465,7 +1486,7 @@ subroutine page_01()
     use, intrinsic :: iso_fortran_env
     implicit none
     character(len=256) :: str
-    real(real128), parameter :: fai = (1.0_real128+sqrt(5.0_real128))/2.0_real128
+    real(real128), parameter :: fai = (1.0_real128+sqrt(5.0_real128))*0.5_real128
     do
         write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
         print '(A)', '\n-----------------------------------------'
@@ -1618,8 +1639,11 @@ subroutine page_00()
 end subroutine page_00
 
 program calculator
+    use, intrinsic :: iso_fortran_env
     implicit none
     character(len=256) :: str
+    integer(int64) :: i, t1, t2, t_rate, t_max, diff
+    real(real64) :: s, c_t1, c_t2
     if (.not. getuid() .eq. 0) then !権限なし
         call getarg(1, str)
         if (iargc() .eq. 0) then
@@ -1630,6 +1654,29 @@ program calculator
             call page_01()
         else if (str .eq. 'page_02') then
             call page_02()
+        else if (str .eq. 'benchmark') then
+            print '(A)', '\n計算中\n'
+            call system_clock(t1)
+            call cpu_time(c_t1)
+!$omp parallel num_threads(16)
+!$omp do
+            do i = 0, 10**8
+!$omp critical
+                s = s + (-1.0_real64)**i / (2.0_real64 * i + 1.0_real64)
+!$omp end critical
+            end do
+!$omp end do
+!$omp end parallel
+            print*, 'Answer:', s*4
+            call cpu_time(c_t2)
+            call system_clock(t2, t_rate, t_max)
+            if (t2 < t1) then
+                diff = (t_max - t1) + t2 + 1
+            else
+                diff = t2 - t1
+            end if
+            print '(A, F10.4, A)', '\ntime:   ', diff / dble(t_rate), ' [sec]'
+            print '(A, F8.4, A)', 'cpu time: ', c_t2 - c_t1, ' [sec]\n'
         else
             print '(A)', '\nこの引数はありません。\n'
         end if
