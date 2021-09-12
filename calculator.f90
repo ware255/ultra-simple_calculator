@@ -1598,6 +1598,20 @@ subroutine page_00()
     end do
 end subroutine page_00
 
+subroutine help()
+    implicit none
+    print '(A)', '使用法: ./calculator [オプション]'
+    print '(A)', 'オプションがない場合はそのまま実行します。\n'
+    print '(A)', 'オプション'
+    print '(A12)', 'page_00'
+    print '(A12)', 'page_01'
+    print '(A12)', 'page_02'
+    print '(A9)', 'help'
+    print '(A15)', 'benchmark\n'
+    print '(A)', '例:'
+    print '(A)', '$ ./calculator page_00'
+end subroutine help
+
 program calculator
     !$ use omp_lib
     use, intrinsic :: iso_fortran_env
@@ -1610,6 +1624,8 @@ program calculator
         call getarg(1, str)
         if (iargc() .eq. 0) then
             call page_00()
+        else if (str .eq. 'help') then
+            call help()
         else if (str .eq. 'page_00') then
             call page_00()
         else if (str .eq. 'page_01') then
