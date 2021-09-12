@@ -1269,10 +1269,10 @@ subroutine undouhouteisiki()
 
     write(11, *) x, z
     !$ st = omp_get_wtime()
-!$omp parallel num_threads(16)
-!$omp do
+    !$omp parallel num_threads(16)
+    !$omp do
     do i = 1, 60000 ! 一分間だから60000 * 0.001
-!$omp critical
+        !$omp critical
         dxdt = u
         dzdt = w
         dudt = 0.0
@@ -1282,13 +1282,13 @@ subroutine undouhouteisiki()
         z = z + 0.001 * dzdt
         u = u + 0.001 * dudt
         w = w + 0.001 * dwdt
-!$omp end critical
+        !$omp end critical
 
         print*, x, z
         write(11, *) x, z
     end do
-!$omp end do
-!$omp end parallel
+    !$omp end do
+    !$omp end parallel
     !$ en = omp_get_wtime()
 
     close(11)
@@ -1639,11 +1639,13 @@ subroutine page_00()
 end subroutine page_00
 
 program calculator
+    !$ use omp_lib
     use, intrinsic :: iso_fortran_env
     implicit none
     character(len=256) :: str
-    integer(int64) :: i, t1, t2, t_rate, t_max, diff
-    real(real64) :: s, c_t1, c_t2
+    integer(int64) :: i
+    real(real128) :: s = 0.0_real128
+    !$ real(real64) :: time_begin_s,time_end_s
     if (.not. getuid() .eq. 0) then !権限なし
         call getarg(1, str)
         if (iargc() .eq. 0) then
@@ -1656,27 +1658,19 @@ program calculator
             call page_02()
         else if (str .eq. 'benchmark') then
             print '(A)', '\n計算中\n'
-            call system_clock(t1)
-            call cpu_time(c_t1)
-!$omp parallel num_threads(16)
-!$omp do
+            !$ time_begin_s = omp_get_wtime()
+            !$omp parallel num_threads(16)
+            !$omp do
             do i = 0, 10**8
-!$omp critical
+                !$omp critical
                 s = s + (-1.0_real64)**i / (2.0_real64 * i + 1.0_real64)
-!$omp end critical
+                !$omp end critical
             end do
-!$omp end do
-!$omp end parallel
+            !$omp end do
+            !$omp end parallel
+            !$ time_end_s = omp_get_wtime()
             print*, 'Answer:', s*4
-            call cpu_time(c_t2)
-            call system_clock(t2, t_rate, t_max)
-            if (t2 < t1) then
-                diff = (t_max - t1) + t2 + 1
-            else
-                diff = t2 - t1
-            end if
-            print '(A, F10.4, A)', '\ntime:   ', diff / dble(t_rate), ' [sec]'
-            print '(A, F8.4, A)', 'cpu time: ', c_t2 - c_t1, ' [sec]\n'
+            !$ print '(A, F10.5, A)', '\ntime:   ', time_end_s - time_begin_s, ' [sec]\n'
         else
             print '(A)', '\nこの引数はありません。\n'
         end if
