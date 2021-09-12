@@ -13,15 +13,20 @@ CUIで機能します。「GUIの方がいい」と欲張らないでくださ�
      $ ./calculator
 ## 使用方法
      通常
-     $ ./calculator<br>
+     $ ./calculator
+     
      オプションがわからないとき
      $ ./calculator help
+     
      ./calculatorと実行した時と同じ
      $ ./calculator page_00
+     
      page_00の次のページ
      $ ./calculator page_01
+     
      page_01の次のページ
      $ ./calculator page_02
+     
      PCスペックをテストします。
      $ ./calculator benchmark
 ## 動作確認済みOS
