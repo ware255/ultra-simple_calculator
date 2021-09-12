@@ -13,7 +13,7 @@ CUIで機能します。「GUIの方がいい」と欲張らないでくださ�
      $ ./calculator
 ## 使用方法
      通常
-     $ ./calculator
+     $ ./calculator<br>
      オプションがわからないとき
      $ ./calculator help
      ./calculatorと実行した時と同じ
