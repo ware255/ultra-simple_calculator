@@ -1602,7 +1602,7 @@ subroutine help()
     implicit none
     print '(A)', '使用法: ./calculator [オプション]'
     print '(A)', 'オプションがない場合はそのまま実行します。\n'
-    print '(A)', 'オプション'
+    print '(A)', 'オプション:'
     print '(A12)', 'page_00'
     print '(A12)', 'page_01'
     print '(A12)', 'page_02'
