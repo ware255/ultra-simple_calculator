@@ -1168,7 +1168,7 @@ subroutine gamma_f()
     integer(int64) :: a
     real(real128), parameter :: pi = 4.0_real128*atan(1.0_real128)
     real(real128) :: z, gamma1, gamma2
-    real(real128) :: b = 1.e0, e = 1.e0
+    real(real128) :: b = 1.0_real128, e = 1.0_real128
     call ieee_set_rounding_mode(ieee_nearest)
     print '(A)', '\x1b[2J\x1b[3J\x1b[H'
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
@@ -1365,67 +1365,6 @@ subroutine ensyu()
     print*, '\nEnterを押してください。'
     read *
 end subroutine ensyu
-
-subroutine free_()
-    use, intrinsic :: iso_fortran_env
-    use, intrinsic :: ieee_arithmetic
-    implicit none
-    character(len=256) :: func, x1_, x2_!, x(5)
-    !integer(int64) :: i = 0
-    real(real128) :: x1 = 0.e0, x2 = 0.e0!, z(5)
-    call ieee_set_rounding_mode(ieee_nearest)
-    do
-        write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-        print '(A)', '\nコマンド\n'
-        print '(A)', 'add         //足し算'
-        print '(A)', 'sub         //引き算'
-        print '(A)', 'mul         //掛け算'
-        print '(A)', 'div         //割り算'
-        print '(A)', 'exit ^ ^    //終わルー☆\n'
-        print '(A)', '入力例: addition 1 1\n'
-        write (*,fmt='(A)', advance='no') ': '
-        read (*, *) func, x1_, x2_
-
-        !do i = 1, 5
-        !    read (*, *) x(i)
-        !    if (x(i) .eq. 'exit') call page_00()
-        !    if (i .eq. 2) then
-        !        read (x(i), *) z(i)
-        !    end if
-        !end do
-
-        if (func .eq. 'exit' .and. x1_ .eq. &
-        &'^' .and. x2_ .eq. '^') exit
-
-        read (x1_, *) x1
-        read (x2_, *) x2
-
-        if (func .eq. 'add') then
-            print*, '\n答え'
-            print*, x1 + x2
-            print*, '\nEnterを押してください。'
-            read *
-        else if (func .eq. 'sub') then
-            print*, '\n答え'
-            print*, x1 - x2
-            print*, '\nEnterを押してください。'
-            read *
-        else if (func .eq. 'mul') then
-            print*, '\n答え'
-            print*, x1 * x2
-            print*, '\nEnterを押してください。'
-            read *
-        else if (func .eq. 'div') then
-            print*, '\n答え'
-            print*, x1 / x2
-            print*, '\nEnterを押してください。'
-            read *
-        else
-            print*, 'は？'
-            call sleep(1)
-        end if
-    end do
-end subroutine free_
 
 subroutine page_02()
     implicit none
@@ -1629,8 +1568,6 @@ subroutine page_00()
             call page_01()
         case ('02')
             call page_02()
-        case ('free')
-            call free_()
         case default
             print*, 'そんなもんねぇよｗ'
             call sleep(1)
@@ -1657,11 +1594,11 @@ program calculator
         else if (str .eq. 'page_02') then
             call page_02()
         else if (str .eq. 'benchmark') then
-            print '(A)', '\n計算中\n'
+            print '(A)', '\n計算中です。\n'!(約2分かかります。)
             !$ time_begin_s = omp_get_wtime()
-            !$omp parallel num_threads(16)
+            !$omp parallel num_threads(32)
             !$omp do
-            do i = 0, 10**8
+            do i = 0, 10**8!12
                 !$omp critical
                 s = s + (-1.0_real64)**i / (2.0_real64 * i + 1.0_real64)
                 !$omp end critical
@@ -1669,8 +1606,8 @@ program calculator
             !$omp end do
             !$omp end parallel
             !$ time_end_s = omp_get_wtime()
-            print*, 'Answer:', s*4
-            !$ print '(A, F10.5, A)', '\ntime:   ', time_end_s - time_begin_s, ' [sec]\n'
+            print*, 'Answer:', s * 4
+            !$ print '(A, F13.5, A)', '\ntime:', time_end_s - time_begin_s, ' [sec]\n'
         else
             print '(A)', '\nこの引数はありません。\n'
         end if
