@@ -1366,6 +1366,26 @@ subroutine ensyu()
     read *
 end subroutine ensyu
 
+subroutine heikin()
+    use, intrinsic :: iso_fortran_env
+    implicit none
+    integer(int64) :: i, max
+    real(real128) :: x(1024), y = 0.0_real128
+    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    print '(A)', '観測値を入力してください。'
+    read (*, *) max
+    print*, ''
+    do i = 1, max
+        print '(i0, "つ目の値を入力してください。")', i
+        read (*, *) x(i)
+        y = y + x(i)
+    end do
+    print*, '\n答え'
+    print*, y / max
+    print*, '\nEnterを押してください。'
+    read *
+end subroutine heikin
+
 subroutine page_02()
     implicit none
     character(len=256) :: str
@@ -1377,6 +1397,7 @@ subroutine page_02()
         print*, '3 運動方程式(一分間での放物運動)'
         print*, '4 運動方程式のグラフをみる(gnuplot)'
         print*, '5 円周率をtxtファイルで出力(桁数多め)'
+        print*, '6 平均値'
         print*, '11 ジョーク\n'
         print*, '99 終了           01 Back'
         print '(A)', '-----------------------------------------'
@@ -1403,6 +1424,8 @@ subroutine page_02()
             call TX()
         case ('5')
             call ensyu()
+        case ('6')
+            call heikin()
         case ('11')
             call joke()
         case ('00')
