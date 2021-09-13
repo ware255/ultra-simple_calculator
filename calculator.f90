@@ -8,6 +8,13 @@ subroutine tasizan()
     print '(A)', '値を入力してください。'
     read (*, *) y
     print*, '\n答え'
+    if (x <= 999 .or. y <= 999) then
+        print '(F9.4, "  +", F9.4, "\n")', x, y
+    else if (x <= 99999 .or. y <= 99999) then
+        print '(F19.4, "   +", F19.4, "\n")', x, y
+    else
+        print '(F29.4, "    +", F29.4, "\n")', x, y
+    end if
     print*, x + y
     print*, '\nEnterを押してください。'
     read *
@@ -23,6 +30,13 @@ subroutine hikizan()
     print '(A)', '値を入力してください。'
     read (*, *) y
     print*, '\n答え'
+    if (x <= 999 .or. y <= 999) then
+        print '(F9.4, "  -", F9.4, "\n")', x, y
+    else if (x <= 99999 .or. y <= 99999) then
+        print '(F19.4, "   -", F19.4, "\n")', x, y
+    else
+        print '(F29.4, "    -", F29.4, "\n")', x, y
+    end if
     print*, x - y
     print*, '\nEnterを押してください。'
     read *
@@ -42,6 +56,13 @@ subroutine kakezan()
     read (*, '(A)') str
     if (str .eq. '') then
         print*, '\n答え'
+        if (x <= 999) then
+            print '(F9.4, "  ^", F6.4, "\n")', x, 2
+        else if (x <= 99999) then
+            print '(F19.4, "   ^", F16.4, "\n")', x, 2
+        else
+            print '(F29.4, "    ^", F26.4, "\n")', x, 2
+        end if
         print*, x * x
         print*, '\nEnterを押してください。'
         read *
@@ -49,6 +70,13 @@ subroutine kakezan()
     end if
     read (str, *) y
     print*, '\n答え'
+    if (x <= 999 .or. y <= 999) then
+        print '(F9.4, "  *", F9.4, "\n")', x, y
+    else if (x <= 99999 .or. y <= 99999) then
+        print '(F19.4, "   *", F19.4, "\n")', x, y
+    else
+        print '(F29.4, "    *", F29.4, "\n")', x, y
+    end if
     print*, x * y
     print*, '\nEnterを押してください。'
     read *
@@ -67,6 +95,13 @@ subroutine warizan()
     print '(A)', '値を入力してください。'
     read (*, *) y
     print*, '\n答え'
+    if (x <= 999 .or. y <= 999) then
+        print '(F9.4, "  /", F9.4, "\n")', x, y
+    else if (x <= 99999 .or. y <= 99999) then
+        print '(F19.4, "   /", F19.4, "\n")', x, y
+    else
+        print '(F29.4, "    /", F29.4, "\n")', x, y
+    end if
     print*, x / y
     print*, '\nEnterを押してください。'
     read *
@@ -135,6 +170,13 @@ subroutine nizyou()
     print '(A)', 'n乗する値を入力してください。'
     read (*, *) y
     print*, '\n答え'
+    if (x <= 999 .or. y <= 999) then
+        print '(F9.4, "  ^", F9.4, "\n")', x, y
+    else if (x <= 99999 .or. y <= 99999) then
+        print '(F19.4, "   ^", F19.4, "\n")', x, y
+    else
+        print '(F29.4, "    ^", F29.4, "\n")', x, y
+    end if
     print*, x**y
     print*, '\nEnterを押してください。'
     read *
@@ -1347,17 +1389,23 @@ subroutine ensyu()
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', 'ちょっと待っててね\n終わったあとは、メモ帳を&
     &大画面にした方がええで\n'
+    !$omp parallel num_threads(16) private(buffer)
     do n = 1,  bmax!buffer()
         carry = 0
         do L = vmax, 1, -1 !vect()
+            !$omp critical
             num = 100000 * vect(L) + carry * L
             carry = num / (2*L - 1)
             vect(L) = num - carry * (2*L - 1)
+            !$omp end critical
         end do
+        !$omp critical
         k = carry / 100000
         buffer(n) = more + k
         more = carry - k * 100000
+        !$omp end critical
     end do
+    !$omp end parallel
     open(11, file="pi.txt", status="replace")
         write(11, "(1x, I1, '.'/(1x, 32I5.5))") buffer
     close(11)
@@ -1499,7 +1547,6 @@ subroutine page_01()
             read *
             exit
         case ('00')
-            !call page_00()
             write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             exit
         case ('99')
