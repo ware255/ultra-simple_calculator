@@ -8,9 +8,9 @@ subroutine tasizan()
     print '(A)', '値を入力してください。'
     read (*, *) y
     print*, '\n答え'
-    if (x <= 999 .or. y <= 999) then
+    if (x <= 999 .and. y <= 999) then
         print '(F9.4, "  +  ", F0.4, "\n")', x, y
-    else if (x <= 99999 .or. y <= 99999) then
+    else if (x <= 99999 .and. y <= 99999) then
         print '(F19.4, "  +  ", F0.4, "\n")', x, y
     else
         print '(F29.4, "  +  ", F0.4, "\n")', x, y
@@ -30,9 +30,9 @@ subroutine hikizan()
     print '(A)', '値を入力してください。'
     read (*, *) y
     print*, '\n答え'
-    if (x <= 999 .or. y <= 999) then
+    if (x <= 999 .and. y <= 999) then
         print '(F9.4, "  -  ", F0.4, "\n")', x, y
-    else if (x <= 99999 .or. y <= 99999) then
+    else if (x <= 99999 .and. y <= 99999) then
         print '(F19.4, "  -  ", F0.4, "\n")', x, y
     else
         print '(F29.4, "  -  ", F0.4, "\n")', x, y
@@ -70,9 +70,9 @@ subroutine kakezan()
     end if
     read (str, *) y
     print*, '\n答え'
-    if (x <= 999 .or. y <= 999) then
+    if (x <= 999 .and. y <= 999) then
         print '(F9.4, "  *  ", F0.4, "\n")', x, y
-    else if (x <= 99999 .or. y <= 99999) then
+    else if (x <= 99999 .and. y <= 99999) then
         print '(F19.4, "  *  ", F0.4, "\n")', x, y
     else
         print '(F29.4, "  *  ", F0.4, "\n")', x, y
@@ -95,9 +95,9 @@ subroutine warizan()
     print '(A)', '値を入力してください。'
     read (*, *) y
     print*, '\n答え'
-    if (x <= 999 .or. y <= 999) then
+    if (x <= 999 .and. y <= 999) then
         print '(F9.4, "  /  ", F0.4, "\n")', x, y
-    else if (x <= 99999 .or. y <= 99999) then
+    else if (x <= 99999 .and. y <= 99999) then
         print '(F19.4, "  /  ", F0.4, "\n")', x, y
     else
         print '(F29.4, "  /  ", F0.4, "\n")', x, y
@@ -170,9 +170,9 @@ subroutine nizyou()
     print '(A)', 'n乗する値を入力してください。'
     read (*, *) y
     print*, '\n答え'
-    if (x <= 999 .or. y <= 999) then
+    if (x <= 999 .and. y <= 999) then
         print '(F9.4, "  ^  ", F0.4, "\n")', x, y
-    else if (x <= 99999 .or. y <= 99999) then
+    else if (x <= 99999 .and. y <= 99999) then
         print '(F19.4, "  ^  ", F0.4, "\n")', x, y
     else
         print '(F29.4, "  ^  ", F0.4, "\n")', x, y
@@ -1419,7 +1419,7 @@ subroutine heikin()
     use, intrinsic :: ieee_arithmetic
     implicit none
     integer(int64) :: i, max
-    real(real128) :: x(1024), y = 0.0_real128
+    real(real128) :: x(1048576), y = 0.0_real128 !1024
     call ieee_set_rounding_mode(ieee_nearest)
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '観測値を入力してください。'
