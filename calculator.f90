@@ -9,11 +9,11 @@ subroutine tasizan()
     read (*, *) y
     print*, '\n答え'
     if (x <= 999 .or. y <= 999) then
-        print '(F9.4, "  +", F9.4, "\n")', x, y
+        print '(F9.4, "  +  ", F0.4, "\n")', x, y
     else if (x <= 99999 .or. y <= 99999) then
-        print '(F19.4, "   +", F19.4, "\n")', x, y
+        print '(F19.4, "  +  ", F0.4, "\n")', x, y
     else
-        print '(F29.4, "    +", F29.4, "\n")', x, y
+        print '(F29.4, "  +  ", F0.4, "\n")', x, y
     end if
     print*, x + y
     print*, '\nEnterを押してください。'
@@ -31,11 +31,11 @@ subroutine hikizan()
     read (*, *) y
     print*, '\n答え'
     if (x <= 999 .or. y <= 999) then
-        print '(F9.4, "  -", F9.4, "\n")', x, y
+        print '(F9.4, "  -  ", F0.4, "\n")', x, y
     else if (x <= 99999 .or. y <= 99999) then
-        print '(F19.4, "   -", F19.4, "\n")', x, y
+        print '(F19.4, "  -  ", F0.4, "\n")', x, y
     else
-        print '(F29.4, "    -", F29.4, "\n")', x, y
+        print '(F29.4, "  -  ", F0.4, "\n")', x, y
     end if
     print*, x - y
     print*, '\nEnterを押してください。'
@@ -57,11 +57,11 @@ subroutine kakezan()
     if (str .eq. '') then
         print*, '\n答え'
         if (x <= 999) then
-            print '(F9.4, "  ^", F6.4, "\n")', x, 2
+            print '(F9.4, "  ^  ", I0, "\n")', x, 2
         else if (x <= 99999) then
-            print '(F19.4, "   ^", F16.4, "\n")', x, 2
+            print '(F19.4, "  ^  ", I0, "\n")', x, 2
         else
-            print '(F29.4, "    ^", F26.4, "\n")', x, 2
+            print '(F29.4, "  ^  ", I0, "\n")', x, 2
         end if
         print*, x * x
         print*, '\nEnterを押してください。'
@@ -71,11 +71,11 @@ subroutine kakezan()
     read (str, *) y
     print*, '\n答え'
     if (x <= 999 .or. y <= 999) then
-        print '(F9.4, "  *", F9.4, "\n")', x, y
+        print '(F9.4, "  *  ", F0.4, "\n")', x, y
     else if (x <= 99999 .or. y <= 99999) then
-        print '(F19.4, "   *", F19.4, "\n")', x, y
+        print '(F19.4, "  *  ", F0.4, "\n")', x, y
     else
-        print '(F29.4, "    *", F29.4, "\n")', x, y
+        print '(F29.4, "  *  ", F0.4, "\n")', x, y
     end if
     print*, x * y
     print*, '\nEnterを押してください。'
@@ -96,11 +96,11 @@ subroutine warizan()
     read (*, *) y
     print*, '\n答え'
     if (x <= 999 .or. y <= 999) then
-        print '(F9.4, "  /", F9.4, "\n")', x, y
+        print '(F9.4, "  /  ", F0.4, "\n")', x, y
     else if (x <= 99999 .or. y <= 99999) then
-        print '(F19.4, "   /", F19.4, "\n")', x, y
+        print '(F19.4, "  /  ", F0.4, "\n")', x, y
     else
-        print '(F29.4, "    /", F29.4, "\n")', x, y
+        print '(F29.4, "  /  ", F0.4, "\n")', x, y
     end if
     print*, x / y
     print*, '\nEnterを押してください。'
@@ -171,11 +171,11 @@ subroutine nizyou()
     read (*, *) y
     print*, '\n答え'
     if (x <= 999 .or. y <= 999) then
-        print '(F9.4, "  ^", F9.4, "\n")', x, y
+        print '(F9.4, "  ^  ", F0.4, "\n")', x, y
     else if (x <= 99999 .or. y <= 99999) then
-        print '(F19.4, "   ^", F19.4, "\n")', x, y
+        print '(F19.4, "  ^  ", F0.4, "\n")', x, y
     else
-        print '(F29.4, "    ^", F29.4, "\n")', x, y
+        print '(F29.4, "  ^  ", F0.4, "\n")', x, y
     end if
     print*, x**y
     print*, '\nEnterを押してください。'
@@ -1313,17 +1313,17 @@ subroutine undouhouteisiki()
     !$ st = omp_get_wtime()
     !$omp parallel num_threads(16)
     !$omp do
-    do i = 1, 60000 ! 一分間だから60000 * 0.001
+    do i = 1, 600000 ! 一分間だから600000 * 0.001
         !$omp critical
         dxdt = u
         dzdt = w
         dudt = 0.0
         dwdt = -g
 
-        x = x + 0.001 * dxdt
-        z = z + 0.001 * dzdt
-        u = u + 0.001 * dudt
-        w = w + 0.001 * dwdt
+        x = x + 0.0001 * dxdt
+        z = z + 0.0001 * dzdt
+        u = u + 0.0001 * dudt
+        w = w + 0.0001 * dwdt
         !$omp end critical
 
         print*, x, z
@@ -1416,15 +1416,17 @@ end subroutine ensyu
 
 subroutine heikin()
     use, intrinsic :: iso_fortran_env
+    use, intrinsic :: ieee_arithmetic
     implicit none
     integer(int64) :: i, max
     real(real128) :: x(1024), y = 0.0_real128
+    call ieee_set_rounding_mode(ieee_nearest)
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '観測値を入力してください。'
     read (*, *) max
     print*, ''
     do i = 1, max
-        print '(i0, "つ目の値を入力してください。")', i
+        print '(I0, "つ目の値を入力してください。")', i
         read (*, *) x(i)
         y = y + x(i)
     end do
@@ -1479,7 +1481,6 @@ subroutine page_02()
         case ('00')
             call page_00()
         case ('01')
-            !call page_01()
             write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             exit
         case ('99')
@@ -1680,7 +1681,7 @@ program calculator
         else if (str .eq. 'page_02') then
             call page_02()
         else if (str .eq. 'benchmark') then
-            print '(A)', '\n計算中です。\n'!(約2分かかります。)
+            print '(A)', '\n計算中です。\n'
             !$ time_begin_s = omp_get_wtime()
             !$omp parallel num_threads(32)
             !$omp do
