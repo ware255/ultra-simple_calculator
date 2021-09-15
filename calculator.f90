@@ -1449,7 +1449,7 @@ subroutine kaizyou()
         ans = ans * k
     end do
     print*, '\n答え'
-    print '("\t", i0, "! = ", F0.4)', n, ans
+    print '("  ", i0, "! = ", F0.4)', n, ans
     print*, '\nEnterを押してください。'
     read *
 end subroutine kaizyou
