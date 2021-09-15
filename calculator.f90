@@ -1436,6 +1436,24 @@ subroutine heikin()
     read *
 end subroutine heikin
 
+subroutine kaizyou()
+    use, intrinsic :: iso_fortran_env
+    implicit none
+    integer(int64) :: n, k
+    real(real128) :: ans
+    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    print '(A)', '値を入力してください。'
+    read (*, *) n
+    ans = 1
+    do k = 1, n
+        ans = ans * k
+    end do
+    print*, '\n答え'
+    print '("\t", i0, "! = ", F0.4)', n, ans
+    print*, '\nEnterを押してください。'
+    read *
+end subroutine kaizyou
+
 subroutine page_02()
     implicit none
     character(len=256) :: str
@@ -1448,6 +1466,7 @@ subroutine page_02()
         print*, '4 運動方程式のグラフをみる(gnuplot)'
         print*, '5 円周率をtxtファイルで出力(桁数多め)'
         print*, '6 平均値'
+        print*, '7 階乗(n!)'
         print*, '11 ジョーク\n'
         print*, '99 終了           01 Back'
         print '(A)', '-----------------------------------------'
@@ -1476,6 +1495,8 @@ subroutine page_02()
             call ensyu()
         case ('6')
             call heikin()
+        case ('7')
+            call kaizyou()
         case ('11')
             call joke()
         case ('00')
