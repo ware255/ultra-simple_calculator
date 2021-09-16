@@ -1298,12 +1298,12 @@ subroutine undouhouteisiki()
     print '(A)', '仰角 [deg]'
     read (*, *) angle
 
-    g = 9.806
+    g = 9.8
 
     theta = pi / 180.0 * angle
 
-    x = 0.0_real128
-    z = 0.0_real128
+    x = 0.0
+    z = 0.0
     u = V * cos(theta)
     w = V * sin(theta)
 
@@ -1311,19 +1311,19 @@ subroutine undouhouteisiki()
 
     write(11, *) x, z
     !$ st = omp_get_wtime()
-    !$omp parallel num_threads(16)
+    !$omp parallel num_threads(32)
     !$omp do
-    do i = 1, 600000 ! 一分間だから600000 * 0.001
+    do i = 1, 60000000 ! 一分間だから600000 * 0.001
         !$omp critical
         dxdt = u
         dzdt = w
         dudt = 0.0
         dwdt = -g
 
-        x = x + 0.0001 * dxdt
-        z = z + 0.0001 * dzdt
-        u = u + 0.0001 * dudt
-        w = w + 0.0001 * dwdt
+        x = x + 0.000001 * dxdt
+        z = z + 0.000001 * dzdt
+        u = u + 0.000001 * dudt
+        w = w + 0.000001 * dwdt
         !$omp end critical
 
         print*, x, z
@@ -1509,7 +1509,7 @@ subroutine page_02()
             stop
         case default
             print*, 'そんなもんねぇよｗ'
-            call sleep(1)
+            read * !call sleep(1)
         end select
     end do
 end subroutine page_02
@@ -1578,7 +1578,7 @@ subroutine page_01()
             call page_02()
         case default
             print*, 'そんなもんねぇよｗ'
-            call sleep(1)
+            read * !call sleep(1)
         end select
     end do
 end subroutine page_01
@@ -1662,7 +1662,7 @@ subroutine page_00()
             call page_02()
         case default
             print*, 'そんなもんねぇよｗ'
-            call sleep(1)
+            read * !call sleep(1)
         end select
     end do
 end subroutine page_00
