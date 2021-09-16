@@ -1298,7 +1298,7 @@ subroutine undouhouteisiki()
     print '(A)', '仰角 [deg]'
     read (*, *) angle
 
-    g = 9.8
+    g = 9.806
 
     theta = pi / 180.0 * angle
 
@@ -1311,22 +1311,22 @@ subroutine undouhouteisiki()
 
     write(11, *) x, z
     !$ st = omp_get_wtime()
-    !$omp parallel num_threads(32)
+    !$omp parallel num_threads(64)
     !$omp do
-    do i = 1, 60000000 ! 一分間だから600000 * 0.001
+    do i = 1, 6000000 ! 一分間だから600000 * 0.001
         !$omp critical
         dxdt = u
         dzdt = w
         dudt = 0.0
         dwdt = -g
 
-        x = x + 0.000001 * dxdt
-        z = z + 0.000001 * dzdt
-        u = u + 0.000001 * dudt
-        w = w + 0.000001 * dwdt
+        x = x + 0.00001 * dxdt
+        z = z + 0.00001 * dzdt
+        u = u + 0.00001 * dudt
+        w = w + 0.00001 * dwdt
         !$omp end critical
 
-        print*, x, z
+        print '("\t", F0.9, "\t", F0.9)', x, z
         write(11, *) x, z
     end do
     !$omp end do
@@ -1373,9 +1373,9 @@ subroutine TX()
     X = V * V * sin(2.0 * theta)
 
     print*, '\n滞空時間'
-    print*, T
+    print '("\t", F0.36, " [sec]")', T
     print*, '\n飛距離'
-    print*, X
+    print '("\t", F0.36, " [m]")', X
     print*, '\nEnterを押してください。'
     read *
 end subroutine TX
