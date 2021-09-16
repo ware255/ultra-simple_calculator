@@ -1311,7 +1311,7 @@ subroutine undouhouteisiki()
 
     write(11, *) x, z
     !$ st = omp_get_wtime()
-    !$omp parallel num_threads(64)
+    !$omp parallel num_threads(16)
     !$omp do
     do i = 1, 6000000 ! 一分間だから600000 * 0.001
         !$omp critical
