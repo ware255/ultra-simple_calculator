@@ -1443,35 +1443,42 @@ subroutine TX()
 end subroutine TX
 
 subroutine ensyu()
+    !$ use omp_lib
     use, intrinsic :: iso_fortran_env
     implicit none
-    integer(int64), parameter :: vmax = 404800, bmax = 51451
-    integer(int64) :: vect(vmax) = 2, buffer(bmax)
-    integer(int64) :: carry, n, L, k, more = 0, num
+    integer(int64), parameter :: vmax = 428800, bmax = 25728
+    integer(int64) :: vect(vmax), buffer(bmax)
+    integer(int64) :: carry, n, L, k, more, num, i
+    !$ double precision st, en
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', 'ちょっと待っててね\n終わったあとは、メモ帳を&
     &大画面にした方がええで\n'
-    !$omp parallel num_threads(16) private(buffer)
-    do n = 1,  bmax!buffer()
+    !$ st = omp_get_wtime()
+    !$omp parallel num_threads(32)
+    !$omp do
+    do i = 1, vmax
+        vect(i) = 2
+    end do
+    !$omp end do
+    !$omp end parallel
+    more = 0
+    do n = 1, bmax !buffer()
         carry = 0
         do L = vmax, 1, -1 !vect()
-            !$omp critical
             num = 100000 * vect(L) + carry * L
             carry = num / (2*L - 1)
             vect(L) = num - carry * (2*L - 1)
-            !$omp end critical
         end do
-        !$omp critical
         k = carry / 100000
         buffer(n) = more + k
         more = carry - k * 100000
-        !$omp end critical
     end do
-    !$omp end parallel
+    !$ en = omp_get_wtime()
     open(11, file="pi.txt", status="replace")
         write(11, "(1x, I1, '.'/(1x, 32I5.5))") buffer
     close(11)
     write(*, "(1x, I1, '.'/(1x, 12I5.5))") buffer
+    !$ print *, "Elapsed time :", en-st
     print*, '\nEnterを押してください。'
     read *
 end subroutine ensyu
