@@ -192,7 +192,7 @@ subroutine game_1()
     hero_hp = 5;enemy1_hp = 10;
     hero_mp = 5;enemy1_mp = 10;
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-    print*, '\n超戦略ゲーム  ~ shit video game ~\n\n\nEnterを押してください。'
+    print*, '\n超戦略ゲーム  ~ shit video game ~\n\n\n\n\nEnterを押してください。'
     read *
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     do
@@ -357,7 +357,7 @@ subroutine game_1()
             end select
         else
             print '(A)', '\nそんなもんねぇよｗ'
-            call sleep(1)
+            read * !call sleep(1)
             write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
         end if
     end do
@@ -392,7 +392,7 @@ subroutine game_2()
     hero_hp = 5;enemy2_hp = 15
     hero_mp = 5;enemy2_mp = 15
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-    print *, '\n超戦略ゲーム  ~ shit video game ~\n\n\nEnterを押してください。'
+    print *, '\n超戦略ゲーム  ~ shit video game ~\n\n\n\n\nEnterを押してください。'
     read *
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     do
@@ -557,7 +557,7 @@ subroutine game_2()
             end select
         else
             print '(A)', '\nそんなもんねぇよｗ'
-            call sleep(1)
+            read * !call sleep(1)
             write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
         end if
     end do
@@ -587,12 +587,58 @@ subroutine game_3()
     implicit none
     character(len=10) d
     integer(int64) :: hero_hp, hero_mp, enemy3_hp, enemy3_mp, n, x
-    integer(int64) :: mp = 0, y
-    n = 0;x = 0
-    hero_hp = 5;enemy3_hp = 20
-    hero_mp = 5;enemy3_mp = 20
+    integer(int64) :: mp = 0, y, level
+    open(1, file='.level', status='old')
+        read (1, *) level
+    close(1)
+    select case(level)
+    case (0)
+        n = 0;x = 0
+        hero_hp = 5;enemy3_hp = 20
+        hero_mp = 5;enemy3_mp = 20
+    case (1)
+        n = 0;x = 0
+        hero_hp = 10;enemy3_hp = 30
+        hero_mp = 10;enemy3_mp = 20
+    case (2)
+        n = 0;x = 0
+        hero_hp = 20;enemy3_hp = 40
+        hero_mp = 20;enemy3_mp = 20
+    case (3)
+        n = 0;x = 0
+        hero_hp = 30;enemy3_hp = 50
+        hero_mp = 30;enemy3_mp = 20
+    case (4)
+        n = 0;x = 0
+        hero_hp = 40;enemy3_hp = 60
+        hero_mp = 40;enemy3_mp = 20
+    case (5)
+        n = 0;x = 0
+        hero_hp = 50;enemy3_hp = 70
+        hero_mp = 50;enemy3_mp = 20
+    case (6)
+        n = 0;x = 0
+        hero_hp = 60;enemy3_hp = 80
+        hero_mp = 60;enemy3_mp = 20
+    case (7)
+        n = 0;x = 0
+        hero_hp = 70;enemy3_hp = 90
+        hero_mp = 70;enemy3_mp = 20
+    case (8)
+        n = 0;x = 0
+        hero_hp = 80;enemy3_hp = 100
+        hero_mp = 75;enemy3_mp = 20
+    case (9)
+        n = 0;x = 0
+        hero_hp = 999;enemy3_hp = 9999
+        hero_mp = 999;enemy3_mp = 20
+    case (10)
+        n = 0;x = 0
+        hero_hp = 99999;enemy3_hp = 999999
+        hero_mp = 99999;enemy3_mp = 20
+    end select
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-    print*, '\n超戦略ゲーム  ~ shit video game ~\n\n\nEnterを押してください。'
+    print*, '\n超戦略ゲーム  ~ shit video game ~\n\n\n\n\nEnterを押してください。'
     read *
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     do
@@ -604,7 +650,16 @@ subroutine game_3()
         else if (enemy3_hp .le. 0) then
             print '(A)', '\n敵を撲殺することが出来た。ワイの勝利！！！'
             print '(A)', 'Ураааааааааааааааа!'
-            read *
+            if (level .eq. 10) then
+                print '(A)', '\nレベルMaxです。'
+                goto 110
+            end if
+            open(2, file='.level', status='old')
+                level = level + 1
+                write(2, *) level
+            close(2)
+            print '(A)', '\nレベル1上がった。'
+110         read *
             write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             exit
         end if
@@ -755,7 +810,7 @@ subroutine game_3()
             end select
         else
             print '(A)', '\nそんなもんねぇよｗ'
-            call sleep(1)
+            read * !call sleep(1)
             write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
         end if
     end do
@@ -785,6 +840,8 @@ subroutine game()
     implicit none
     integer(int64) :: n
     n = add(9)
+    open(1, file='.level', status='old', err=110)
+    close(1)
     select case(n)
     case (1)
         call game_1()
@@ -793,6 +850,11 @@ subroutine game()
     case default
         call game_3()
     end select
+    goto 120
+110 open(2, file='.level', status='new')
+        write(2, *) 0
+    close(2)
+120 write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     contains
     function add(n)
         implicit none
@@ -1383,7 +1445,7 @@ end subroutine TX
 subroutine ensyu()
     use, intrinsic :: iso_fortran_env
     implicit none
-    integer(int64), parameter :: vmax = 809600, bmax = 102912
+    integer(int64), parameter :: vmax = 404800, bmax = 51451
     integer(int64) :: vect(vmax) = 2, buffer(bmax)
     integer(int64) :: carry, n, L, k, more = 0, num
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
@@ -1686,7 +1748,7 @@ program calculator
     use, intrinsic :: iso_fortran_env
     implicit none
     character(len=256) :: str
-    integer(int64) :: i
+    integer(int64) :: i, level
     real(real128) :: s = 0.0_real128
     !$ real(real64) :: time_begin_s,time_end_s
     if (.not. getuid() .eq. 0) then !権限なし
@@ -1716,6 +1778,14 @@ program calculator
             !$ time_end_s = omp_get_wtime()
             print*, 'Answer:', s * 4
             !$ print '(A, F13.5, A)', '\ntime:', time_end_s - time_begin_s, ' [sec]\n'
+        else if (str .eq. 'level') then
+            open(11, file='.level', status='old', err=110)
+                read (11, *) level
+            close(11)
+            print '("\n現在のレベル:\t", I0)', level
+            print*, ''
+            stop
+110         stop "\n※超戦略ゲームをプレイしてください。\n"
         else
             print '(A)', '\nこの引数はありません。\n'
         end if
