@@ -1578,8 +1578,7 @@ subroutine collatz()
             n = n * 3 + 1
         end if
     end do
-    print*, '\n答え'
-    print '("\t", I0, " 回の操作で ", I0)', i, int(n)
+    print '("\n", I0, " 回の操作で答えが ", I0)', i, int(n)
     print*, '\nEnterを押してください。'
     read *
 end subroutine collatz
