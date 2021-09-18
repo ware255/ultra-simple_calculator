@@ -1457,7 +1457,9 @@ subroutine ensyu()
     !$omp parallel num_threads(32)
     !$omp do
     do i = 1, vmax
+        !$omp critical
         vect(i) = 2
+        !$omp end critical
     end do
     !$omp end do
     !$omp end parallel
@@ -1514,14 +1516,92 @@ subroutine kaizyou()
     print '(A)', '値を入力してください。'
     read (*, *) n
     ans = 1
+    !$omp parallel num_threads(8)
+    !$omp do
     do k = 1, n
+        !$omp critical
         ans = ans * k
+        !$omp end critical
     end do
+    !$omp end do
+    !$omp end parallel
     print*, '\n答え'
     print '("  ", i0, "! = ", F0.4)', n, ans
     print*, '\nEnterを押してください。'
     read *
 end subroutine kaizyou
+
+subroutine zetaf()
+    use, intrinsic :: iso_fortran_env
+    implicit none
+    integer(int64), parameter :: max = 2147483647
+    integer(int64) :: n
+    real(real128) :: zeta, s
+    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    print '(A)', '値を入力してください。'
+    read (*, *) s
+    print '(A)', 'ちょっと待っててね\n'
+    zeta = 0
+    !$omp parallel num_threads(128)
+    !$omp do
+    do n = 1, max
+        !$omp critical
+        zeta = zeta + 1/n**s
+        !$omp end critical
+    end do
+    !$omp end do
+    !$omp end parallel
+    print*, '\n答え'
+    print*, zeta
+    print*, '\nEnterを押してください。'
+    read *
+end subroutine zetaf
+
+subroutine collatz()
+    use, intrinsic :: iso_fortran_env
+    implicit none
+    real(real128), parameter :: q = 2
+    real(real128) :: n, h, i
+    write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    print '(A)', '値を入力してください。'
+    read (*, *) n
+    !print '(A)', 'ちょっと待っててね\n'
+    do
+        i = i + 1
+        h = mod(n, q)
+        if (n .eq. 1) then
+            exit
+        else if (h .eq. 0) then
+            n = n / 2
+        else if (h .eq. 1) then
+            n = n * 3 + 1
+        end if
+    end do
+    print*, '\n答え'
+    print '("\t", F0.0, " 回の操作で ", F0.0)', i, n
+    print*, '\nEnterを押してください。'
+    read *
+    contains
+    real(real128) function collat_gusu(n)
+        real(real128) :: n, c
+        c = n
+        do
+            n = n / 2
+            if (n .eq. c) exit
+        end do
+        collat_gusu = n
+    end function collat_gusu
+
+    real(real128) function collat_kisu(n)
+        real(real128) :: n, c
+        c = n
+        do
+            n = (n * 3 + 1) / 2
+            if (n .eq. c) exit
+        end do
+        collat_kisu = n
+    end function
+end subroutine collatz
 
 subroutine page_02()
     implicit none
@@ -1529,13 +1609,15 @@ subroutine page_02()
     do
         write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
         print '(A)', '\n-----------------------------------------'
-        print*, '1 Γ(z) ~ √2π/z(z/e)^z'
+        print*, '1 ガンマ関数 Γ(z)'
         print*, '2 滞空時間と飛距離'
         print*, '3 運動方程式(一分間での放物運動)'
         print*, '4 運動方程式のグラフをみる(gnuplot)'
         print*, '5 円周率をtxtファイルで出力(桁数多め)'
         print*, '6 平均値'
         print*, '7 階乗(n!)'
+        print*, '8 リーマンゼータ関数 ζ(s)'
+        print*, '9 コラッツ予想(ケチってreal128使ってます。)'
         print*, '11 ジョーク\n'
         print*, '99 終了           01 Back'
         print '(A)', '-----------------------------------------'
@@ -1566,6 +1648,10 @@ subroutine page_02()
             call heikin()
         case ('7')
             call kaizyou()
+        case ('8')
+            call zetaf()
+        case ('9')
+            call collatz()
         case ('11')
             call joke()
         case ('00')
