@@ -1561,11 +1561,12 @@ subroutine collatz()
     use, intrinsic :: iso_fortran_env
     implicit none
     real(real128), parameter :: q = 2
-    real(real128) :: n, h, i
+    real(real128) :: n, h
+    integer(int64) :: i
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
     read (*, *) n
-    !print '(A)', 'ちょっと待っててね\n'
+    i = 0
     do
         i = i + 1
         h = mod(n, q)
@@ -1578,29 +1579,9 @@ subroutine collatz()
         end if
     end do
     print*, '\n答え'
-    print '("\t", F0.0, " 回の操作で ", F0.0)', i, n
+    print '("\t", I0, " 回の操作で ", I0)', i, int(n)
     print*, '\nEnterを押してください。'
     read *
-    contains
-    real(real128) function collat_gusu(n)
-        real(real128) :: n, c
-        c = n
-        do
-            n = n / 2
-            if (n .eq. c) exit
-        end do
-        collat_gusu = n
-    end function collat_gusu
-
-    real(real128) function collat_kisu(n)
-        real(real128) :: n, c
-        c = n
-        do
-            n = (n * 3 + 1) / 2
-            if (n .eq. c) exit
-        end do
-        collat_kisu = n
-    end function
 end subroutine collatz
 
 subroutine page_02()
