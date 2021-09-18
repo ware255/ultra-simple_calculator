@@ -1568,7 +1568,6 @@ subroutine collatz()
     read (*, *) n
     i = 0
     do
-        i = i + 1
         h = mod(n, q)
         if (n .eq. 1) then
             exit
@@ -1577,6 +1576,7 @@ subroutine collatz()
         else if (h .eq. 1) then
             n = n * 3 + 1
         end if
+        i = i + 1
     end do
     print '("\n", I0, " 回の操作で答えが ", I0)', i, int(n)
     print*, '\nEnterを押してください。'
