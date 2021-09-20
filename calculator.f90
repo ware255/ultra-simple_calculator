@@ -1616,6 +1616,7 @@ subroutine M_A()
     read (str, *) x
     print*, '\n答え'
     print*, z + x
+    z = z + x
     print*, '\nEnterを押してください。'
     read *
 end subroutine M_A
@@ -1631,6 +1632,7 @@ subroutine M_S()
     read (str, *) x
     print*, '\n答え'
     print*, z - x
+    z = z - x
     print*, '\nEnterを押してください。'
     read *
 end subroutine M_S
