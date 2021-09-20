@@ -928,6 +928,7 @@ subroutine nizihoutei()
 end subroutine nizihoutei
 
 subroutine n_sin()
+    use m_usc
     use, intrinsic :: iso_fortran_env
     implicit none
     real(real128) :: n
@@ -936,11 +937,13 @@ subroutine n_sin()
     read (*, *) n
     print*, '\n答え'
     print*, sin(n)
+    z = sin(n)
     print '(A)', '\nEnterを押してください。'
     read *
 end subroutine n_sin
 
 subroutine n_cos()
+    use m_usc
     use, intrinsic :: iso_fortran_env
     implicit none
     real(real128) :: n
@@ -949,11 +952,13 @@ subroutine n_cos()
     read (*, *) n
     print '(A)', '\n答え'
     print*, cos(n)
+    z = cos(n)
     print*, '\nEnterを押してください。'
     read *
 end subroutine n_cos
 
 subroutine  n_tan()
+    use m_usc
     use, intrinsic :: iso_fortran_env
     implicit none
     real(real128) :: n
@@ -962,11 +967,13 @@ subroutine  n_tan()
     read (*, *) n
     print*, '\n答え'
     print*, tan(n)
+    z = tan(n)
     print*, '\nEnterを押してください。'
     read *
 end subroutine n_tan
 
 subroutine n_asin()
+    use m_usc
     use, intrinsic :: iso_fortran_env
     implicit none
     real(real128) :: n
@@ -975,11 +982,13 @@ subroutine n_asin()
     read (*, *) n
     print*, '\n答え'
     print*, asin(n)
+    z = asin(n)
     print*, '\nEnterを押してください。'
     read *
 end subroutine n_asin
 
 subroutine n_acos()
+    use m_usc
     use, intrinsic :: iso_fortran_env
     implicit none
     real(real128) :: n
@@ -988,11 +997,13 @@ subroutine n_acos()
     read (*, *) n
     print*, '\n答え'
     print*, acos(n)
+    z = acos(n)
     print*, '\nEnterを押してください。'
     read *
 end subroutine n_acos
 
 subroutine n_atan()
+    use m_usc
     use, intrinsic :: iso_fortran_env
     implicit none
     real(real128) :: n
@@ -1001,11 +1012,13 @@ subroutine n_atan()
     read (*, *) n
     print*, '\n答え'
     print*, atan(n)
+    z = atan(n)
     print*, '\nEnterを押してください。'
     read *
 end subroutine n_atan
 
 subroutine n_atan2()
+    use m_usc
     use, intrinsic :: iso_fortran_env
     implicit none
     real(real128) :: x, y
@@ -1016,6 +1029,7 @@ subroutine n_atan2()
     read (*, *) y
     print*, '\n答え'
     print*, atan2(y, x)
+    z = atan2(y, x)
     print*, '\nEnterを押してください。'
     read *
 end subroutine n_atan2
@@ -1034,6 +1048,7 @@ subroutine n_aimag()
 end subroutine n_aimag
 
 subroutine n_log10()
+    use m_usc
     use, intrinsic :: iso_fortran_env
     implicit none
     real(real128) :: n
@@ -1042,11 +1057,13 @@ subroutine n_log10()
     read (*, *) n
     print*, '\n答え'
     print*, log10(n)
+    z = log10(n)
     print*, '\nEnterを押してください。'
     read *
 end subroutine n_log10
 
 subroutine n_log()
+    use m_usc
     use, intrinsic :: iso_fortran_env
     implicit none
     real(real128) :: n
@@ -1055,11 +1072,13 @@ subroutine n_log()
     read (*, *) n
     print*, '\n答え'
     print*, log(n)
+    z = log(n)
     print*, '\nEnterを押してください。'
     read *
 end subroutine n_log
 
 subroutine mozuro
+    use m_usc
     use, intrinsic :: iso_fortran_env
     implicit none
     real(real128) :: a, n
@@ -1070,11 +1089,13 @@ subroutine mozuro
     read (*, *) n
     print*, '\n答え'
     print*, mod(a, n)
+    z = mod(a, n)
     print*, '\nEnterを押してください。'
     read *
 end subroutine mozuro
 
 subroutine randsu()
+    use m_usc
     use, intrinsic :: iso_fortran_env
     implicit none
     integer(int64) :: x, n
@@ -1088,6 +1109,7 @@ subroutine randsu()
     n = randon(x)
     print*, '\n出力'
     print*, n
+    z = n
 11  print*, '\nEnterを押してください。'
     read *
     contains
@@ -1177,6 +1199,7 @@ subroutine randsu()
 end subroutine randsu
 
 subroutine neipia() ! e = lim n->Infinity [ (1+1/n)**n ] | Σn=0 ∞ [ 1/n! ]
+    use m_usc
     use, intrinsic :: iso_fortran_env
     use, intrinsic :: ieee_arithmetic
     implicit none
@@ -1191,6 +1214,7 @@ subroutine neipia() ! e = lim n->Infinity [ (1+1/n)**n ] | Σn=0 ∞ [ 1/n! ]
     end do
     print*, 'ネイピア数(総和は1から1024まで)'
     print*, e
+    z = e
     print*, '\n Wikipediaでは以下(上の桁数に合わせた)'
     print '(A)', '   2.71828182845904523536028747135266249'
     print*, '\nEnterを押してください。'
@@ -1198,6 +1222,7 @@ subroutine neipia() ! e = lim n->Infinity [ (1+1/n)**n ] | Σn=0 ∞ [ 1/n! ]
 end subroutine neipia
 
 subroutine y_zyoukon()
+    use m_usc
     use, intrinsic :: iso_fortran_env
     use, intrinsic :: ieee_arithmetic
     implicit none
@@ -1218,11 +1243,13 @@ subroutine y_zyoukon()
     read (*, *) x
     print*, '答え'
     print*, x**(1/y)
+    z = x**(1/y)
 19  print*, '\nEnterを押してください。'
     read *
 end subroutine y_zyoukon
 
 subroutine zettaiti()
+    use m_usc
     use, intrinsic :: iso_fortran_env
     implicit none
     real(real128) :: x
@@ -1231,11 +1258,13 @@ subroutine zettaiti()
     read (*, *) x
     print*, '\n答え'
     print*, abs(x)
+    z = abs(x)
     print*, '\nEnterを押してください。'
     read *
 end subroutine zettaiti
 
 subroutine sisu()
+    use m_usc
     use, intrinsic :: iso_fortran_env
     implicit none
     real(real128) :: x
@@ -1244,11 +1273,13 @@ subroutine sisu()
     read (*, *) x
     print*, '\n答え'
     print*, exp(x)
+    z = exp(x)
     print*, '\nEnterを押してください。'
     read *
 end subroutine sisu
 
 subroutine soukyokusin()
+    use m_usc
     use, intrinsic :: iso_fortran_env
     implicit none
     real(real128) :: x
@@ -1257,11 +1288,13 @@ subroutine soukyokusin()
     read (*, *) x
     print*, '\n答え'
     print*, sinh(x)
+    z = sinh(x)
     print*, '\nEnterを押してください。'
     read *
 end subroutine soukyokusin
 
 subroutine soukyokucos()
+    use m_usc
     use, intrinsic :: iso_fortran_env
     implicit none
     real(real128) :: x
@@ -1270,11 +1303,13 @@ subroutine soukyokucos()
     read (*, *) x
     print*, '\n答え'
     print*, cosh(x)
+    z = cosh(x)
     print*, '\nEnterを押してください。'
     read *
 end subroutine soukyokucos
 
 subroutine soukyokutan()
+    use m_usc
     use, intrinsic :: iso_fortran_env
     implicit none
     real(real128) :: x
@@ -1283,6 +1318,7 @@ subroutine soukyokutan()
     read (*, *) x
     print*, '\n答え'
     print*, tanh(x)
+    z = tanh(x)
     print*, '\nEnterを押してください。'
     read *
 end subroutine soukyokutan
@@ -1308,6 +1344,7 @@ subroutine gamma_f()
     gamma2 = (z/e)**z
     print*, '\n答え'
     print*, gamma1 * gamma2
+    z = gamma1 * gamma2
     print*, '\nEnterを押してください。'
     read *
 end subroutine gamma_f
@@ -1508,6 +1545,7 @@ subroutine ensyu()
 end subroutine ensyu
 
 subroutine heikin()
+    use m_usc
     use, intrinsic :: iso_fortran_env
     use, intrinsic :: ieee_arithmetic
     implicit none
@@ -1525,11 +1563,13 @@ subroutine heikin()
     end do
     print*, '\n答え'
     print*, y / max
+    z = y / max
     print*, '\nEnterを押してください。'
     read *
 end subroutine heikin
 
 subroutine kaizyou()
+    use m_usc
     use, intrinsic :: iso_fortran_env
     implicit none
     integer(int64) :: n, k
@@ -1549,11 +1589,13 @@ subroutine kaizyou()
     !$omp end parallel
     print*, '\n答え'
     print '("  ", i0, "! = ", F0.4)', n, ans
+    z = ans
     print*, '\nEnterを押してください。'
     read *
 end subroutine kaizyou
 
 subroutine zetaf()
+    use m_usc
     use, intrinsic :: iso_fortran_env
     implicit none
     integer(int64), parameter :: max = 2147483647
@@ -1575,6 +1617,7 @@ subroutine zetaf()
     !$omp end parallel
     print*, '\n答え'
     print*, zeta
+    z = zeta
     print*, '\nEnterを押してください。'
     read *
 end subroutine zetaf
