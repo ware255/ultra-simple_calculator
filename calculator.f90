@@ -1,4 +1,11 @@
+module m_usc
+    use, intrinsic :: iso_fortran_env
+    implicit none
+    real(real128) :: z
+end module m_usc
+
 subroutine tasizan()
+    use m_usc
     use, intrinsic :: iso_fortran_env
     implicit none
     real(real128) :: x, y
@@ -16,11 +23,13 @@ subroutine tasizan()
         print '(F29.4, "  +  ", F0.4, "\n")', x, y
     end if
     print*, x + y
+    z = x + y
     print*, '\nEnterを押してください。'
     read *
 end subroutine tasizan
 
 subroutine hikizan()
+    use m_usc
     use, intrinsic :: iso_fortran_env
     implicit none
     real(real128) :: x, y
@@ -38,11 +47,13 @@ subroutine hikizan()
         print '(F29.4, "  -  ", F0.4, "\n")', x, y
     end if
     print*, x - y
+    z = x - y
     print*, '\nEnterを押してください。'
     read *
 end subroutine hikizan
 
 subroutine kakezan()
+    use m_usc
     use, intrinsic :: iso_fortran_env
     use, intrinsic :: ieee_arithmetic
     implicit none
@@ -64,6 +75,7 @@ subroutine kakezan()
             print '(F29.4, "  ^  ", I0, "\n")', x, 2
         end if
         print*, x * x
+        z = x * x
         print*, '\nEnterを押してください。'
         read *
         goto 11
@@ -78,12 +90,14 @@ subroutine kakezan()
         print '(F29.4, "  *  ", F0.4, "\n")', x, y
     end if
     print*, x * y
+    z = x * y
     print*, '\nEnterを押してください。'
     read *
 11  write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
 end subroutine kakezan
 
 subroutine warizan()
+    use m_usc
     use, intrinsic :: iso_fortran_env
     use, intrinsic :: ieee_arithmetic
     implicit none
@@ -103,11 +117,13 @@ subroutine warizan()
         print '(F29.4, "  /  ", F0.4, "\n")', x, y
     end if
     print*, x / y
+    z = x / y
     print*, '\nEnterを押してください。'
     read *
 end subroutine warizan
 
 subroutine heihoukon()
+    use m_usc
     use, intrinsic :: iso_fortran_env
     use, intrinsic :: ieee_features, only:ieee_sqrt
     implicit none
@@ -117,6 +133,7 @@ subroutine heihoukon()
     read (*, *) x
     print*, '\n近似値'
     print*, sqrt(x)
+    z = sqrt(x)
     if (x .eq. 2.) then
         print*, '　一夜一夜に月見ごろ          <= 覚え方'
     else if (x .eq. 3.) then
@@ -127,6 +144,7 @@ subroutine heihoukon()
 end subroutine heihoukon
 
 subroutine ensyuritu()
+    use m_usc
     use, intrinsic :: iso_fortran_env
     use, intrinsic :: ieee_arithmetic
     implicit none
@@ -138,11 +156,13 @@ subroutine ensyuritu()
     read (*, *) r
     print*, '\n答え'
     print*, r * r * pi
+    z = r * r * pi
     print*, '\nEnterを押してください。'
     read *
 end subroutine ensyuritu
 
 subroutine syutyou()
+    use m_usc
     use, intrinsic :: iso_fortran_env
     use, intrinsic :: ieee_arithmetic
     implicit none
@@ -153,12 +173,14 @@ subroutine syutyou()
     print '(A)', '値を入力してください。'
     read (*, *) r
     print*, '\n答え'
-    print*, 2*pi*r
+    print*, 2 * pi * r
+    z = 2 * pi * r
     print*, '\nEnterを押してください。'
     read *
 end subroutine syutyou
 
 subroutine nizyou()
+    use m_usc
     use, intrinsic :: iso_fortran_env
     use, intrinsic :: ieee_arithmetic
     implicit none
@@ -178,6 +200,7 @@ subroutine nizyou()
         print '(F29.4, "  ^  ", F0.4, "\n")', x, y
     end if
     print*, x**y
+    z = x**y
     print*, '\nEnterを押してください。'
     read *
 end subroutine nizyou
@@ -1582,6 +1605,36 @@ subroutine collatz()
     read *
 end subroutine collatz
 
+subroutine M_A()
+    use m_usc
+    use, intrinsic :: iso_fortran_env
+    implicit none
+    character(len=256) :: str
+    real(real128) :: x
+    print '(A)', '値を入力してください。'
+    read (*, '(A)') str
+    read (str, *) x
+    print*, '\n答え'
+    print*, z + x
+    print*, '\nEnterを押してください。'
+    read *
+end subroutine M_A
+
+subroutine M_S()
+    use m_usc
+    use, intrinsic :: iso_fortran_env
+    implicit none
+    character(len=256) :: str
+    real(real128) :: x
+    print '(A)', '値を入力してください。'
+    read (*, '(A)') str
+    read (str, *) x
+    print*, '\n答え'
+    print*, z - x
+    print*, '\nEnterを押してください。'
+    read *
+end subroutine M_S
+
 subroutine page_02()
     implicit none
     character(len=256) :: str
@@ -1640,6 +1693,10 @@ subroutine page_02()
         case ('99')
             write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             stop
+        case ('M+')
+            call M_A()
+        case ('M-')
+            call M_S()
         case default
             print*, 'そんなもんねぇよｗ'
             read * !call sleep(1)
@@ -1708,6 +1765,10 @@ subroutine page_01()
             stop
         case ('02')
             call page_02()
+        case ('M+')
+            call M_A()
+        case ('M-')
+            call M_S()
         case default
             print*, 'そんなもんねぇよｗ'
             read * !call sleep(1)
@@ -1792,6 +1853,10 @@ subroutine page_00()
             call page_01()
         case ('02')
             call page_02()
+        case ('M+')
+            call M_A()
+        case ('M-')
+            call M_S()
         case default
             print*, 'そんなもんねぇよｗ'
             read * !call sleep(1)
