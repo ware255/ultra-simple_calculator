@@ -1274,7 +1274,6 @@ subroutine gamma_f()
     real(real128) :: z, gamma1, gamma2
     real(real128) :: b = 1.0_real128, e = 1.0_real128
     call ieee_set_rounding_mode(ieee_nearest)
-    print '(A)', '\x1b[2J\x1b[3J\x1b[H'
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)',  '値を入力してください。'
     read (*, *) z
@@ -1546,7 +1545,7 @@ subroutine zetaf()
     !$omp do
     do n = 1, max
         !$omp critical
-        zeta = zeta + 1/n**s
+        zeta = zeta + 1 / n**s
         !$omp end critical
     end do
     !$omp end do
@@ -1637,8 +1636,7 @@ subroutine page_02()
         case ('00')
             call page_00()
         case ('01')
-            write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-            exit
+            call page_01()
         case ('99')
             write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             stop
@@ -1704,8 +1702,7 @@ subroutine page_01()
             read *
             exit
         case ('00')
-            write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-            exit
+            call page_00()
         case ('99')
             write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             stop
