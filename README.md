@@ -1,4 +1,4 @@
-# ultra-simple_calculator
+# Ultra-Simple_Calculator
 これは、Fortranで書かれた超簡易計算機です。<br />
 CUIで機能します。「GUIの方がいい」と欲張らないでください。運動方程式や特殊な計算はEuler法を採用しています。なので精度は極端にいいやつと悪いやつがあります。<br><br>
 ## インストール
