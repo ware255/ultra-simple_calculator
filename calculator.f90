@@ -1024,9 +1024,9 @@ subroutine n_atan2()
     real(real128) :: x, y
     write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', 'y値を入力してください。'
-    read (*, *) x
-    print '(A)', 'x値を入力してください。'
     read (*, *) y
+    print '(A)', 'x値を入力してください。'
+    read (*, *) x
     print*, '\n答え'
     print*, atan2(y, x)
     z = atan2(y, x)
@@ -1683,6 +1683,7 @@ end subroutine M_S
 subroutine page_02()
     implicit none
     character(len=256) :: str
+    character(len=24) string
     do
         write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
         print '(A)', '\n-----------------------------------------'
@@ -1695,6 +1696,7 @@ subroutine page_02()
         print*, '7 階乗(n!)'
         print*, '8 リーマンゼータ関数 ζ(s)'
         print*, '9 コラッツ予想(ケチってreal128使ってます。)'
+        print*, '10 現在の時刻'
         print*, '11 ジョーク\n'
         print*, '99 終了           01 Back'
         print '(A)', '-----------------------------------------'
@@ -1729,6 +1731,11 @@ subroutine page_02()
             call zetaf()
         case ('9')
             call collatz()
+        case ('10')
+            call fdate(string)
+            print '("\n", A)', string
+            print*, '\nEnterを押してください。'
+            read *
         case ('11')
             call joke()
         case ('00')
@@ -1753,6 +1760,7 @@ subroutine page_01()
     use, intrinsic :: iso_fortran_env
     implicit none
     character(len=256) :: str
+    character(len=1024) :: user
     real(real128), parameter :: fai = (1.0_real128+sqrt(5.0_real128))*0.5_real128
     do
         write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
@@ -1798,9 +1806,10 @@ subroutine page_01()
             print*, '\nEnterを押してください。'
             read *
         case ('11')
-            print '(A)', '\n制作者:ware255(われ)\n\n???ってなんだろ&
+            call getlog(user)
+            print '(A, A, A)', '\n制作者:ware255(われ)\n\n???ってなんだろ&
             &う、って思ったでしょｗ\n思っちゃったやつソースコード見てね&
-            &ぇって分かっちまうから気お付けろよｗ'
+            &ぇって\n分かっちまうから''', trim(user),'''さん、気お付けろよｗ'
             read *
             exit
         case ('00')
