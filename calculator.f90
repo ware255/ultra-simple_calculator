@@ -1213,10 +1213,10 @@ subroutine neipia() ! e = lim n->Infinity [ (1+1/n)**n ] | Σn=0 ∞ [ 1/n! ]
         e = e + 1 / b
     end do
     print*, 'ネイピア数(総和は1から1024まで)'
-    print*, e
+    print '(2F40.36)', e
     z = e
     print*, '\n Wikipediaでは以下(上の桁数に合わせた)'
-    print '(A)', '   2.71828182845904523536028747135266249'
+    print '(A)', '  2.718281828459045235360287471352662497'
     print*, '\nEnterを押してください。'
     read *
 end subroutine neipia
