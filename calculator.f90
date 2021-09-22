@@ -1680,10 +1680,37 @@ subroutine M_S()
     read *
 end subroutine M_S
 
+subroutine soinsubunkai()
+    implicit none
+    integer(kind=8) n, i, m, k
+    write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    print '(A)', '値を入力してください。'
+    read (*, *) n
+
+    print*, '\n答え'
+    write (*, '("\t", I0, A)', advance='no') n,' = 1'
+    k = n
+    i = 2
+    do while (i <= k)
+        m = mod(k, i)
+        if (m .eq. 0)then
+            write (*, '(A, I0)', advance='no') ' * ', i 
+            k = k / i
+            cycle
+        else if (k .eq. i) then
+            exit
+        else
+            i = i + 1
+            cycle
+        endif
+    end do
+    print*, '\n\nEnterを押してください。'
+    read *
+end subroutine soinsubunkai
+
 subroutine page_02()
     implicit none
     character(len=256) :: str
-    character(len=24) string
     do
         write (*,fmt='(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
         print '(A)', '\n-----------------------------------------'
@@ -1696,7 +1723,7 @@ subroutine page_02()
         print*, '7 階乗(n!)'
         print*, '8 リーマンゼータ関数 ζ(s)'
         print*, '9 コラッツ予想(ケチってreal128使ってます。)'
-        print*, '10 現在の時刻'
+        print*, '10 素因数分解'
         print*, '11 ジョーク\n'
         print*, '99 終了           01 Back'
         print '(A)', '-----------------------------------------'
@@ -1732,10 +1759,7 @@ subroutine page_02()
         case ('9')
             call collatz()
         case ('10')
-            call fdate(string)
-            print '("\n", A)', string
-            print*, '\nEnterを押してください。'
-            read *
+            call soinsubunkai()
         case ('11')
             call joke()
         case ('00')
@@ -1923,11 +1947,12 @@ subroutine help()
     print '(A)', '使用法: ./calculator [オプション]'
     print '(A)', 'オプションがない場合はそのまま実行します。\n'
     print '(A)', 'オプション:'
-    print '(A12)', 'page_00'
-    print '(A12)', 'page_01'
-    print '(A12)', 'page_02'
-    print '(A9)', 'help'
-    print '(A15)', 'benchmark\n'
+    print*, 'page_00    -- 0ページ'
+    print*, 'page_01    -- 1ページ'
+    print*, 'page_02    -- 2ページ'
+    print*, 'help       -- 助けて'
+    print*, 'benchmark  -- ベンチマークのテスト'
+    print*, 'time       -- 現在の時刻\n'
     print '(A)', '例:'
     print '(A)', '$ ./calculator page_00'
 end subroutine help
@@ -1937,6 +1962,7 @@ program calculator
     use, intrinsic :: iso_fortran_env
     implicit none
     character(len=256) :: str
+    character(len=24) string
     integer(int64) :: i, level
     real(real128) :: s = 0.0_real128
     !$ real(real64) :: time_begin_s,time_end_s
@@ -1975,6 +2001,10 @@ program calculator
             print*, ''
             stop
 110         stop "\n※超戦略ゲームをプレイしてください。\n"
+        else if (str .eq. 'time') then
+            call fdate(string)
+            print '("\n", A)', string
+            print*, ''
         else
             print '(A)', '\nこの引数はありません。\n'
         end if
