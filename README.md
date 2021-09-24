@@ -7,8 +7,10 @@ CUIで機能します。「GUIの方がいい」と欲張らないでくださ�
      $ git clone https://github.com/ware255/ultra-simple_calculator
      移動
      $ cd ultra-simple_calculator
-     コンパイル
+     コンパイル(gfortranの場合)
      $ gfortran -O3 -fopenmp -fbackslash calculator.f90 -o calculator
+     コンパイル(ifortの場合)
+     $ ifort -assume bscc -O3 -qopenmp calculator.f90 -o calculator
      実行
      $ ./calculator
 ## 使用方法
