@@ -1397,7 +1397,7 @@ subroutine undouhouteisiki()
     use, intrinsic :: ieee_arithmetic
     implicit none
     integer(int64) :: i
-    real(real128), parameter :: pi = 4.0_real128*atan(1.0_real128)
+    real(real128), parameter :: pi = 3.141592653589793238462643383279502884
     real(real128) :: g, V, angle, theta, x, z, u, w&
     &, dxdt, dzdt, dudt, dwdt
     !$ double precision st, en
@@ -1407,6 +1407,7 @@ subroutine undouhouteisiki()
     read (*, *) V
     print '(A)', '仰角 [deg]'
     read (*, *) angle
+    print '(A)', '\n計算中'
 
     g = 9.80665
 
@@ -1419,7 +1420,7 @@ subroutine undouhouteisiki()
 
     open(11, file='output.txt', status='replace')
 
-    write(11, *) x, z
+    write(11, '("\t", F0.36, "\t", F0.36)') x, z
     !$ st = omp_get_wtime()
     !$omp parallel num_threads(32)
     !$omp do
@@ -1436,8 +1437,7 @@ subroutine undouhouteisiki()
         w = w + 0.0001 * dwdt
         !$omp end critical
 
-        print '("\t", F0.9, "\t", F0.9)', x, z
-        write(11, *) x, z
+        write(11, '("\t", F0.36, "\t", F0.36)') x, z
     end do
     !$omp end do
     !$omp end parallel
@@ -1466,7 +1466,7 @@ subroutine TX()
     use, intrinsic :: iso_fortran_env
     use, intrinsic :: ieee_arithmetic
     implicit none
-    real(real128), parameter :: pi = 4.0_real128*atan(1.0_real128)
+    real(real128), parameter :: pi = 3.141592653589793238462643383279502884
     real(real128) :: g, V, angle, theta, T, L, H
     call ieee_set_rounding_mode(ieee_nearest)
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
