@@ -1408,7 +1408,7 @@ subroutine undouhouteisiki()
     print '(A)', '仰角 [deg]'
     read (*, *) angle
 
-    g = 9.806
+    g = 9.80665
 
     theta = pi / 180.0 * angle
 
@@ -1467,7 +1467,7 @@ subroutine TX()
     use, intrinsic :: ieee_arithmetic
     implicit none
     real(real128), parameter :: pi = 4.0_real128*atan(1.0_real128)
-    real(real128) :: g, V, angle, theta, T, X
+    real(real128) :: g, V, angle, theta, T, L, H
     call ieee_set_rounding_mode(ieee_nearest)
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '初期速度 [m/s]'
@@ -1475,17 +1475,20 @@ subroutine TX()
     print '(A)', '仰角 [deg]'
     read (*, *) angle
 
-    g = 9.806
+    g = 9.80665
 
     theta = pi / 180.0 * angle
 
     T = 2.0 * V * sin(theta) / g
-    X = V * V * sin(2.0 * theta)
+    L = (V**2) * sin(2.0 * theta) / g
+    H = ((v * sin(theta))*(v * sin(theta))) / (2 * g)
 
     print*, '\n滞空時間'
     print '("\t", F0.36, " [sec]")', T
     print*, '\n飛距離'
-    print '("\t", F0.36, " [m]")', X
+    print '("\t", F0.36, " [m]")', L
+    print*, '\n最高高度'
+    print '("\t", F0.36, " [m]")', H
     print*, '\nEnterを押してください。'
     read *
 end subroutine TX
