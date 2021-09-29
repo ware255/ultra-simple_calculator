@@ -1435,9 +1435,9 @@ subroutine undouhouteisiki()
         z = z + 0.0001 * dzdt
         u = u + 0.0001 * dudt
         w = w + 0.0001 * dwdt
-        !$omp end critical
 
         write(11, '("\t", F0.36, "\t", F0.36)') x, z
+        !$omp end critical
     end do
     !$omp end do
     !$omp end parallel
