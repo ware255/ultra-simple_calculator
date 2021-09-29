@@ -125,7 +125,6 @@ end subroutine warizan
 subroutine heihoukon()
     use m_usc
     use, intrinsic :: iso_fortran_env
-    use, intrinsic :: ieee_features, only:ieee_sqrt
     implicit none
     real(real128) :: x
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
@@ -902,7 +901,6 @@ end subroutine game
 subroutine nizihoutei()
     use, intrinsic :: iso_fortran_env
     use, intrinsic :: ieee_arithmetic
-    use, intrinsic :: ieee_features, only:ieee_divide
     implicit none
     real(real128) :: a, b, c, k1, k2
     call ieee_set_rounding_mode(ieee_nearest)
@@ -1327,24 +1325,14 @@ subroutine gamma_f()
     use, intrinsic :: iso_fortran_env
     use, intrinsic :: ieee_arithmetic
     implicit none
-    integer(int64), parameter :: n = 1024
-    integer(int64) :: a
-    real(real128), parameter :: pi = 4.0_real128*atan(1.0_real128)
-    real(real128) :: z, gamma1, gamma2
-    real(real128) :: b = 1.0_real128, e = 1.0_real128
+    real(real128) :: z
     call ieee_set_rounding_mode(ieee_nearest)
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)',  '値を入力してください。'
     read (*, *) z
-    do a = 1, n
-        b = b * a
-        e = e + 1 / b
-    end do
-    gamma1 = sqrt(2*pi/z)
-    gamma2 = (z/e)**z
     print*, '\n答え'
-    print*, gamma1 * gamma2
-    z = gamma1 * gamma2
+    print*, gamma(z)
+    z = gamma(z)
     print*, '\nEnterを押してください。'
     read *
 end subroutine gamma_f
@@ -1407,7 +1395,6 @@ subroutine undouhouteisiki()
     !$ use omp_lib
     use, intrinsic :: iso_fortran_env
     use, intrinsic :: ieee_arithmetic
-    use, intrinsic :: ieee_features, only:ieee_sqrt
     implicit none
     integer(int64) :: i
     real(real128), parameter :: pi = 4.0_real128*atan(1.0_real128)
@@ -1436,7 +1423,7 @@ subroutine undouhouteisiki()
     !$ st = omp_get_wtime()
     !$omp parallel num_threads(32)
     !$omp do
-    do i = 1, 600000 ! 一分間だから600000 * 0.001
+    do i = 1, 600000 ! 一分間
         !$omp critical
         dxdt = u
         dzdt = w
