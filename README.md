@@ -29,6 +29,9 @@ CUIで機能します。「GUIの方がいい」と欲張らないでくださ�
      page_01の次のページ
      $ ./calculator page_02
      
+     page_02の次のページ
+     $ ./calculator page_03
+     
      PCスペックをテストします。
      $ ./calculator benchmark
      
