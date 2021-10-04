@@ -2120,6 +2120,7 @@ subroutine help()
     print*, 'page_00    -- 0ページ'
     print*, 'page_01    -- 1ページ'
     print*, 'page_02    -- 2ページ'
+    print*, 'page_03    -- 3ページ'
     print*, 'help       -- 助けて'
     print*, 'benchmark  -- ベンチマークのテスト'
     print*, 'time       -- 現在の時刻\n'
@@ -2149,6 +2150,8 @@ program calculator
             call page_01()
         else if (str .eq. 'page_02') then
             call page_02()
+        else if (str .eq. 'page_03') then
+            call page_03()
         else if (str .eq. 'benchmark') then
             print '(A)', '\n計算中です。\n'
             !$ time_begin_s = omp_get_wtime()
