@@ -860,8 +860,9 @@ end subroutine game_3
 subroutine game()
     use, intrinsic :: iso_fortran_env
     implicit none
+    integer(int32) :: seedsize = 3
     integer(int64) :: n
-    n = add(9)
+    n = add(9, seedsize)
     open(1, file='.level', status='old', err=110)
     close(1)
     select case(n)
@@ -878,10 +879,11 @@ subroutine game()
     close(2)
 120 write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     contains
-    function add(n)
+    function add(n, seedsize)
         implicit none
-        integer(int32) :: add, rad, n
-        integer(int32) :: seedsize = 3
+        integer(int32), intent(in) :: n
+        integer(int32) :: add, rad
+        integer(int32) :: seedsize
         real(int32) :: y
         real(int32) :: x
         integer,allocatable :: seed(:)
@@ -1196,7 +1198,7 @@ subroutine randsu()
     end function
 end subroutine randsu
 
-subroutine neipia() ! e = lim n->Infinity [ (1+1/n)**n ] | Σn=0 ∞ [ 1/n! ]
+subroutine neipia() ! e = lim n->Infinity (1+1/n)**n | Σn=0 ∞ 1/n!
     use m_usc
     use, intrinsic :: iso_fortran_env
     use, intrinsic :: ieee_arithmetic
@@ -1323,10 +1325,8 @@ end subroutine soukyokutan
 
 subroutine gamma_f()
     use, intrinsic :: iso_fortran_env
-    use, intrinsic :: ieee_arithmetic
     implicit none
     real(real128) :: z
-    call ieee_set_rounding_mode(ieee_nearest)
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)',  '値を入力してください。'
     read (*, *) z
@@ -1394,14 +1394,12 @@ end subroutine joke
 subroutine undouhouteisiki()
     !$ use omp_lib
     use, intrinsic :: iso_fortran_env
-    use, intrinsic :: ieee_arithmetic
     implicit none
     integer(int64) :: i
     real(real128), parameter :: pi = 3.141592653589793238462643383279502884
     real(real128) :: g, V, angle, theta, x, z, u, w&
     &, dxdt, dzdt, dudt, dwdt
     !$ double precision st, en
-    call ieee_set_rounding_mode(ieee_nearest)
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '初期速度 [m/s]'
     read (*, *) V
@@ -1411,10 +1409,10 @@ subroutine undouhouteisiki()
 
     g = 9.80665
 
-    theta = pi / 180.0 * angle
+    theta = pi / 180. * angle
 
-    x = 0.0
-    z = 0.0
+    x = 0.
+    z = 0.
     u = V * cos(theta)
     w = V * sin(theta)
 
@@ -1464,11 +1462,9 @@ end subroutine undouplot
 
 subroutine TX()
     use, intrinsic :: iso_fortran_env
-    use, intrinsic :: ieee_arithmetic
     implicit none
     real(real128), parameter :: pi = 3.141592653589793238462643383279502884
     real(real128) :: g, V, angle, theta, T, L, H
-    call ieee_set_rounding_mode(ieee_nearest)
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '初期速度 [m/s]'
     read (*, *) V
@@ -1477,11 +1473,11 @@ subroutine TX()
 
     g = 9.80665
 
-    theta = pi / 180.0 * angle
+    theta = pi / 180. * angle
 
-    T = 2.0 * V * sin(theta) / g
-    L = (V**2) * sin(2.0 * theta) / g
-    H = ((v * sin(theta))*(v * sin(theta))) / (2 * g)
+    T = 2. * V * sin(theta) / g
+    L = (V**2) * sin(2. * theta) / g
+    H = ((v * sin(theta)) * (v * sin(theta))) / (2. * g)
 
     print*, '\n滞空時間'
     print '("\t", F0.36, " [sec]")', T
@@ -1672,6 +1668,38 @@ subroutine M_S()
     read *
 end subroutine M_S
 
+subroutine M_M()
+    use m_usc
+    use, intrinsic :: iso_fortran_env
+    implicit none
+    character(len=256) :: str
+    real(real128) :: x
+    print '(A)', '値を入力してください。'
+    read (*, '(A)') str
+    read (str, *) x
+    print*, '\n答え'
+    print*, z * x
+    z = z * x
+    print*, '\nEnterを押してください。'
+    read *
+end subroutine M_M
+
+subroutine M_D()
+    use m_usc
+    use, intrinsic :: iso_fortran_env
+    implicit none
+    character(len=256) :: str
+    real(real128) :: x
+    print '(A)', '値を入力してください。'
+    read (*, '(A)') str
+    read (str, *) x
+    print*, '\n答え'
+    print*, z / x
+    z = z / x
+    print*, '\nEnterを押してください。'
+    read *
+end subroutine M_D
+
 subroutine soinsubunkai()
     implicit none
     integer(kind=8) n, i, m, k
@@ -1700,6 +1728,94 @@ subroutine soinsubunkai()
     read *
 end subroutine soinsubunkai
 
+subroutine sosuhantei()
+    use, intrinsic :: iso_fortran_env
+    implicit none
+    integer(int64) p, i
+    write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    print '(A)', '値を入力してください。'
+    read (*, *) p
+    select case(p)
+    case (0, 1)
+        print*, '\n答え'
+        print '("\t", I0, "は素数ではありません。")', p
+        goto 11
+    case (2, 3)
+        print*, '\n答え'
+        print '("\t", I0, "は素数です。")', p
+        goto 11
+    end select
+    if (mod(p, 2) .eq. 0 .or. mod(p, 3) .eq. 0) then
+        print*, '\n答え'
+        print '("\t", I0, "は素数ではありません。")', p
+        goto 11
+    end if
+    i = 5
+    do while ((i**2) <= p)
+        if (mod(p, i) .eq. 0) then
+            print*, '\n答え'
+            print '("\t", I0, "は素数ではありません。")', p
+            goto 11
+        else if (mod(p, (i + 2)) .eq. 0) then
+            print*, '\n答え'
+            print '("\t", I0, "は素数ではありません。")', p
+            goto 11
+        end if
+        i = i + 6
+    end do
+    print*, '\n答え'
+    print '("\t", I0, "は素数です。")', p
+11  print*, '\nEnterを押してください。'
+    read *
+end subroutine sosuhantei
+
+subroutine numberkurash()
+    use, intrinsic :: iso_fortran_env
+    implicit none
+    integer(int64) n, m, ans 
+    integer(int32) seedsize
+    seedsize = 3
+    n = 101
+    ans = randon(n, seedsize)
+    do
+        write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+        print '(A)', '僕の考えている数学を当ててね。＾＾(0~100までだお)'
+        read (*, *) m
+        if (m .eq. ans) then
+            print*, '\n凄いね。正解だお！＾＾ｂ'
+            read *
+            exit
+        else if (m < ans) then
+            print*, '\nちょっと大きい数だお＾＾;'
+            read *
+        else if (m > ans) then
+            print*, '\nちょっと小さい数だお＾＾;'
+            read *
+        end if
+    end do
+    contains
+    integer(int64) function randon(n, seedsize)
+        implicit none
+        integer(int64) :: rad
+        integer(int64), intent(in) :: n
+        integer(int32), intent(inout) :: seedsize
+        real(real128) :: y, x
+        integer,allocatable :: seed(:)
+        call random_seed(size=seedsize)
+        allocate(seed(seedsize))
+        if (n .le. 1024) then
+            do
+                call random_seed(get = seed)
+                call random_number(x)
+                y = x*1024
+                rad = int(y)
+                if (rad .lt. n) exit
+            end do
+        end if
+        randon = rad
+    end function
+end subroutine numberkurash
+
 subroutine page_03()
     use, intrinsic :: iso_fortran_env
     implicit none
@@ -1707,19 +1823,17 @@ subroutine page_03()
     do
         write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
         print '(A)', '\n-----------------------------------------'
-        print*, '1 test'
-        print*, '11 ジョーク\n'
+        print*, '1 素数判定'
+        print*, '11 数当てゲーム＾＾\n'
         print*, '99 終了           02 Back'
         print '(A)', '-----------------------------------------'
         write (*, '(A)', advance='no') ': '
         read (*, '(A)') str
         select case(str)
         case ('1')
-            print*, 'test'
-            read *
+            call sosuhantei()
         case ('11')
-            print*, 'test'
-            read *
+            call numberkurash()
         case ('00')
             call page_00()
         case ('01')
@@ -1733,6 +1847,10 @@ subroutine page_03()
             call M_A()
         case ('M-')
             call M_S()
+        case ('M*')
+            call M_M()
+        case ('M/')
+            call M_D()
         case default
             print*, 'そんなもんねぇよｗ'
             read * !call sleep(1)
@@ -1747,9 +1865,9 @@ subroutine page_02()
         write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
         print '(A)', '\n-----------------------------------------'
         print*, '1 ガンマ関数 Γ(z)'
-        print*, '2 滞空時間と飛距離'
-        print*, '3 放物運動(一分後まで)'
-        print*, '4 放物運動(gnuplotでグラフを描画)'
+        print*, '2 斜方投射での滞空時間と飛距離'
+        print*, '3 斜方投射(一分後まで)'
+        print*, '4 斜方投射(gnuplotでグラフを描画)'
         print*, '5 円周率をtxtファイルで出力(桁数多め)'
         print*, '6 平均値'
         print*, '7 階乗(n!)'
@@ -1807,6 +1925,10 @@ subroutine page_02()
             call M_A()
         case ('M-')
             call M_S()
+        case ('M*')
+            call M_M()
+        case ('M/')
+            call M_D()
         case default
             print*, 'そんなもんねぇよｗ'
             read * !call sleep(1)
@@ -1883,6 +2005,10 @@ subroutine page_01()
             call M_A()
         case ('M-')
             call M_S()
+        case ('M*')
+            call M_M()
+        case ('M/')
+            call M_D()
         case default
             print*, 'そんなもんねぇよｗ'
             read * !call sleep(1)
@@ -1895,7 +2021,7 @@ subroutine page_00()
     implicit none
     character(len=256) :: str
     real(real128), parameter :: PI = 4.0_real128*atan(1.0_real128)
-    do! while(.true.)
+    do
         write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
         print '(A)', '\n-----------------------------------------'
         print*, '1 足し算          12 三角関数(sin)'
@@ -1928,6 +2054,8 @@ subroutine page_00()
             print '(A)', '\x1b[2J\x1b[3J\x1b[H'
             print*, 'π(円周率)'
             print '(2F40.36)', PI
+            print*, '\n Wikipediaでは以下(上の桁数に合わせた)'
+            print '(A)', '  3.141592653589793238462643383279502884'
             print*, '\nEnterを押してください。'
             read *
         case ('7')
@@ -1973,6 +2101,10 @@ subroutine page_00()
             call M_A()
         case ('M-')
             call M_S()
+        case ('M*')
+            call M_M()
+        case ('M/')
+            call M_D()
         case default
             print*, 'そんなもんねぇよｗ'
             read * !call sleep(1)
