@@ -860,9 +860,8 @@ end subroutine game_3
 subroutine game()
     use, intrinsic :: iso_fortran_env
     implicit none
-    integer(int32) :: seedsize = 3
     integer(int64) :: n
-    n = add(9, seedsize)
+    n = add()
     open(1, file='.level', status='old', err=110)
     close(1)
     select case(n)
@@ -879,23 +878,25 @@ subroutine game()
     close(2)
 120 write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     contains
-    function add(n, seedsize)
+    function add()
         implicit none
-        integer(int32), intent(in) :: n
-        integer(int32) :: add, rad
+        integer(int32) :: add, rad, c
         integer(int32) :: seedsize
-        real(int32) :: y
-        real(int32) :: x
+        real(int32) :: y, x
         integer,allocatable :: seed(:)
         call random_seed(size=seedsize)
         allocate(seed(seedsize))
         do
             call random_seed(get=seed)
+            call system_clock(count=c)
+                seed(1) = c
+            call random_seed(put=seed)
             call random_number(x)
             y = x*100
             rad = int(y)
-            if (rad .lt. n) exit
+            if (rad .lt. 9) exit
         end do
+        deallocate(seed)
         add = rad
     end function
 end subroutine game
@@ -1116,7 +1117,7 @@ subroutine randsu()
     function randon(n)
         implicit none
         integer(int64) :: randon, rad, n
-        integer(int32) :: seedsize = 3
+        integer(int32) :: seedsize, c
         real(real128) :: y, x
         integer,allocatable :: seed(:)
         call random_seed(size=seedsize)
@@ -1124,6 +1125,9 @@ subroutine randsu()
         if (n .le. 1024) then
             do
                 call random_seed(get=seed)
+                call system_clock(count=c)
+                seed(1) = c
+                call random_seed(put=seed)
                 call random_number(x)
                 y = x*1024
                 rad = int(y)
@@ -1132,6 +1136,9 @@ subroutine randsu()
         else if (n .le. 7812524) then
             do
                 call random_seed(get=seed)
+                call system_clock(count=c)
+                seed(1) = c
+                call random_seed(put=seed)
                 call random_number(x)
                 y = x*7812524
                 rad = int(y)
@@ -1140,6 +1147,9 @@ subroutine randsu()
         else if (n .le. 15625024) then
             do
                 call random_seed(get=seed)
+                call system_clock(count=c)
+                seed(1) = c
+                call random_seed(put=seed)
                 call random_number(x)
                 y = x*15625024
                 rad = int(y)
@@ -1148,6 +1158,9 @@ subroutine randsu()
         else if (n .le. 31250024) then
             do
                 call random_seed(get=seed)
+                call system_clock(count=c)
+                seed(1) = c
+                call random_seed(put=seed)
                 call random_number(x)
                 y = x*31250024
                 rad = int(y)
@@ -1156,6 +1169,9 @@ subroutine randsu()
         else if (n .le. 62500024) then
             do
                 call random_seed(get=seed)
+                call system_clock(count=c)
+                seed(1) = c
+                call random_seed(put=seed)
                 call random_number(x)
                 y = x*62500024
                 rad = int(y)
@@ -1164,6 +1180,9 @@ subroutine randsu()
         else if (n .le. 125000024) then
             do
                 call random_seed(get=seed)
+                call system_clock(count=c)
+                seed(1) = c
+                call random_seed(put=seed)
                 call random_number(x)
                 y = x*125000024
                 rad = int(y)
@@ -1172,6 +1191,9 @@ subroutine randsu()
         else if (n .le. 250000024) then
             do
                 call random_seed(get=seed)
+                call system_clock(count=c)
+                seed(1) = c
+                call random_seed(put=seed)
                 call random_number(x)
                 y = x*250000024
                 rad = int(y)
@@ -1180,6 +1202,9 @@ subroutine randsu()
         else if (n .le. 500000024) then
             do
                 call random_seed(get=seed)
+                call system_clock(count=c)
+                seed(1) = c
+                call random_seed(put=seed)
                 call random_number(x)
                 y = x*500000024
                 rad = int(y)
@@ -1188,12 +1213,16 @@ subroutine randsu()
         else
             do
                 call random_seed(get=seed)
+                call system_clock(count=c)
+                seed(1) = c
+                call random_seed(put=seed)
                 call random_number(x)
                 y = x*2147483624!1000000000024.
                 rad = int(y)
                 if (rad .lt. n) exit
             end do
         end if
+        deallocate(seed)
         randon = rad
     end function
 end subroutine randsu
@@ -1340,10 +1369,8 @@ end subroutine gamma_f
 subroutine joke()
     use, intrinsic :: iso_fortran_env
     implicit none
-    integer(int64) :: x, n
-    integer(int32) :: seedsize = 3
-    n = 5
-24  x = randon(n, seedsize)
+    integer(int64) :: x
+24  x = randon()
     select case(x)
     case (0)
         print*, '\n  women = time * money\n'
@@ -1369,24 +1396,26 @@ subroutine joke()
         goto 24
     end select
     contains
-    integer(int64) function randon(n, seedsize)
+    integer(int64) function randon()
         implicit none
         integer(int64) :: rad
-        integer(int64), intent(in) :: n
-        integer(int32), intent(inout) :: seedsize
-        real(real128) :: y, x
+        !integer(int64), intent(in) :: n
+        integer(int32) :: seedsize, c
+        real(real64) :: y, x
         integer,allocatable :: seed(:)
-        call random_seed(size=seedsize)
+        call random_seed(size = seedsize)
         allocate(seed(seedsize))
-        if (n .le. 10) then
-            do
-                call random_seed(get = seed)
-                call random_number(x)
-                y = x*10
-                rad = int(y)
-                if (rad .lt. n) exit
-            end do
-        end if
+        do
+            call random_seed(get = seed)
+            call system_clock(count = c)
+            seed(1) = c
+            call random_seed( put = seed )
+            call random_number(x)
+            y = x*10
+            rad = int(y)
+            if (rad .lt. 5) exit
+        end do
+        deallocate(seed)
         randon = rad
     end function
 end subroutine joke
@@ -1769,52 +1798,80 @@ subroutine sosuhantei()
     read *
 end subroutine sosuhantei
 
-subroutine numberkurash()
+subroutine slot()
     use, intrinsic :: iso_fortran_env
     implicit none
-    integer(int64) n, m, ans 
-    integer(int32) seedsize
-    seedsize = 3
-    n = 101
-    ans = randon(n, seedsize)
-    do
+    character char
+    integer(int64) i, j, x, getc, status, a, b, c
+    i = 0; a = 0; b = 0; c = 0
+11  do j = 0, 3
         write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-        print '(A)', '僕の考えている数学を当ててね。＾＾(0~100までだお)'
-        read (*, *) m
-        if (m .eq. ans) then
-            print*, '\n凄いね。正解だお！＾＾ｂ'
-            read *
+        print '(A)', '┌─────────────────┐'
+        print '(A, I0, A, I0, A, I0, A)', '｜  ', a, '  |  ', b, '  |  ', c, ' ｜'
+        print '(A)', '└─────────────────┘'
+        print '(A)', '\n何かキーを押してください。'
+        status = getc(char)
+        x = randon()
+        select case (j)
+        case (0)
+            a = x
+        case (1)
+            b = x
+        case (2)
+            c = x
+        end select
+        if (j .eq. 3) then
+            if (a .eq. b .and. b .eq. c) then
+                print '(A)', '\n当たりｷﾀ━━━━(ﾟ∀ﾟ)━━━━!!'
+                i = i - 2
+                status = getc(char)
+            else if (a .eq. 7 .and. b .eq. 7 .and. c .eq. 7) then
+                print '(A)', '\n超スーパーレアナンバーｷﾀ━━━━(ﾟ∀ﾟ)━━━━!!'
+                print '(A)', '当たる超確率up'!大噓
+                i = i - 3
+                status = getc(char)
+            else if (a .eq. b .or. a .eq. c .or. b .eq. c) then
+                print '(A)', '\nリーチ(＞ω＜)/'
+                i = i - 1
+                status = getc(char)
+            else
+                print '(A)', '\nおしい！'
+                i = i + 1
+                if (i .eq. 5) then
+                    print '(A, I0, "回")', '\nゲームオーバー\t記録:', i
+                    status = getc(char)
+                    exit
+                end if
+                status = getc(char)
+            end if
+            goto 11
+        else if (char .eq. 'q') then
             exit
-        else if (m < ans) then
-            print*, '\nちょっと大きい数だお＾＾;'
-            read *
-        else if (m > ans) then
-            print*, '\nちょっと小さい数だお＾＾;'
-            read *
         end if
     end do
     contains
-    integer(int64) function randon(n, seedsize)
+    integer(int64) function randon()
         implicit none
         integer(int64) :: rad
-        integer(int64), intent(in) :: n
-        integer(int32), intent(inout) :: seedsize
-        real(real128) :: y, x
-        integer,allocatable :: seed(:)
-        call random_seed(size=seedsize)
+        integer(int32) :: seedsize, c
+        real(real64) :: y, x
+        integer, allocatable :: seed(:)
+        call random_seed(size = seedsize)
         allocate(seed(seedsize))
-        if (n .le. 1024) then
-            do
-                call random_seed(get = seed)
-                call random_number(x)
-                y = x*1024
-                rad = int(y)
-                if (rad .lt. n) exit
-            end do
-        end if
+        do
+            call random_seed(get = seed)
+            call system_clock(count = c)
+            seed(1) = c
+            call random_seed(put = seed)
+            call random_number(x)
+            y = x*100
+            rad = int(y)
+            if (rad .lt. 10) exit
+        end do
+        deallocate(seed)
         randon = rad
     end function
-end subroutine numberkurash
+end subroutine slot
 
 subroutine page_03()
     use, intrinsic :: iso_fortran_env
@@ -1824,7 +1881,7 @@ subroutine page_03()
         write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
         print '(A)', '\n-----------------------------------------'
         print*, '1 素数判定'
-        print*, '11 数当てゲーム＾＾\n'
+        print*, '11 スロットゲーム\n'
         print*, '99 終了           02 Back'
         print '(A)', '-----------------------------------------'
         write (*, '(A)', advance='no') ': '
@@ -1833,7 +1890,7 @@ subroutine page_03()
         case ('1')
             call sosuhantei()
         case ('11')
-            call numberkurash()
+            call slot()
         case ('00')
             call page_00()
         case ('01')
