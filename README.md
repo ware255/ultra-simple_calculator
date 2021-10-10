@@ -1,14 +1,13 @@
 # Ultra-Simple_Calculator
-これは、Fortranで書かれた超簡易計算機です。<br />
-CUIで機能します。「GUIの方がいい」と欲張らないでください。運動方程式や特殊な計算はEuler法を採用しています。なので精度は極端にいいやつと悪いやつがあります。<br><br>
+これは、Fortranで書かれた超簡易計算機です。<br>
+CUIで機能します。「GUIの方がいい」と欲張らないでください。運動方程式や特殊な計算はEuler法を採用しています。なので精度は極端にいいやつと悪いやつがあります。<br>
+事前にIntel Fortran Compilerをインストールしておいてください。<br>
 ## インストール
      依存関係などのインストール
      $ sudo apt install gfortran gnuplot
      $ git clone https://github.com/ware255/ultra-simple_calculator
      移動
      $ cd ultra-simple_calculator
-     コンパイル(gfortranの場合)
-     $ gfortran -O3 -fopenmp -fbackslash calculator.f90 -o calculator
      コンパイル(ifortの場合)
      $ ifort -assume bscc -O3 -qopenmp calculator.f90 -o calculator
      実行
