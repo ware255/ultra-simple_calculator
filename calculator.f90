@@ -386,17 +386,19 @@ subroutine game_1()
     contains
     function add(n)
         implicit none
-        integer(int32) :: add, rad, n
-        integer(int32) :: seedsize = 3
-        real(real32) :: y
-        real(real32) :: x
+        integer(int32) add, rad, n, c
+        integer(int32) seedsize
+        real(real32) y, x
         integer,allocatable :: seed(:)
         call random_seed(size=seedsize)
         allocate(seed(seedsize))
         do
             call random_seed(get=seed)
+            call system_clock(count=c)
+            seed(1) = c
+            call random_seed(put=seed)
             call random_number(x)
-            y = x*10
+            y = x*100
             rad = int(y)
             if (rad .lt. n) exit
         end do
@@ -587,17 +589,19 @@ subroutine game_2()
     contains
     function add(n)
         implicit none
-        integer(int32) :: add, rad, n
-        integer(int32) :: seedsize = 3
-        real(real32) :: y
-        real(real32) :: x
+        integer(int32) add, rad, n, c
+        integer(int32) seedsize
+        real(real32) y, x
         integer,allocatable :: seed(:)
         call random_seed(size=seedsize)
         allocate(seed(seedsize))
         do
             call random_seed(get=seed)
+            call system_clock(count=c)
+            seed(1) = c
+            call random_seed(put=seed)
             call random_number(x)
-            y = x*10
+            y = x*100
             rad = int(y)
             if (rad .lt. n) exit
         end do
@@ -841,17 +845,19 @@ subroutine game_3()
     contains
     function add(n)
         implicit none
-        integer(int32) :: add, rad, n
-        integer(int32) :: seedsize = 3
-        real(real32) :: y
-        real(real32) :: x
+        integer(int32) add, rad, n, c
+        integer(int32) seedsize
+        real(real32) y, x
         integer,allocatable :: seed(:)
         call random_seed(size=seedsize)
         allocate(seed(seedsize))
         do
             call random_seed(get=seed)
+            call system_clock(count=c)
+            seed(1) = c
+            call random_seed(put=seed)
             call random_number(x)
-            y = x*10
+            y = x*100
             rad = int(y)
             if (rad .lt. n) exit
         end do
@@ -1356,15 +1362,16 @@ subroutine soukyokutan()
 end subroutine soukyokutan
 
 subroutine gamma_f()
+    use m_usc
     use, intrinsic :: iso_fortran_env
     implicit none
-    real(real128) z
+    real(real128) x
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)',  '値を入力してください。'
-    read (*, *) z
+    read (*, *) x
     print*, '\n答え'
-    print*, gamma(z)
-    z = gamma(z)
+    print*, gamma(x)
+    z = gamma(x)
     print*, '\nEnterを押してください。'
     read *
 end subroutine gamma_f
@@ -1404,7 +1411,7 @@ subroutine joke()
         integer(int64) rad
         integer(int32) seedsize, c
         real(real64) y, x
-        integer,allocatable :: seed(:)
+        integer, allocatable :: seed(:)
         call random_seed(size = seedsize)
         allocate(seed(seedsize))
         do
@@ -1526,20 +1533,19 @@ subroutine ensyu()
     use, intrinsic :: iso_fortran_env
     implicit none
     integer(int64), parameter :: vmax = 428800, bmax = 25728
-    integer(int64) :: vect(vmax), buffer(bmax)
-    integer(int64) :: n, L, more, num, carry, k, d
+    integer(int64) vect(vmax), buffer(bmax)
+    integer(int64) n, L, more, num, carry, k, d
     !$ double precision st, en
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', 'ちょっと待っててね\n終わったあとは、メモ帳を&
     &大画面にした方がええで\n'
-    !$ st = omp_get_wtime()
     !$ st = omp_get_wtime()
     vect(1:vmax) = 2
     more = 0
     do n = 1, bmax !buffer()
         carry = 0
         do L = vmax, 1, -1 !vect()
-            num = 100000 * vect(L) + carry * L
+            num = (100000 * vect(L)) + (carry * L)
             d = (2*L - 1)
             carry = num / d
             vect(L) = num - carry * d
