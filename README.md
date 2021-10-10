@@ -8,7 +8,7 @@ CUIで機能します。「GUIの方がいい」と欲張らないでくださ�
      $ git clone https://github.com/ware255/ultra-simple_calculator
      移動
      $ cd ultra-simple_calculator
-     コンパイル(ifortの場合)
+     コンパイル
      $ ifort -assume bscc -O3 -qopenmp calculator.f90 -o calculator
      実行
      $ ./calculator
