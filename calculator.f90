@@ -1415,12 +1415,12 @@ subroutine joke()
         call random_seed(size = seedsize)
         allocate(seed(seedsize))
         do
-            call random_seed(get = seed)
-            call system_clock(count = c)
+            call random_seed(get=seed)
+            call system_clock(count=c)
             seed(1) = c
-            call random_seed( put = seed )
+            call random_seed(put=seed)
             call random_number(x)
-            y = x*10
+            y = x*100
             rad = int(y)
             if (rad .lt. 5) exit
         end do
@@ -1435,8 +1435,8 @@ subroutine undouhouteisiki()
     implicit none
     integer(int64) i
     !real(real128), parameter :: pi = 3.141592653589793238462643383279502884
-    real(real128) g, V, angle, theta, x, z, u, w&
-    &, dxdt, dzdt, dudt, dwdt
+    real(real128) g, V, angle, theta, x, z, u, w
+    real(real128) dxdt, dzdt, dudt, dwdt
     !$ double precision st, en
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '初期速度 [m/s]'
@@ -1515,7 +1515,7 @@ subroutine TX()
     dummy = sin(theta)
 
     T = 2. * V * dummy / g
-    L = (V**2) * sin(2. * theta) / g
+    L = (V * V) * sin(2. * theta) / g
     H = ((v * dummy) * (v * dummy)) / 19.6133!(2. * g)
 
     print*, '\n滞空時間'
@@ -2224,7 +2224,7 @@ program calculator
             !$omp do
             do i = 0, 10**8!12
                 !$omp critical
-                s = s + (-1.0_real64)**i / (2.0_real64 * i + 1.0_real64)
+                s = s + (((-1.)**i) / (2. * real(i) + 1.))
                 !$omp end critical
             end do
             !$omp end do
