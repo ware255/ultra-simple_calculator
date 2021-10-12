@@ -1713,11 +1713,16 @@ subroutine M_M()
     real(real128) x
     print '(A)', '値を入力してください。'
     read (*, '(A)') str
+    if (str .eq. '') then
+        print*, z * z
+        z = z * z
+        goto 11
+    end if
     read (str, *) x
     print*, '\n答え'
     print*, z * x
     z = z * x
-    print*, '\nEnterを押してください。'
+11  print*, '\nEnterを押してください。'
     read *
 end subroutine M_M
 
@@ -1743,7 +1748,6 @@ subroutine soinsubunkai()
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
     read (*, *) n
-
     print*, '\n答え'
     write (*, '("\t", I0, A)', advance='no') n,' = 1'
     k = n
@@ -1788,7 +1792,7 @@ subroutine sosuhantei()
         goto 11
     end if
     i = 5
-    do while ((i**2) <= p)
+    do while ((i * i) <= p)
         if (mod(p, i) .eq. 0) then
             print*, '\n答え'
             print '("\t", I0, "は素数ではありません。")', p
@@ -1834,8 +1838,8 @@ subroutine slot()
                 i = i - 2
                 status = getc(char)
             else if (a .eq. 7 .and. b .eq. 7 .and. c .eq. 7) then
-                print '(A)', '\n超スーパーレアナンバーｷﾀ━━━━(ﾟ∀ﾟ)━━━━!!'
-                print '(A)', '当たる超確率up'!大噓
+                print '(A)', '\n超極レアスーパーナンバーｷﾀ━━━━(ﾟ∀ﾟ)━━━━!!'
+                print '(A)', '当たる超確率up'!(大噓)
                 i = i - 3
                 status = getc(char)
             else if (a .eq. b .or. a .eq. c .or. b .eq. c) then
@@ -2199,7 +2203,7 @@ program calculator
     implicit none
     character(len=256) str
     character(len=24) string
-    integer(int64) i, level, getuid, uid
+    integer(int64) level, getuid, uid, i
     real(real128) :: s = 0.0_real128
     !$ real(real64) :: time_begin_s,time_end_s
     uid = getuid()
@@ -2220,11 +2224,11 @@ program calculator
         else if (str .eq. 'benchmark') then
             print '(A)', '\n計算中です。\n'
             !$ time_begin_s = omp_get_wtime()
-            !$omp parallel num_threads(32)
+            !$omp parallel num_threads(64)
             !$omp do
-            do i = 0, 10**8!12
+            do i = 0, 10*15
                 !$omp critical
-                s = s + (((-1.)**i) / (2. * real(i) + 1.))
+                s = s + (((-1.)**i) / (2 * real(i) + 1))
                 !$omp end critical
             end do
             !$omp end do
@@ -2251,4 +2255,5 @@ program calculator
         print '(A)', '\n※いつでもどこでも電卓が使えるようにして\n&
         &　いるためroot権限は実装しておりません。\n'
     end if
+    contains
 end program calculator
