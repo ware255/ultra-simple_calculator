@@ -76,8 +76,6 @@ subroutine kakezan()
         end if
         print*, x * x
         z = x * x
-        print*, '\nEnterを押してください。'
-        read *
         goto 11
     end if
     read (str, *) y
@@ -91,9 +89,8 @@ subroutine kakezan()
     end if
     print*, x * y
     z = x * y
-    print*, '\nEnterを押してください。'
+11  print*, '\nEnterを押してください。'
     read *
-11  write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
 end subroutine kakezan
 
 subroutine warizan()
@@ -211,8 +208,8 @@ subroutine game_1()
     integer(int64) hero_hp, hero_mp, enemy1_hp, enemy1_mp, n, x
     integer(int64) :: mp = 0, y
     n = 0;x = 0
-    hero_hp = 5;enemy1_hp = 10;
-    hero_mp = 5;enemy1_mp = 10;
+    hero_hp = 5;enemy1_hp = 10
+    hero_mp = 5;enemy1_mp = 10
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print*, '\n超戦略ゲーム  ~ shit video game ~\n\n\n\n\nEnterを押してください。'
     read *
@@ -386,10 +383,10 @@ subroutine game_1()
     contains
     function add(n)
         implicit none
-        integer(int32) add, rad, n, c
-        integer(int32) seedsize
+        integer(int32) add, rad, n
+        integer(int32) seedsize, c
         real(real32) y, x
-        integer,allocatable :: seed(:)
+        integer, allocatable :: seed(:)
         call random_seed(size=seedsize)
         allocate(seed(seedsize))
         do
@@ -589,10 +586,10 @@ subroutine game_2()
     contains
     function add(n)
         implicit none
-        integer(int32) add, rad, n, c
-        integer(int32) seedsize
+        integer(int32) add, rad, n
+        integer(int32) seedsize, c
         real(real32) y, x
-        integer,allocatable :: seed(:)
+        integer, allocatable :: seed(:)
         call random_seed(size=seedsize)
         allocate(seed(seedsize))
         do
@@ -658,12 +655,12 @@ subroutine game_3()
         hero_mp = 75;enemy3_mp = 20
     case (9)
         n = 0;x = 0
-        hero_hp = 999;enemy3_hp = 9999
-        hero_mp = 999;enemy3_mp = 20
+        hero_hp = 99;enemy3_hp = 110
+        hero_mp = 99;enemy3_mp = 20
     case (10)
         n = 0;x = 0
-        hero_hp = 99999;enemy3_hp = 999999
-        hero_mp = 99999;enemy3_mp = 20
+        hero_hp = 99999999;enemy3_hp = 999999999
+        hero_mp = 99999999;enemy3_mp = 20
     end select
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print*, '\n超戦略ゲーム  ~ shit video game ~\n\n\n\n\nEnterを押してください。'
@@ -845,10 +842,10 @@ subroutine game_3()
     contains
     function add(n)
         implicit none
-        integer(int32) add, rad, n, c
-        integer(int32) seedsize
+        integer(int32) add, rad, n
+        integer(int32) seedsize, c
         real(real32) y, x
-        integer,allocatable :: seed(:)
+        integer, allocatable :: seed(:)
         call random_seed(size=seedsize)
         allocate(seed(seedsize))
         do
@@ -892,7 +889,7 @@ subroutine game()
         integer(int32) add, rad, c
         integer(int32) seedsize
         real(int32) y, x
-        integer,allocatable :: seed(:)
+        integer, allocatable :: seed(:)
         call random_seed(size=seedsize)
         allocate(seed(seedsize))
         do
@@ -1128,7 +1125,7 @@ subroutine randsu()
         integer(int64) randon, rad, n
         integer(int32) seedsize, c
         real(real128) y, x
-        integer,allocatable :: seed(:)
+        integer, allocatable :: seed(:)
         call random_seed(size=seedsize)
         allocate(seed(seedsize))
         if (n .le. 1024) then
@@ -1226,7 +1223,7 @@ subroutine randsu()
                 seed(1) = c
                 call random_seed(put=seed)
                 call random_number(x)
-                y = x*2147483624!1000000000024.
+                y = x * 2147483647
                 rad = int(y)
                 if (rad .lt. n) exit
             end do
@@ -1406,11 +1403,11 @@ subroutine joke()
         goto 24
     end select
     contains
-    integer(int64) function randon()
+    integer(int32) function randon()
         implicit none
-        integer(int64) rad
-        integer(int32) seedsize, c
-        real(real64) y, x
+        integer(int32) rad, c
+        integer(int32) seedsize
+        real(real128) y, x
         integer, allocatable :: seed(:)
         call random_seed(size = seedsize)
         allocate(seed(seedsize))
@@ -1434,7 +1431,7 @@ subroutine undouhouteisiki()
     use, intrinsic :: iso_fortran_env
     implicit none
     integer(int64) i
-    !real(real128), parameter :: pi = 3.141592653589793238462643383279502884
+    real(real128), parameter :: pi = 3.141592653589793238462643383279502884
     real(real128) g, V, angle, theta, x, z, u, w
     real(real128) dxdt, dzdt, dudt, dwdt
     !$ double precision st, en
@@ -1447,7 +1444,7 @@ subroutine undouhouteisiki()
 
     g = 9.80665
 
-    theta = 1.745329251994329576923690768488613E-0002 * angle !pi / 180.
+    theta = pi / 180 * angle
 
     x = 0.
     z = 0.
@@ -1502,7 +1499,7 @@ subroutine TX()
     use, intrinsic :: iso_fortran_env
     implicit none
     real(real128), parameter :: pi = 3.141592653589793238462643383279502884
-    real(real128) g, V, angle, theta, T, L, H, dummy
+    real(real128) g, V, angle, theta, T, L, H, d
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '初期速度 [m/s]'
     read (*, *) V
@@ -1512,11 +1509,11 @@ subroutine TX()
     g = 9.80665
 
     theta = pi / 180. * angle !1.745329251994329576923690768488613E-0002
-    dummy = sin(theta)
+    d = sin(theta)
 
-    T = 2. * V * dummy / g
+    T = 2. * V * d / g
     L = (V * V) * sin(2. * theta) / g
-    H = ((v * dummy) * (v * dummy)) / 19.6133!(2. * g)
+    H = ((v * d) * (v * d)) / 19.6133!(2. * g)
 
     print*, '\n滞空時間'
     print '("\t", F0.36, " [sec]")', T
@@ -1532,9 +1529,10 @@ subroutine ensyu()
     !$ use omp_lib
     use, intrinsic :: iso_fortran_env
     implicit none
-    integer(int64), parameter :: vmax = 428800, bmax = 25728
-    integer(int64) vect(vmax), buffer(bmax)
-    integer(int64) n, L, more, num, carry, k, d
+    integer, parameter :: LargeInt_K = selected_int_kind(18)
+    integer(kind=LargeInt_K), parameter :: vmax = 428800, bmax = 25728
+    integer(kind=LargeInt_K) vect(vmax), buffer(bmax)
+    integer(kind=LargeInt_K) n, L, more, num, carry, k, d
     !$ double precision st, en
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', 'ちょっと待っててね\n終わったあとは、メモ帳を&
@@ -1542,9 +1540,9 @@ subroutine ensyu()
     !$ st = omp_get_wtime()
     vect(1:vmax) = 2
     more = 0
-    do n = 1, bmax !buffer()
+    do n = 1, bmax
         carry = 0
-        do L = vmax, 1, -1 !vect()
+        do L = vmax, 1, -1
             num = (100000 * vect(L)) + (carry * L)
             d = (2*L - 1)
             carry = num / d
@@ -1569,7 +1567,8 @@ subroutine heikin()
     use, intrinsic :: iso_fortran_env
     use, intrinsic :: ieee_arithmetic
     implicit none
-    integer(int64) i, max
+    integer, parameter :: LargeInt_K = selected_int_kind (18)
+    integer(kind=LargeInt_K) i, max
     real(real128), allocatable :: x(:)
     real(real128) :: y = 0.
     call ieee_set_rounding_mode(ieee_nearest)
@@ -1648,9 +1647,10 @@ end subroutine zetaf
 subroutine collatz()
     use, intrinsic :: iso_fortran_env
     implicit none
+    integer, parameter :: LargeInt_K = selected_int_kind (18)
     real(real128), parameter :: q = 2
     real(real128) n, h
-    integer(int64) i
+    integer(kind=LargeInt_K) i
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
     read (*, *) n
@@ -1661,7 +1661,7 @@ subroutine collatz()
         if (n .eq. 1) then
             exit
         else if (h .eq. 0) then
-            n = n / 2
+            n = n * 0.5
         else if (h .eq. 1) then
             n = n * 3 + 1
         end if
@@ -1744,7 +1744,8 @@ end subroutine M_D
 
 subroutine soinsubunkai()
     implicit none
-    integer(kind=8) n, i, m, k
+    integer, parameter :: LargeInt_K = selected_int_kind (18)
+    integer(kind=LargeInt_K) n, i, m, k
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
     read (*, *) n
@@ -1770,9 +1771,9 @@ subroutine soinsubunkai()
 end subroutine soinsubunkai
 
 subroutine sosuhantei()
-    use, intrinsic :: iso_fortran_env
     implicit none
-    integer(int64) p, i
+    integer, parameter :: LargeInt_K = selected_int_kind (18)
+    integer(kind=LargeInt_K) p, i
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
     read (*, *) p
@@ -1814,15 +1815,15 @@ subroutine slot()
     use, intrinsic :: iso_fortran_env
     implicit none
     character char
-    integer(int64) i, j, x, getc, status, a, b, c
-    i = 0; a = 0; b = 0; c = 0
+    integer(int64) i, j, x, a, b, c, k!, getc, status
+    i = 0; a = 0; b = 0; c = 0; k = 0
 11  do j = 0, 3
         write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
         print '(A)', '┌─────────────────┐'
         print '(A, I0, A, I0, A, I0, A)', '｜  ', a, '  |  ', b, '  |  ', c, ' ｜'
         print '(A)', '└─────────────────┘'
-        print '(A)', '\n何かキーを押してください。'
-        status = getc(char)
+        print '(A)', '\nEnterを押してください。'
+        read (*, '(A)') char
         x = randon()
         select case (j)
         case (0)
@@ -1836,25 +1837,29 @@ subroutine slot()
             if (a .eq. b .and. b .eq. c) then
                 print '(A)', '\n当たりｷﾀ━━━━(ﾟ∀ﾟ)━━━━!!'
                 i = i - 2
-                status = getc(char)
+                k = k + 2
+                read (*, '(A)') char
             else if (a .eq. 7 .and. b .eq. 7 .and. c .eq. 7) then
                 print '(A)', '\n超極レアスーパーナンバーｷﾀ━━━━(ﾟ∀ﾟ)━━━━!!'
                 print '(A)', '当たる超確率up'!(大噓)
                 i = i - 3
-                status = getc(char)
+                k = k + 3
+                read (*, '(A)') char
             else if (a .eq. b .or. a .eq. c .or. b .eq. c) then
                 print '(A)', '\nリーチ(＞ω＜)/'
                 i = i - 1
-                status = getc(char)
+                k = k + 1
+                read (*, '(A)') char
             else
                 print '(A)', '\nおしい！'
                 i = i + 1
+                k = k + 1
                 if (i .eq. 5) then
-                    print '(A, I0, "回")', '\nゲームオーバー\t記録:', i
-                    status = getc(char)
+                    print '(A, I0, "回", I0)', '\nゲームオーバー\t記録:', k
+                    read (*, '(A)') char
                     exit
                 end if
-                status = getc(char)
+                read (*, '(A)') char
             end if
             goto 11
         else if (char .eq. 'q') then
@@ -1862,11 +1867,10 @@ subroutine slot()
         end if
     end do
     contains
-    integer(int64) function randon()
+    integer(int32) function randon()
         implicit none
-        integer(int64) rad
-        integer(int32) seedsize, c
-        real(real64) y, x
+        integer(int32) seedsize, c, rad
+        real(real128) y, x
         integer, allocatable :: seed(:)
         call random_seed(size = seedsize)
         allocate(seed(seedsize))
@@ -1912,17 +1916,17 @@ subroutine page_03()
         case ('99')
             write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             stop
-        case ('M+')
+        case ('M+', 'm+')
             call M_A()
-        case ('M-')
+        case ('M-', 'm-')
             call M_S()
-        case ('M*')
+        case ('M*', 'm*')
             call M_M()
-        case ('M/')
+        case ('M/', 'm/')
             call M_D()
         case default
             print*, 'そんなもんねぇよｗ'
-            read * !call sleep(1)
+            read *
         end select
     end do
 end subroutine page_03
@@ -1990,13 +1994,13 @@ subroutine page_02()
         case ('99')
             write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             stop
-        case ('M+')
+        case ('M+', 'm+')
             call M_A()
-        case ('M-')
+        case ('M-', 'm-')
             call M_S()
-        case ('M*')
+        case ('M*', 'm*')
             call M_M()
-        case ('M/')
+        case ('M/', 'm/')
             call M_D()
         case default
             print*, 'そんなもんねぇよｗ'
@@ -2070,13 +2074,13 @@ subroutine page_01()
             call page_02()
         case ('03')
             call page_03()
-        case ('M+')
+        case ('M+', 'm+')
             call M_A()
-        case ('M-')
+        case ('M-', 'm-')
             call M_S()
-        case ('M*')
+        case ('M*', 'm*')
             call M_M()
-        case ('M/')
+        case ('M/', 'm/')
             call M_D()
         case default
             print*, 'そんなもんねぇよｗ'
@@ -2166,17 +2170,17 @@ subroutine page_00()
             call page_02()
         case ('03')
             call page_03()
-        case ('M+')
+        case ('M+', 'm+')
             call M_A()
-        case ('M-')
+        case ('M-', 'm-')
             call M_S()
-        case ('M*')
+        case ('M*', 'm*')
             call M_M()
-        case ('M/')
+        case ('M/', 'm/')
             call M_D()
         case default
             print*, 'そんなもんねぇよｗ'
-            read * !call sleep(1)
+            read *
         end select
     end do
 end subroutine page_00
@@ -2255,5 +2259,4 @@ program calculator
         print '(A)', '\n※いつでもどこでも電卓が使えるようにして\n&
         &　いるためroot権限は実装しておりません。\n'
     end if
-    contains
 end program calculator
