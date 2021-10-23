@@ -2,6 +2,7 @@ module m_usc
     use, intrinsic :: iso_fortran_env
     implicit none
     real(real128) z
+    integer(int64) err
 end module m_usc
 
 subroutine tasizan()
@@ -11,21 +12,33 @@ subroutine tasizan()
     real(real128) x, y
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)',  '値を入力してください。'
-    read (*, *) x
-    print '(A)', '値を入力してください。'
-    read (*, *) y
-    print*, '\n答え'
-    if (x <= 999 .and. y <= 999) then
-        print '(F9.4, "  +  ", F0.4, "\n")', x, y
-    else if (x <= 99999 .and. y <= 99999) then
-        print '(F19.4, "  +  ", F0.4, "\n")', x, y
+    read (*, *, iostat=err) x
+    if (err .eq. 0) then
+        print '(A)', '値を入力してください。'
+        read (*, *, iostat=err) y
+        if (err .eq. 0) then
+            print*, '\n答え'
+            if (x <= 999 .and. y <= 999) then
+                print '(F9.4, "  +  ", F0.4, "\n")', x, y
+            else if (x <= 99999 .and. y <= 99999) then
+                print '(F19.4, "  +  ", F0.4, "\n")', x, y
+            else
+                print '(F29.4, "  +  ", F0.4, "\n")', x, y
+            end if
+            print*, x + y
+            z = x + y
+            print*, '\nEnterを押してください。'
+            read *
+        else
+            print*, '\nError!'
+            read *
+            return
+        end if
     else
-        print '(F29.4, "  +  ", F0.4, "\n")', x, y
+        print*, '\nError!'
+        read *
+        return
     end if
-    print*, x + y
-    z = x + y
-    print*, '\nEnterを押してください。'
-    read *
 end subroutine tasizan
 
 subroutine hikizan()
@@ -35,21 +48,33 @@ subroutine hikizan()
     real(real128) x, y
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
-    read (*, *) x
-    print '(A)', '値を入力してください。'
-    read (*, *) y
-    print*, '\n答え'
-    if (x <= 999 .and. y <= 999) then
-        print '(F9.4, "  -  ", F0.4, "\n")', x, y
-    else if (x <= 99999 .and. y <= 99999) then
-        print '(F19.4, "  -  ", F0.4, "\n")', x, y
+    read (*, *, iostat=err) x
+    if (err .eq. 0) then
+        print '(A)', '値を入力してください。'
+        read (*, *, iostat=err) y
+        if (err .eq. 0) then
+            print*, '\n答え'
+            if (x <= 999 .and. y <= 999) then
+                print '(F9.4, "  -  ", F0.4, "\n")', x, y
+            else if (x <= 99999 .and. y <= 99999) then
+                print '(F19.4, "  -  ", F0.4, "\n")', x, y
+            else
+                print '(F29.4, "  -  ", F0.4, "\n")', x, y
+            end if
+            print*, x - y
+            z = x - y
+            print*, '\nEnterを押してください。'
+            read *
+        else
+            print*, '\nError!'
+            read *
+            return
+        end if
     else
-        print '(F29.4, "  -  ", F0.4, "\n")', x, y
+        print*, '\nError!'
+        read *
+        return
     end if
-    print*, x - y
-    z = x - y
-    print*, '\nEnterを押してください。'
-    read *
 end subroutine hikizan
 
 subroutine kakezan()
@@ -62,35 +87,49 @@ subroutine kakezan()
     call ieee_set_rounding_mode(ieee_nearest)
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
-    read (*, *) x
-    print '(A)', '値を入力してください。'
-    read (*, '(A)') str
-    if (str .eq. '') then
-        print*, '\n答え'
-        if (x <= 999) then
-            print '(F9.4, "  ^  ", I0, "\n")', x, 2
-        else if (x <= 99999) then
-            print '(F19.4, "  ^  ", I0, "\n")', x, 2
-        else
-            print '(F29.4, "  ^  ", I0, "\n")', x, 2
+    read (*, *, iostat=err) x
+    if (err .eq. 0) then
+        print '(A)', '値を入力してください。'
+        read (*, '(A)') str
+        if (str .eq. '') then
+            print*, '\n答え'
+            if (x <= 999) then
+                print '(F9.4, "  ^  ", I0, "\n")', x, 2
+            else if (x <= 99999) then
+                print '(F19.4, "  ^  ", I0, "\n")', x, 2
+            else
+                print '(F29.4, "  ^  ", I0, "\n")', x, 2
+            end if
+            print*, x * x
+            z = x * x
+            print*, '\nEnterを押してください。'
+            read *
+            return
         end if
-        print*, x * x
-        z = x * x
-        goto 11
-    end if
-    read (str, *) y
-    print*, '\n答え'
-    if (x <= 999 .and. y <= 999) then
-        print '(F9.4, "  *  ", F0.4, "\n")', x, y
-    else if (x <= 99999 .and. y <= 99999) then
-        print '(F19.4, "  *  ", F0.4, "\n")', x, y
+        read (str, *, iostat=err) y
+        if (err .eq. 0) then
+            print*, '\n答え'
+            if (x <= 999 .and. y <= 999) then
+                print '(F9.4, "  *  ", F0.4, "\n")', x, y
+            else if (x <= 99999 .and. y <= 99999) then
+                print '(F19.4, "  *  ", F0.4, "\n")', x, y
+            else
+                print '(F29.4, "  *  ", F0.4, "\n")', x, y
+            end if
+            print*, x * y
+            z = x * y
+            print*, '\nEnterを押してください。'
+            read *
+        else
+            print*, '\nError!'
+            read *
+            return
+        end if
     else
-        print '(F29.4, "  *  ", F0.4, "\n")', x, y
+        print*, '\nError!'
+        read *
+        return
     end if
-    print*, x * y
-    z = x * y
-11  print*, '\nEnterを押してください。'
-    read *
 end subroutine kakezan
 
 subroutine warizan()
@@ -102,21 +141,33 @@ subroutine warizan()
     call ieee_set_rounding_mode(ieee_nearest)
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
-    read (*, *) x
-    print '(A)', '値を入力してください。'
-    read (*, *) y
-    print*, '\n答え'
-    if (x <= 999 .and. y <= 999) then
-        print '(F9.4, "  /  ", F0.4, "\n")', x, y
-    else if (x <= 99999 .and. y <= 99999) then
-        print '(F19.4, "  /  ", F0.4, "\n")', x, y
+    read (*, *, iostat=err) x
+    if (err .eq. 0) then
+        print '(A)', '値を入力してください。'
+        read (*, *, iostat=err) y
+        if (err .eq. 0) then
+            print*, '\n答え'
+            if (x <= 999 .and. y <= 999) then
+                print '(F9.4, "  /  ", F0.4, "\n")', x, y
+            else if (x <= 99999 .and. y <= 99999) then
+                print '(F19.4, "  /  ", F0.4, "\n")', x, y
+            else
+                print '(F29.4, "  /  ", F0.4, "\n")', x, y
+            end if
+            print*, x / y
+            z = x / y
+            print*, '\nEnterを押してください。'
+            read *
+        else
+            print*, '\nError!'
+            read *
+            return
+        end if
     else
-        print '(F29.4, "  /  ", F0.4, "\n")', x, y
+        print*, '\nError!'
+        read *
+        return
     end if
-    print*, x / y
-    z = x / y
-    print*, '\nEnterを押してください。'
-    read *
 end subroutine warizan
 
 subroutine heihoukon()
@@ -126,17 +177,23 @@ subroutine heihoukon()
     real(real128) x
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
-    read (*, *) x
-    print*, '\n近似値'
-    print*, sqrt(x)
-    z = sqrt(x)
-    if (x .eq. 2.) then
-        print*, '　一夜一夜に月見ごろ          <= 覚え方'
-    else if (x .eq. 3.) then
-        print*, '　人並みにおごれや            <= 覚え方'
+    read (*, *, iostat=err) x
+    if (err .eq. 0) then
+        print*, '\n近似値'
+        print*, sqrt(x)
+        z = sqrt(x)
+        if (x .eq. 2.) then
+            print*, '　一夜一夜に月見ごろ          <= 覚え方'
+        else if (x .eq. 3.) then
+            print*, '　人並みにおごれや            <= 覚え方'
+        end if
+        print*, '\nEnterを押してください。'
+        read *
+    else
+        print*, '\nError!'
+        read *
+        return
     end if
-    print*, '\nEnterを押してください。'
-    read *
 end subroutine heihoukon
 
 subroutine ensyuritu()
@@ -149,12 +206,18 @@ subroutine ensyuritu()
     call ieee_set_rounding_mode(ieee_nearest)
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
-    read (*, *) r
-    print*, '\n答え'
-    print*, r * r * pi
-    z = r * r * pi
-    print*, '\nEnterを押してください。'
-    read *
+    read (*, *, iostat=err) r
+    if (err .eq. 0) then
+        print*, '\n答え'
+        print*, r * r * pi
+        z = r * r * pi
+        print*, '\nEnterを押してください。'
+        read *
+    else
+        print*, '\nError!'
+        read *
+        return
+    end if
 end subroutine ensyuritu
 
 subroutine syutyou()
@@ -167,12 +230,18 @@ subroutine syutyou()
     call ieee_set_rounding_mode(ieee_nearest)
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
-    read (*, *) r
-    print*, '\n答え'
-    print*, 2 * pi * r
-    z = 2 * pi * r
-    print*, '\nEnterを押してください。'
-    read *
+    read (*, *, iostat=err) r
+    if (err .eq. 0) then
+        print*, '\n答え'
+        print*, 2 * pi * r
+        z = 2 * pi * r
+        print*, '\nEnterを押してください。'
+        read *
+    else
+        print*, '\nError!'
+        read *
+        return
+    end if
 end subroutine syutyou
 
 subroutine nizyou()
@@ -184,21 +253,33 @@ subroutine nizyou()
     call ieee_set_rounding_mode(ieee_nearest)
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', 'べき乗する値を入力してください。'
-    read (*, *) x
-    print '(A)', 'n乗する値を入力してください。'
-    read (*, *) y
-    print*, '\n答え'
-    if (x <= 999 .and. y <= 999) then
-        print '(F9.4, "  ^  ", F0.4, "\n")', x, y
-    else if (x <= 99999 .and. y <= 99999) then
-        print '(F19.4, "  ^  ", F0.4, "\n")', x, y
+    read (*, *, iostat=err) x
+    if (err .eq. 0) then
+        print '(A)', 'n乗する値を入力してください。'
+        read (*, *, iostat=err) y
+        if (err .eq. 0) then
+            print*, '\n答え'
+            if (x <= 999 .and. y <= 999) then
+                print '(F9.4, "  ^  ", F0.4, "\n")', x, y
+            else if (x <= 99999 .and. y <= 99999) then
+                print '(F19.4, "  ^  ", F0.4, "\n")', x, y
+            else
+                print '(F29.4, "  ^  ", F0.4, "\n")', x, y
+            end if
+            print*, x**y
+            z = x**y
+            print*, '\nEnterを押してください。'
+            read *
+        else
+            print*, '\nError!'
+            read *
+            return
+        end if
     else
-        print '(F29.4, "  ^  ", F0.4, "\n")', x, y
+        print*, '\nError!'
+        read *
+        return
     end if
-    print*, x**y
-    z = x**y
-    print*, '\nEnterを押してください。'
-    read *
 end subroutine nizyou
 
 subroutine game_1()
@@ -381,9 +462,9 @@ subroutine game_1()
         end if
     end do
     contains
-    function add(n)
+    integer(int32) function add(n)
         implicit none
-        integer(int32) add, rad, n
+        integer(int32) rad, n
         integer(int32) seedsize, c
         real(real32) y, x
         integer, allocatable :: seed(:)
@@ -584,9 +665,9 @@ subroutine game_2()
         end if
     end do
     contains
-    function add(n)
+    integer(int32) function add(n)
         implicit none
-        integer(int32) add, rad, n
+        integer(int32) rad, n
         integer(int32) seedsize, c
         real(real32) y, x
         integer, allocatable :: seed(:)
@@ -835,14 +916,14 @@ subroutine game_3()
             end select
         else
             print '(A)', '\nそんなもんねぇよｗ'
-            read * !call sleep(1)
+            read *
             write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
         end if
     end do
     contains
-    function add(n)
+    integer(int32) function add(n)
         implicit none
-        integer(int32) add, rad, n
+        integer(int32) rad, n
         integer(int32) seedsize, c
         real(real32) y, x
         integer, allocatable :: seed(:)
@@ -884,9 +965,9 @@ subroutine game()
     close(2)
 120 write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     contains
-    function add()
+    integer(int32) function add()
         implicit none
-        integer(int32) add, rad, c
+        integer(int32) rad, c
         integer(int32) seedsize
         real(int32) y, x
         integer, allocatable :: seed(:)
@@ -908,6 +989,7 @@ subroutine game()
 end subroutine game
 
 subroutine nizihoutei()
+    use m_usc
     use, intrinsic :: iso_fortran_env
     use, intrinsic :: ieee_arithmetic
     implicit none
@@ -916,22 +998,40 @@ subroutine nizihoutei()
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '一般: ax^2 + bx + c = 0\n'
     print '(A)', 'a値を入力してください。'
-    read (*, *) a
-    print '(A)', 'b値を入力してください。'
-    read (*, *) b
-    print '(A)', 'c値を入力してください。'
-    read (*, *) c
-    print '(A)', '\n答え'
-    k1 = (-b+sqrt((b*b)-4*a*c)) / (2*a)
-    k2 = (-b-sqrt((b*b)-4*a*c)) / (2*a)
-    open (11, file='nizihoutei.txt', status='replace')
-        write (11, *) k1
-        write (11, *) k2
-    close (11)
-    print *, k1
-    print *, k2
-    print '(A)', '\nEnterを押してください。'
-    read *
+    read (*, *, iostat=err) a
+    if (err .eq. 0) then
+        print '(A)', 'b値を入力してください。'
+        read (*, *, iostat=err) b
+        if (err .eq. 0) then
+            print '(A)', 'c値を入力してください。'
+            read (*, *, iostat=err) c
+            if (err .eq. 0) then
+                print '(A)', '\n答え'
+                k1 = (-b+sqrt((b*b)-4*a*c)) / (2*a)
+                k2 = (-b-sqrt((b*b)-4*a*c)) / (2*a)
+                open (11, file='nizihoutei.txt', status='replace')
+                    write (11, *) k1
+                    write (11, *) k2
+                close (11)
+                print *, k1
+                print *, k2
+                print '(A)', '\nEnterを押してください。'
+                read *
+            else
+                print*, '\nError!'
+                read *
+                return
+            end if
+        else
+            print*, '\nError!'
+            read *
+            return
+        end if
+    else
+        print*, '\nError!'
+        read *
+        return
+    end if
 end subroutine nizihoutei
 
 subroutine n_sin()
@@ -941,12 +1041,18 @@ subroutine n_sin()
     real(real128) n
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
-    read (*, *) n
-    print*, '\n答え'
-    print*, sin(n)
-    z = sin(n)
-    print '(A)', '\nEnterを押してください。'
-    read *
+    read (*, *, iostat=err) n
+    if (err .eq. 0) then
+        print*, '\n答え'
+        print*, sin(n)
+        z = sin(n)
+        print '(A)', '\nEnterを押してください。'
+        read *
+    else
+        print*, '\nError!'
+        read *
+        return
+    end if
 end subroutine n_sin
 
 subroutine n_cos()
@@ -956,12 +1062,18 @@ subroutine n_cos()
     real(real128) n
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
-    read (*, *) n
-    print '(A)', '\n答え'
-    print*, cos(n)
-    z = cos(n)
-    print*, '\nEnterを押してください。'
-    read *
+    read (*, *, iostat=err) n
+    if (err .eq. 0) then
+        print '(A)', '\n答え'
+        print*, cos(n)
+        z = cos(n)
+        print*, '\nEnterを押してください。'
+        read *
+    else
+        print*, '\nError!'
+        read *
+        return
+    end if
 end subroutine n_cos
 
 subroutine  n_tan()
@@ -971,12 +1083,18 @@ subroutine  n_tan()
     real(real128) n
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
-    read (*, *) n
-    print*, '\n答え'
-    print*, tan(n)
-    z = tan(n)
-    print*, '\nEnterを押してください。'
-    read *
+    read (*, *, iostat=err) n
+    if (err .eq. 0) then
+        print*, '\n答え'
+        print*, tan(n)
+        z = tan(n)
+        print*, '\nEnterを押してください。'
+        read *
+    else
+        print*, '\nError!'
+        read *
+        return
+    end if
 end subroutine n_tan
 
 subroutine n_asin()
@@ -986,12 +1104,18 @@ subroutine n_asin()
     real(real128) n
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
-    read (*, *) n
-    print*, '\n答え'
-    print*, asin(n)
-    z = asin(n)
-    print*, '\nEnterを押してください。'
-    read *
+    read (*, *, iostat=err) n
+    if (err .eq. 0) then
+        print*, '\n答え'
+        print*, asin(n)
+        z = asin(n)
+        print*, '\nEnterを押してください。'
+        read *
+    else
+        print*, '\nError!'
+        read *
+        return
+    end if
 end subroutine n_asin
 
 subroutine n_acos()
@@ -1001,12 +1125,18 @@ subroutine n_acos()
     real(real128) n
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
-    read (*, *) n
-    print*, '\n答え'
-    print*, acos(n)
-    z = acos(n)
-    print*, '\nEnterを押してください。'
-    read *
+    read (*, *, iostat=err) n
+    if (err .eq. 0) then
+        print*, '\n答え'
+        print*, acos(n)
+        z = acos(n)
+        print*, '\nEnterを押してください。'
+        read *
+    else
+        print*, '\nError!'
+        read *
+        return
+    end if
 end subroutine n_acos
 
 subroutine n_atan()
@@ -1016,12 +1146,18 @@ subroutine n_atan()
     real(real128) n
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
-    read (*, *) n
-    print*, '\n答え'
-    print*, atan(n)
-    z = atan(n)
-    print*, '\nEnterを押してください。'
-    read *
+    read (*, *, iostat=err) n
+    if (err .eq. 0) then
+        print*, '\n答え'
+        print*, atan(n)
+        z = atan(n)
+        print*, '\nEnterを押してください。'
+        read *
+    else
+        print*, '\nError!'
+        read *
+        return
+    end if
 end subroutine n_atan
 
 subroutine n_atan2()
@@ -1031,27 +1167,46 @@ subroutine n_atan2()
     real(real128) x, y
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', 'y値を入力してください。'
-    read (*, *) y
-    print '(A)', 'x値を入力してください。'
-    read (*, *) x
-    print*, '\n答え'
-    print*, atan2(y, x)
-    z = atan2(y, x)
-    print*, '\nEnterを押してください。'
-    read *
+    read (*, *, iostat=err) y
+    if (err .eq. 0) then
+        print '(A)', 'x値を入力してください。'
+        read (*, *, iostat=err) x
+        if (err .eq. 0) then
+            print*, '\n答え'
+            print*, atan2(y, x)
+            z = atan2(y, x)
+            print*, '\nEnterを押してください。'
+            read *
+        else
+            print*, '\nError!'
+            read *
+            return
+        end if
+    else
+        print*, '\nError!'
+        read *
+        return
+    end if
 end subroutine n_atan2
 
 subroutine n_aimag()
     implicit none
     complex(kind=8) z
+    integer(kind=8) err
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-    print '(A)',  '入力例: (2.71, 0.99)\n'
+    print '(A)',  '入力例: (2.71, 0.99)\n※()も入力してください。\n'
     print '(A)', '値を入力してください。'
-    read (*, *) z
-    print*, '\n答え'
-    print*, aimag(z)
-    print*, '\nEnterを押してください。'
-    read *
+    read (*, *, iostat=err) z
+    if (err .eq. 0) then
+        print*, '\n答え'
+        print*, aimag(z)
+        print*, '\nEnterを押してください。'
+        read *
+    else
+        print*, '\nError!'
+        read *
+        return
+    end if
 end subroutine n_aimag
 
 subroutine n_log10()
@@ -1061,12 +1216,18 @@ subroutine n_log10()
     real(real128) n
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
-    read (*, *) n
-    print*, '\n答え'
-    print*, log10(n)
-    z = log10(n)
-    print*, '\nEnterを押してください。'
-    read *
+    read (*, *, iostat=err) n
+    if (err .eq. 0) then
+        print*, '\n答え'
+        print*, log10(n)
+        z = log10(n)
+        print*, '\nEnterを押してください。'
+        read *
+    else
+        print*, '\nError!'
+        read *
+        return
+    end if
 end subroutine n_log10
 
 subroutine n_log()
@@ -1076,12 +1237,18 @@ subroutine n_log()
     real(real128) n
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
-    read (*, *) n
-    print*, '\n答え'
-    print*, log(n)
-    z = log(n)
-    print*, '\nEnterを押してください。'
-    read *
+    read (*, *, iostat=err) n
+    if (err .eq. 0) then
+        print*, '\n答え'
+        print*, log(n)
+        z = log(n)
+        print*, '\nEnterを押してください。'
+        read *
+    else
+        print*, '\nError!'
+        read *
+        return
+    end if
 end subroutine n_log
 
 subroutine mozuro
@@ -1091,40 +1258,61 @@ subroutine mozuro
     real(real128) a, n
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値aを入力してください。'
-    read (*, *) a
-    print '(A)', '値nを入力してください。'
-    read (*, *) n
-    print*, '\n答え'
-    print*, mod(a, n)
-    z = mod(a, n)
-    print*, '\nEnterを押してください。'
-    read *
+    read (*, *, iostat=err) a
+    if (err .eq. 0) then
+        print '(A)', '値nを入力してください。'
+        read (*, *, iostat=err) n
+        if (err .eq. 0) then
+            print*, '\n答え'
+            print*, mod(a, n)
+            z = mod(a, n)
+            print*, '\nEnterを押してください。'
+            read *
+        else
+            print*, '\nError!'
+            read *
+            return
+        end if
+    else
+        print*, '\nError!'
+        read *
+        return
+    end if
 end subroutine mozuro
 
 subroutine randsu()
     use m_usc
     use, intrinsic :: iso_fortran_env
     implicit none
-    integer(int64) x, n
+    integer(int64) n
+    real(real128) x
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', 'xを入力してください。(1～x)'
-    read (*, *) x
-    if (x .le. 0) then
-        print '(A)', '\n1以上にしてください。\n'
-        goto 11
+    read (*, *, iostat=err) x
+    if (err .eq. 0) then
+        if (x .le. 0) then
+            print '(A)', '\n1以上にしてください。\n'
+            print*, '\nEnterを押してください。'
+            read *
+            return
+        end if
+        n = randon(x)
+        print*, '\n出力'
+        print*, n
+        z = n
+        print*, '\nEnterを押してください。'
+        read *
+    else
+        print*, '\nError!'
+        read *
+        return
     end if
-    n = randon(x)
-    print*, '\n出力'
-    print*, n
-    z = n
-11  print*, '\nEnterを押してください。'
-    read *
     contains
-    function randon(n)
+    integer(int64) function randon(n)
         implicit none
-        integer(int64) randon, rad, n
+        integer(int64) rad
         integer(int32) seedsize, c
-        real(real128) y, x
+        real(real128) y, x, n
         integer, allocatable :: seed(:)
         call random_seed(size=seedsize)
         allocate(seed(seedsize))
@@ -1265,22 +1453,38 @@ subroutine y_zyoukon()
     call ieee_set_rounding_mode(ieee_nearest)
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', 'n乗根のnの値を入力してください。()'
-    read (*, *) y
-    if (y .eq. 1) then
-        print '(A)', '\n1は平方根や立方根にならねぇよ！'
-        goto 19
-    else if (y .eq. 2) then
-        print '(A)', '\n2だと平方根になるのでpage_00に移動して&
-        &5を押して下さい。'
-        goto 19
+    read (*, *, iostat=err) y
+    if (err .eq. 0) then
+        if (y .eq. 1) then
+            print '(A)', '\n1は平方根や立方根にならねぇよ！'
+            print*, '\nEnterを押してください。'
+            read *
+            return
+        else if (y .eq. 2) then
+            print '(A)', '\n2だと平方根になるのでpage_00に移動して&
+            &5を押して下さい。'
+            print*, '\nEnterを押してください。'
+            read *
+            return
+        end if
+        print '(A)', 'n乗根するx値を入力してください。'
+        read (*, *, iostat=err) x
+        if (err .eq. 0) then
+            print*, '答え'
+            print*, x**(1/y)
+            z = x**(1/y)
+            print*, '\nEnterを押してください。'
+            read *
+        else
+            print*, '\nError!'
+            read *
+            return
+        end if
+    else
+        print*, '\nError!'
+        read *
+        return
     end if
-    print '(A)', 'n乗根するx値を入力してください。'
-    read (*, *) x
-    print*, '答え'
-    print*, x**(1/y)
-    z = x**(1/y)
-19  print*, '\nEnterを押してください。'
-    read *
 end subroutine y_zyoukon
 
 subroutine zettaiti()
@@ -1290,12 +1494,18 @@ subroutine zettaiti()
     real(real128) x
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)',  '値を入力してください。'
-    read (*, *) x
-    print*, '\n答え'
-    print*, abs(x)
-    z = abs(x)
-    print*, '\nEnterを押してください。'
-    read *
+    read (*, *, iostat=err) x
+    if (err .eq. 0) then
+        print*, '\n答え'
+        print*, abs(x)
+        z = abs(x)
+        print*, '\nEnterを押してください。'
+        read *
+    else
+        print*, '\nError!'
+        read *
+        return
+    end if
 end subroutine zettaiti
 
 subroutine sisu()
@@ -1305,12 +1515,18 @@ subroutine sisu()
     real(real128) x
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)',  '値を入力してください。'
-    read (*, *) x
-    print*, '\n答え'
-    print*, exp(x)
-    z = exp(x)
-    print*, '\nEnterを押してください。'
-    read *
+    read (*, *, iostat=err) x
+    if (err .eq. 0) then
+        print*, '\n答え'
+        print*, exp(x)
+        z = exp(x)
+        print*, '\nEnterを押してください。'
+        read *
+    else
+        print*, '\nError!'
+        read *
+        return
+    end if
 end subroutine sisu
 
 subroutine soukyokusin()
@@ -1320,12 +1536,18 @@ subroutine soukyokusin()
     real(real128) x
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)',  '値を入力してください。'
-    read (*, *) x
-    print*, '\n答え'
-    print*, sinh(x)
-    z = sinh(x)
-    print*, '\nEnterを押してください。'
-    read *
+    read (*, *, iostat=err) x
+    if (err .eq. 0) then
+        print*, '\n答え'
+        print*, sinh(x)
+        z = sinh(x)
+        print*, '\nEnterを押してください。'
+        read *
+    else
+        print*, '\nError!'
+        read *
+        return
+    end if
 end subroutine soukyokusin
 
 subroutine soukyokucos()
@@ -1335,12 +1557,18 @@ subroutine soukyokucos()
     real(real128) x
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)',  '値を入力してください。'
-    read (*, *) x
-    print*, '\n答え'
-    print*, cosh(x)
-    z = cosh(x)
-    print*, '\nEnterを押してください。'
-    read *
+    read (*, *, iostat=err) x
+    if (err .eq. 0) then
+        print*, '\n答え'
+        print*, cosh(x)
+        z = cosh(x)
+        print*, '\nEnterを押してください。'
+        read *
+    else
+        print*, '\nError!'
+        read *
+        return
+    end if
 end subroutine soukyokucos
 
 subroutine soukyokutan()
@@ -1350,12 +1578,18 @@ subroutine soukyokutan()
     real(real128) x
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)',  '値を入力してください。'
-    read (*, *) x
-    print*, '\n答え'
-    print*, tanh(x)
-    z = tanh(x)
-    print*, '\nEnterを押してください。'
-    read *
+    read (*, *, iostat=err) x
+    if (err .eq. 0) then
+        print*, '\n答え'
+        print*, tanh(x)
+        z = tanh(x)
+        print*, '\nEnterを押してください。'
+        read *
+    else
+        print*, '\nError!'
+        read *
+        return
+    end if
 end subroutine soukyokutan
 
 subroutine gamma_f()
@@ -1365,12 +1599,18 @@ subroutine gamma_f()
     real(real128) x
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)',  '値を入力してください。'
-    read (*, *) x
-    print*, '\n答え'
-    print*, gamma(x)
-    z = gamma(x)
-    print*, '\nEnterを押してください。'
-    read *
+    read (*, *, iostat=err) x
+    if (err .eq. 0) then
+        print*, '\n答え'
+        print*, gamma(x)
+        z = gamma(x)
+        print*, '\nEnterを押してください。'
+        read *
+    else
+        print*, '\nError!'
+        read *
+        return
+    end if
 end subroutine gamma_f
 
 subroutine joke()
@@ -1499,7 +1739,7 @@ subroutine TX()
     use, intrinsic :: iso_fortran_env
     implicit none
     real(real128), parameter :: pi = 3.141592653589793238462643383279502884
-    real(real128) g, V, angle, theta, T, L, H, d
+    real(real128) g, V, angle, theta, T, L, H, d, V2
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '初期速度 [m/s]'
     read (*, *) V
@@ -1510,10 +1750,11 @@ subroutine TX()
 
     theta = pi / 180. * angle !1.745329251994329576923690768488613E-0002
     d = sin(theta)
+    V2 = V * V
 
     T = 2. * V * d / g
-    L = (V * V) * sin(2. * theta) / g
-    H = ((v * d) * (v * d)) / 19.6133!(2. * g)
+    L = V2 * sin(2. * theta) / g
+    H = (V2 * (d * d)) / 19.6133!(2. * g), (V * d) * (V * d)
 
     print*, '\n滞空時間'
     print '("\t", F0.36, " [sec]")', T
