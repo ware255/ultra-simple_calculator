@@ -696,6 +696,7 @@ subroutine game_3()
     integer(int64) :: mp = 0, y, level
     open(1, file='.level', status='old')
         read (1, *) level
+        flush(1)
     close(1)
     select case(level)
     case (0)
@@ -763,6 +764,7 @@ subroutine game_3()
             open(2, file='.level', status='old')
                 level = level + 1
                 write(2, *) level
+                flush(2)
             close(2)
             print '(A)', '\nレベル1上がった。'
 110         read *
@@ -962,6 +964,7 @@ subroutine game()
     goto 120
 110 open(2, file='.level', status='new')
         write(2, *) 0
+        flush(2)
     close(2)
 120 write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     contains
@@ -1011,7 +1014,9 @@ subroutine nizihoutei()
                 k2 = (-b-sqrt((b*b)-4*a*c)) / (2*a)
                 open (11, file='nizihoutei.txt', status='replace')
                     write (11, *) k1
+                    flush(11)
                     write (11, *) k2
+                    flush(11)
                 close (11)
                 print *, k1
                 print *, k2
@@ -1617,30 +1622,30 @@ subroutine joke()
     use, intrinsic :: iso_fortran_env
     implicit none
     integer(int64) x
-24  x = randon()
+    x = randon()
     select case(x)
-    case (0)
+    case (0, 9)
         print*, '\n  women = time * money\n'
         print '(A)', 'Women are the product of time and money.'
         read *
-    case (1)
+    case (1, 5)
         print*, '\n  time = money\n'
         print '(A)', 'Time is money.'
         read *
-    case (2)
+    case (2, 6)
         print*, '\n  women = money^2\n'
         print '(A)', 'So women are money squared.'
         read *
-    case (3)
+    case (3, 7)
         print*, '\n  money = √evil\n'
         print '(A)', 'Money is the root of all evil.'
         read *
-    case (4)
+    case (4, 8)
         print*, '\n  women = (√evil)^2 = evil\n'
         print '(A)', 'So women are evil.'
         read *
     case default
-        goto 24
+        ERROR STOP 'Error: There''s an anomaly in variable x'
     end select
     contains
     integer(int32) function randon()
@@ -1670,58 +1675,62 @@ subroutine undouhouteisiki()
     !$ use omp_lib
     use, intrinsic :: iso_fortran_env
     implicit none
-    integer(int64) i
+    integer(int64) i, err
     real(real128), parameter :: pi = 3.141592653589793238462643383279502884
     real(real128) g, V, angle, theta, x, z, u, w
     real(real128) dxdt, dzdt, dudt, dwdt
     !$ double precision st, en
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '初期速度 [m/s]'
-    read (*, *) V
-    print '(A)', '仰角 [deg]'
-    read (*, *) angle
-    print '(A)', '\n計算中'
-
-    g = 9.80665
-
-    theta = pi / 180 * angle
-
-    x = 0.
-    z = 0.
-    u = V * cos(theta)
-    w = V * sin(theta)
-
-    open(11, file='output.txt', status='replace')
-
-    write(11, '("\t", F0.36, "\t", F0.36)') x, z
-    !$ st = omp_get_wtime()
-    !$omp parallel num_threads(64)
-    !$omp do
-    do i = 1, 600000 ! 一分間
-        !$omp critical
-        dxdt = u
-        dzdt = w
-        dudt = 0.
-        dwdt = -g
-
-        x = x + 0.0001 * dxdt
-        z = z + 0.0001 * dzdt
-        u = u + 0.0001 * dudt
-        w = w + 0.0001 * dwdt
-
-        write(11, '("\t", F0.36, "\t", F0.36)') x, z
-        !$omp end critical
-    end do
-    !$omp end do
-    !$omp end parallel
-    !$ en = omp_get_wtime()
-
-    close(11)
-
-    !$ print *, "Elapsed time :", en-st
-
-    print*, '\nEnterを押してください。'
-    read *
+    read (*, *, iostat=err) V
+    if (err .eq. 0) then
+        print '(A)', '仰角 [deg]'
+        read (*, *, iostat=err) angle
+        if (err .eq. 0) then
+            print '(A)', '\n計算中'
+            g = 9.80665
+            theta = pi / 180 * angle
+            x = 0.
+            z = 0.
+            u = V * cos(theta)
+            w = V * sin(theta)
+            open(11, file='output.txt', status='replace')
+            write(11, '("\t", F0.36, "\t", F0.36)') x, z
+            flush(11)
+            !$ st = omp_get_wtime()
+            !$omp parallel num_threads(64)
+            !$omp do
+            do i = 1, 600000 ! 一分間
+                !$omp critical
+                dxdt = u
+                dzdt = w
+                dudt = 0.
+                dwdt = -g
+                x = x + 0.0001 * dxdt
+                z = z + 0.0001 * dzdt
+                u = u + 0.0001 * dudt
+                w = w + 0.0001 * dwdt
+                write(11, '("\t", F0.36, "\t", F0.36)') x, z
+                flush(11)
+                !$omp end critical
+            end do
+            !$omp end do
+            !$omp end parallel
+            !$ en = omp_get_wtime()
+            close(11)
+            !$ print *, "Elapsed time :", en-st
+            print*, '\nEnterを押してください。'
+            read *
+        else
+            print*, '\nError!'
+            read *
+            return
+        end if
+    else
+        print*, '\nError!'
+        read *
+        return
+    end if
 end subroutine undouhouteisiki
 
 subroutine undouplot()
@@ -1736,44 +1745,61 @@ subroutine undouplot()
 end subroutine undouplot
 
 subroutine TX()
+    use m_usc
     use, intrinsic :: iso_fortran_env
     implicit none
     real(real128), parameter :: pi = 3.141592653589793238462643383279502884
-    real(real128) g, V, angle, theta, T, L, H, d, V2
+    real(real128) g, V, angle, theta, T, L, H, d, V2, H_T
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '初期速度 [m/s]'
-    read (*, *) V
-    print '(A)', '仰角 [deg]'
-    read (*, *) angle
+    read (*, *, iostat=err) V
+    if (err .eq. 0) then
+        print '(A)', '仰角(0≦θ≦90) [deg]'
+        read (*, *, iostat=err) angle
+        if (err .eq. 0) then
+            if (0 > angle .and. angle > 90) then
+                print*, '変域にしたがってね。'
+                read *
+                return
+            end if
+            g = 9.80665
+            theta = pi / 180 * angle
+            d = sin(theta)
+            V2 = V * V
 
-    g = 9.80665
+            T = (2 * V * d) / g
+            L = (V2 * sin(2 * theta)) / g
+            H = (V2 * (d * d)) / 19.6133
+            H_T = (V * d) / g
 
-    theta = pi / 180. * angle !1.745329251994329576923690768488613E-0002
-    d = sin(theta)
-    V2 = V * V
-
-    T = 2. * V * d / g
-    L = V2 * sin(2. * theta) / g
-    H = (V2 * (d * d)) / 19.6133!(2. * g), (V * d) * (V * d)
-
-    print*, '\n滞空時間'
-    print '("\t", F0.36, " [sec]")', T
-    print*, '\n飛距離'
-    print '("\t", F0.36, " [m]")', L
-    print*, '\n最高高度'
-    print '("\t", F0.36, " [m]")', H
-    print*, '\nEnterを押してください。'
-    read *
+            print*, '\n滞空時間'
+            print '("\t", F0.36, " [sec]")', T
+            print*, '\n飛距離'
+            print '("\t", F0.36, " [m]")', L
+            print*, '\n最高高度時の時間'
+            print '("\t", F0.36, " [sec]")', H_T
+            print*, '\n最高高度'
+            print '("\t", F0.36, " [m]")', H
+            print*, '\nEnterを押してください。'
+            read *
+        else
+            print*, '\nError!'
+            read *
+            return
+        end if
+    else
+        print*, '\nError!'
+        read *
+        return
+    end if
 end subroutine TX
 
 subroutine ensyu()
     !$ use omp_lib
-    use, intrinsic :: iso_fortran_env
     implicit none
-    integer, parameter :: LargeInt_K = selected_int_kind(18)
-    integer(kind=LargeInt_K), parameter :: vmax = 428800, bmax = 25728
-    integer(kind=LargeInt_K) vect(vmax), buffer(bmax)
-    integer(kind=LargeInt_K) n, L, more, num, carry, k, d
+    integer(kind=8), parameter :: vmax = 428800, bmax = 25728
+    integer(kind=8) vect(vmax), buffer(bmax)
+    integer(kind=8) n, L, more, num, carry, k, d
     !$ double precision st, en
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', 'ちょっと待っててね\n終わったあとは、メモ帳を&
@@ -1796,6 +1822,7 @@ subroutine ensyu()
     !$ en = omp_get_wtime()
     open(11, file="pi.txt", status="replace")
         write(11, "(1x, I1, '.'/(1x, 32I5.5))") buffer
+        flush(11)
     close(11)
     write(*, "(1x, I1, '.'/(1x, 12I5.5))") buffer
     !$ print *, "Elapsed time :", en-st
@@ -1815,20 +1842,26 @@ subroutine heikin()
     call ieee_set_rounding_mode(ieee_nearest)
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '観測値を入力してください。'
-    read (*, *) max
-    print*, ''
-    allocate(x(max))
-    do i = 1, max
-        print '(I0, "つ目の値を入力してください。")', i
-        read (*, *) x(i)
-        y = y + x(i)
-    end do
-    print*, '\n答え'
-    print*, y / max
-    z = y / max
-    print*, '\nEnterを押してください。'
-    read *
-    deallocate(x)
+    read (*, *, iostat=err) max
+    if (err .eq. 0) then
+        print*, ''
+        allocate(x(max))
+        do i = 1, max
+            print '(I0, "つ目の値を入力してください。")', i
+            read (*, *) x(i)
+            y = y + x(i)
+        end do
+        print*, '\n答え'
+        print*, y / max
+        z = y / max
+        print*, '\nEnterを押してください。'
+        read *
+        deallocate(x)
+    else
+        print*, '\nError!'
+        read *
+        return
+    end if
 end subroutine heikin
 
 subroutine kaizyou()
@@ -1839,22 +1872,28 @@ subroutine kaizyou()
     real(real128) ans
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
-    read (*, *) n
-    ans = 1
-    !$omp parallel num_threads(8)
-    !$omp do
-    do k = 1, n
-        !$omp critical
-        ans = ans * k
-        !$omp end critical
-    end do
-    !$omp end do
-    !$omp end parallel
-    print*, '\n答え'
-    print '("  ", i0, "! = ", F0.4)', n, ans
-    z = ans
-    print*, '\nEnterを押してください。'
-    read *
+    read (*, *, iostat=err) n
+    if (err .eq. 0) then
+        ans = 1
+        !$omp parallel num_threads(8)
+        !$omp do
+        do k = 1, n
+            !$omp critical
+            ans = ans * k
+            !$omp end critical
+        end do
+        !$omp end do
+        !$omp end parallel
+        print*, '\n答え'
+        print '("  ", i0, "! = ", F0.4)', n, ans
+        z = ans
+        print*, '\nEnterを押してください。'
+        read *
+    else
+        print*, '\nError!'
+        read *
+        return
+    end if
 end subroutine kaizyou
 
 subroutine zetaf()
@@ -1886,6 +1925,7 @@ subroutine zetaf()
 end subroutine zetaf
 
 subroutine collatz()
+    use m_usc
     use, intrinsic :: iso_fortran_env
     implicit none
     integer, parameter :: LargeInt_K = selected_int_kind (18)
@@ -1894,24 +1934,30 @@ subroutine collatz()
     integer(kind=LargeInt_K) i
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
-    read (*, *) n
-    i = 0
-    print*, ''
-    do
-        h = mod(n, q)
-        if (n .eq. 1) then
-            exit
-        else if (h .eq. 0) then
-            n = n * 0.5
-        else if (h .eq. 1) then
-            n = n * 3 + 1
-        end if
-        write (*, '(I0, ", ")', advance='no') int(n)
-        i = i + 1
-    end do
-    print '("\n\n", I0, " 回の操作で答えが ", I0)', i, int(n)
-    print*, '\nEnterを押してください。'
-    read *
+    read (*, *, iostat=err) n
+    if (err .eq. 0) then
+        i = 0
+        print*, ''
+        do
+            h = mod(n, q)
+            if (n .eq. 1) then
+                exit
+            else if (h .eq. 0) then
+                n = n * 0.5
+            else if (h .eq. 1) then
+                n = n * 3 + 1
+            end if
+            write (*, '(I0, ", ")', advance='no') int(n)
+            i = i + 1
+        end do
+        print '("\n\n", I0, " 回の操作で答えが ", I0)', i, int(n)
+        print*, '\nEnterを押してください。'
+        read *
+    else
+        print*, '\nError!'
+        read *
+        return
+    end if
 end subroutine collatz
 
 subroutine M_A()
@@ -1922,12 +1968,18 @@ subroutine M_A()
     real(real128) x
     print '(A)', '値を入力してください。'
     read (*, '(A)') str
-    read (str, *) x
-    print*, '\n答え'
-    print*, z + x
-    z = z + x
-    print*, '\nEnterを押してください。'
-    read *
+    read (str, *, iostat=err) x
+    if (err .eq. 0) then
+        print*, '\n答え'
+        print*, z + x
+        z = z + x
+        print*, '\nEnterを押してください。'
+        read *
+    else
+        print*, '\nError!'
+        read *
+        return
+    end if
 end subroutine M_A
 
 subroutine M_S()
@@ -1938,12 +1990,18 @@ subroutine M_S()
     real(real128) x
     print '(A)', '値を入力してください。'
     read (*, '(A)') str
-    read (str, *) x
-    print*, '\n答え'
-    print*, z - x
-    z = z - x
-    print*, '\nEnterを押してください。'
-    read *
+    read (str, *, iostat=err) x
+    if (err .eq. 0) then
+        print*, '\n答え'
+        print*, z - x
+        z = z - x
+        print*, '\nEnterを押してください。'
+        read *
+    else
+        print*, '\nError!'
+        read *
+        return
+    end if
 end subroutine M_S
 
 subroutine M_M()
@@ -1957,14 +2015,22 @@ subroutine M_M()
     if (str .eq. '') then
         print*, z * z
         z = z * z
-        goto 11
+        print*, '\nEnterを押してください。'
+        read *
+        return
     end if
-    read (str, *) x
-    print*, '\n答え'
-    print*, z * x
-    z = z * x
-11  print*, '\nEnterを押してください。'
-    read *
+    read (str, *, iostat=err) x
+    if (err .eq. 0) then
+        print*, '\n答え'
+        print*, z * x
+        z = z * x
+        print*, '\nEnterを押してください。'
+        read *
+    else
+        print*, '\nError!'
+        read *
+        return
+    end if
 end subroutine M_M
 
 subroutine M_D()
@@ -1975,81 +2041,111 @@ subroutine M_D()
     real(real128) x
     print '(A)', '値を入力してください。'
     read (*, '(A)') str
-    read (str, *) x
-    print*, '\n答え'
-    print*, z / x
-    z = z / x
-    print*, '\nEnterを押してください。'
-    read *
+    read (str, *, iostat=err) x
+    if (err .eq. 0) then
+        print*, '\n答え'
+        print*, z / x
+        z = z / x
+        print*, '\nEnterを押してください。'
+        read *
+    else
+        print*, '\nError!'
+        read *
+        return
+    end if
 end subroutine M_D
 
 subroutine soinsubunkai()
+    use m_usc
     implicit none
     integer, parameter :: LargeInt_K = selected_int_kind (18)
     integer(kind=LargeInt_K) n, i, m, k
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
-    read (*, *) n
-    print*, '\n答え'
-    write (*, '("\t", I0, A)', advance='no') n,' = 1'
-    k = n
-    i = 2
-    do while (i <= k)
-        m = mod(k, i)
-        if (m .eq. 0)then
-            write (*, '(A, I0)', advance='no') ' * ', i 
-            k = k / i
-            cycle
-        else if (k .eq. i) then
-            exit
-        else
-            i = i + 1
-            cycle
-        endif
-    end do
-    print*, '\n\nEnterを押してください。'
-    read *
+    read (*, *, iostat=err) n
+    if (err .eq. 0) then
+        print*, '\n答え'
+        write (*, '("\t", I0, A)', advance='no') n,' = 1'
+        k = n
+        i = 2
+        do while (i <= k)
+            m = mod(k, i)
+            if (m .eq. 0)then
+                write (*, '(A, I0)', advance='no') ' * ', i 
+                k = k / i
+                cycle
+            else if (k .eq. i) then
+                exit
+            else
+                i = i + 1
+                cycle
+            endif
+        end do
+        print*, '\n\nEnterを押してください。'
+        read *
+    else
+        print*, '\nError!'
+        read *
+        return
+    end if
 end subroutine soinsubunkai
 
 subroutine sosuhantei()
+    use m_usc
     implicit none
     integer, parameter :: LargeInt_K = selected_int_kind (18)
     integer(kind=LargeInt_K) p, i
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
-    read (*, *) p
-    select case(p)
-    case (0, 1)
-        print*, '\n答え'
-        print '("\t", I0, "は素数ではありません。")', p
-        goto 11
-    case (2, 3)
+    read (*, *, iostat=err) p
+    if (err .eq. 0) then
+        select case(p)
+        case (0, 1)
+            print*, '\n答え'
+            print '("\t", I0, "は素数ではありません。")', p
+            print*, '\nEnterを押してください。'
+            read *
+            return
+        case (2, 3)
+            print*, '\n答え'
+            print '("\t", I0, "は素数です。")', p
+            print*, '\nEnterを押してください。'
+            read *
+            return
+        end select
+        if (mod(p, 2) .eq. 0 .or. mod(p, 3) .eq. 0) then
+            print*, '\n答え'
+            print '("\t", I0, "は素数ではありません。")', p
+            print*, '\nEnterを押してください。'
+            read *
+            return
+        end if
+        i = 5
+        do while ((i * i) <= p)
+            if (mod(p, i) .eq. 0) then
+                print*, '\n答え'
+                print '("\t", I0, "は素数ではありません。")', p
+                print*, '\nEnterを押してください。'
+                read *
+                return
+            else if (mod(p, (i + 2)) .eq. 0) then
+                print*, '\n答え'
+                print '("\t", I0, "は素数ではありません。")', p
+                print*, '\nEnterを押してください。'
+                read *
+                return
+            end if
+            i = i + 6
+        end do
         print*, '\n答え'
         print '("\t", I0, "は素数です。")', p
-        goto 11
-    end select
-    if (mod(p, 2) .eq. 0 .or. mod(p, 3) .eq. 0) then
-        print*, '\n答え'
-        print '("\t", I0, "は素数ではありません。")', p
-        goto 11
+        print*, '\nEnterを押してください。'
+        read *
+    else
+        print*, '\nError!'
+        read *
+        return
     end if
-    i = 5
-    do while ((i * i) <= p)
-        if (mod(p, i) .eq. 0) then
-            print*, '\n答え'
-            print '("\t", I0, "は素数ではありません。")', p
-            goto 11
-        else if (mod(p, (i + 2)) .eq. 0) then
-            print*, '\n答え'
-            print '("\t", I0, "は素数ではありません。")', p
-            goto 11
-        end if
-        i = i + 6
-    end do
-    print*, '\n答え'
-    print '("\t", I0, "は素数です。")', p
-11  print*, '\nEnterを押してください。'
-    read *
 end subroutine sosuhantei
 
 subroutine slot()
@@ -2116,10 +2212,10 @@ subroutine slot()
         call random_seed(size = seedsize)
         allocate(seed(seedsize))
         do
-            call random_seed(get = seed)
-            call system_clock(count = c)
+            call random_seed(get=seed)
+            call system_clock(count=c)
             seed(1) = c
-            call random_seed(put = seed)
+            call random_seed(put=seed)
             call random_number(x)
             y = x*100
             rad = int(y)
@@ -2484,11 +2580,12 @@ program calculator
         else if (str .eq. 'level') then
             open(11, file='.level', status='old', err=110)
                 read (11, *) level
+                flush(11)
             close(11)
             print '("\n現在のレベル:\t", I0)', level
             print*, ''
             stop
-110         stop "\n※超戦略ゲームをプレイしてください。\n"
+110         error stop "\nError: 超戦略ゲームをプレイしてください。\n"
         else if (str .eq. 'time') then
             call fdate(string)
             print '("\n", A)', string
@@ -2496,7 +2593,7 @@ program calculator
         else
             print '(A)', '\nこの引数はありません。\n'
         end if
-    else                            !root権限
+    else
         print '(A)', '\n※いつでもどこでも電卓が使えるようにして\n&
         &　いるためroot権限は実装しておりません。\n'
     end if
