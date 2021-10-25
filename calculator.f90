@@ -1839,16 +1839,33 @@ subroutine heikin()
     integer(kind=LargeInt_K) i, max
     real(real128), allocatable :: x(:)
     real(real128) :: y = 0.
+    character char
     call ieee_set_rounding_mode(ieee_nearest)
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '観測値を入力してください。'
     read (*, *, iostat=err) max
     if (err .eq. 0) then
+        if (max > 1024) then
+            print*, '\nStop entering large values to save memory.'
+            read *
+            return
+        end if
         print*, ''
         allocate(x(max))
         do i = 1, max
-            print '(I0, "つ目の値を入力してください。")', i
-            read (*, *) x(i)
+            print '(I0, "つ目の値を入力してください。(止めるときはqを入力)")', i
+            read (*, '(A)') char
+            if (char .eq. 'q') then
+                deallocate(x)
+                return
+            end if
+            read (char, *, iostat=err) x(i)
+            if (err .ne. 0) then
+                deallocate(x)
+                print*, '\nError!'
+                read *
+                return
+            end if
             y = y + x(i)
         end do
         print*, '\n答え'
