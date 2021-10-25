@@ -1905,23 +1905,29 @@ subroutine zetaf()
     real(real128) zeta, s
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
-    read (*, *) s
-    print '(A)', 'ちょっと待っててね\n'
-    zeta = 0
-    !$omp parallel num_threads(64)
-    !$omp do
-    do i = 1, max
-        !$omp critical
-        zeta = zeta + (1 / (i**s))
-        !$omp end critical
-    end do
-    !$omp end do
-    !$omp end parallel
-    print*, '\n答え'
-    print*, zeta
-    z = zeta
-    print*, '\nEnterを押してください。'
-    read *
+    read (*, *, iostat=err) s
+    if (err .eq. 0) then
+        print '(A)', 'ちょっと待っててね\n'
+        zeta = 0
+        !$omp parallel num_threads(64)
+        !$omp do
+        do i = 1, max
+            !$omp critical
+            zeta = zeta + (1 / (i**s))
+            !$omp end critical
+        end do
+        !$omp end do
+        !$omp end parallel
+        print*, '\n答え'
+        print*, zeta
+        z = zeta
+        print*, '\nEnterを押してください。'
+        read *
+    else
+        print*, '\nError!'
+        read *
+        return
+    end if
 end subroutine zetaf
 
 subroutine collatz()
