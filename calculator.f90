@@ -2213,9 +2213,14 @@ subroutine kanzensu()
     integer(kind=LargeInt_K) x
     real(kind=16) p, n, i, j
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-    print '(A)', 'xを入力してください。(x>100)'
+    print '(A)', 'xを入力してください。(0 < x < 62)'
     read (*, *, iostat=err) x
     if (err .eq. 0) then
+        if (0 >= x .or. 62 <= x) then
+            print*, '変域にしたがってください。'
+            read *
+            return
+        end if
         i = 2; j = 0
         print*, ''
         do
