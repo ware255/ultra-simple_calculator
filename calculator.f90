@@ -2093,8 +2093,6 @@ subroutine sosuhantei()
             print*, '\nEnterを押してください。'
             read *
             return
-        case default
-            error stop 'Error: An abnormal situation has occurred in the variable p.'
         end select
         if (mod(p, 2) .eq. 0 .or. mod(p, 3) .eq. 0) then
             print*, '\n答え'
