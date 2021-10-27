@@ -16,28 +16,26 @@ subroutine tasizan()
     if (err .eq. 0) then
         print '(A)', '値を入力してください。'
         read (*, *, iostat=err) y
-        if (err .eq. 0) then
-            print*, '\n答え'
-            if (x <= 999 .and. y <= 999) then
-                print '(F9.4, "  +  ", F0.4, "\n")', x, y
-            else if (x <= 99999 .and. y <= 99999) then
-                print '(F19.4, "  +  ", F0.4, "\n")', x, y
-            else
-                print '(F29.4, "  +  ", F0.4, "\n")', x, y
-            end if
-            print*, x + y
-            z = x + y
-            print*, '\nEnterを押してください。'
-            read *
-        else
+        if (err .ne. 0) then
             print*, '\nError!'
             read *
             return
         end if
+        print*, '\n答え'
+        if (x <= 999 .and. y <= 999) then
+            print '(F9.4, "  +  ", F0.4, "\n")', x, y
+        else if (x <= 99999 .and. y <= 99999) then
+            print '(F19.4, "  +  ", F0.4, "\n")', x, y
+        else
+            print '(F29.4, "  +  ", F0.4, "\n")', x, y
+        end if
+        print*, x + y
+        z = x + y
+        print*, '\nEnterを押してください。'
+        read *
     else
         print*, '\nError!'
         read *
-        return
     end if
 end subroutine tasizan
 
@@ -52,28 +50,26 @@ subroutine hikizan()
     if (err .eq. 0) then
         print '(A)', '値を入力してください。'
         read (*, *, iostat=err) y
-        if (err .eq. 0) then
-            print*, '\n答え'
-            if (x <= 999 .and. y <= 999) then
-                print '(F9.4, "  -  ", F0.4, "\n")', x, y
-            else if (x <= 99999 .and. y <= 99999) then
-                print '(F19.4, "  -  ", F0.4, "\n")', x, y
-            else
-                print '(F29.4, "  -  ", F0.4, "\n")', x, y
-            end if
-            print*, x - y
-            z = x - y
-            print*, '\nEnterを押してください。'
-            read *
-        else
+        if (err .ne. 0) then
             print*, '\nError!'
             read *
             return
         end if
+        print*, '\n答え'
+        if (x <= 999 .and. y <= 999) then
+            print '(F9.4, "  -  ", F0.4, "\n")', x, y
+        else if (x <= 99999 .and. y <= 99999) then
+            print '(F19.4, "  -  ", F0.4, "\n")', x, y
+        else
+            print '(F29.4, "  -  ", F0.4, "\n")', x, y
+        end if
+        print*, x - y
+        z = x - y
+        print*, '\nEnterを押してください。'
+        read *
     else
         print*, '\nError!'
         read *
-        return
     end if
 end subroutine hikizan
 
@@ -107,28 +103,26 @@ subroutine kakezan()
             return
         end if
         read (str, *, iostat=err) y
-        if (err .eq. 0) then
-            print*, '\n答え'
-            if (x <= 999 .and. y <= 999) then
-                print '(F9.4, "  *  ", F0.4, "\n")', x, y
-            else if (x <= 99999 .and. y <= 99999) then
-                print '(F19.4, "  *  ", F0.4, "\n")', x, y
-            else
-                print '(F29.4, "  *  ", F0.4, "\n")', x, y
-            end if
-            print*, x * y
-            z = x * y
-            print*, '\nEnterを押してください。'
-            read *
-        else
+        if (err .ne. 0) then
             print*, '\nError!'
             read *
             return
         end if
+        print*, '\n答え'
+        if (x <= 999 .and. y <= 999) then
+            print '(F9.4, "  *  ", F0.4, "\n")', x, y
+        else if (x <= 99999 .and. y <= 99999) then
+            print '(F19.4, "  *  ", F0.4, "\n")', x, y
+        else
+            print '(F29.4, "  *  ", F0.4, "\n")', x, y
+        end if
+        print*, x * y
+        z = x * y
+        print*, '\nEnterを押してください。'
+        read *
     else
         print*, '\nError!'
         read *
-        return
     end if
 end subroutine kakezan
 
@@ -145,28 +139,26 @@ subroutine warizan()
     if (err .eq. 0) then
         print '(A)', '値を入力してください。'
         read (*, *, iostat=err) y
-        if (err .eq. 0) then
-            print*, '\n答え'
-            if (x <= 999 .and. y <= 999) then
-                print '(F9.4, "  /  ", F0.4, "\n")', x, y
-            else if (x <= 99999 .and. y <= 99999) then
-                print '(F19.4, "  /  ", F0.4, "\n")', x, y
-            else
-                print '(F29.4, "  /  ", F0.4, "\n")', x, y
-            end if
-            print*, x / y
-            z = x / y
-            print*, '\nEnterを押してください。'
-            read *
-        else
+        if (err .ne. 0) then
             print*, '\nError!'
             read *
             return
         end if
+        print*, '\n答え'
+        if (x <= 999 .and. y <= 999) then
+            print '(F9.4, "  /  ", F0.4, "\n")', x, y
+        else if (x <= 99999 .and. y <= 99999) then
+            print '(F19.4, "  /  ", F0.4, "\n")', x, y
+        else
+            print '(F29.4, "  /  ", F0.4, "\n")', x, y
+        end if
+        print*, x / y
+        z = x / y
+        print*, '\nEnterを押してください。'
+        read *
     else
         print*, '\nError!'
         read *
-        return
     end if
 end subroutine warizan
 
@@ -192,7 +184,6 @@ subroutine heihoukon()
     else
         print*, '\nError!'
         read *
-        return
     end if
 end subroutine heihoukon
 
@@ -216,7 +207,6 @@ subroutine ensyuritu()
     else
         print*, '\nError!'
         read *
-        return
     end if
 end subroutine ensyuritu
 
@@ -240,45 +230,40 @@ subroutine syutyou()
     else
         print*, '\nError!'
         read *
-        return
     end if
 end subroutine syutyou
 
 subroutine nizyou()
     use m_usc
     use, intrinsic :: iso_fortran_env
-    use, intrinsic :: ieee_arithmetic
     implicit none
     real(real128) x, y
-    call ieee_set_rounding_mode(ieee_nearest)
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', 'べき乗する値を入力してください。'
     read (*, *, iostat=err) x
     if (err .eq. 0) then
         print '(A)', 'n乗する値を入力してください。'
         read (*, *, iostat=err) y
-        if (err .eq. 0) then
-            print*, '\n答え'
-            if (x <= 999 .and. y <= 999) then
-                print '(F9.4, "  ^  ", F0.4, "\n")', x, y
-            else if (x <= 99999 .and. y <= 99999) then
-                print '(F19.4, "  ^  ", F0.4, "\n")', x, y
-            else
-                print '(F29.4, "  ^  ", F0.4, "\n")', x, y
-            end if
-            print*, x**y
-            z = x**y
-            print*, '\nEnterを押してください。'
-            read *
-        else
+        if (err .ne. 0) then
             print*, '\nError!'
             read *
             return
         end if
+        print*, '\n答え'
+        if (x <= 999 .and. y <= 999) then
+            print '(F9.4, "  ^  ", F0.4, "\n")', x, y
+        else if (x <= 99999 .and. y <= 99999) then
+            print '(F19.4, "  ^  ", F0.4, "\n")', x, y
+        else
+            print '(F29.4, "  ^  ", F0.4, "\n")', x, y
+        end if
+        print*, x**y
+        z = x**y
+        print*, '\nEnterを押してください。'
+        read *
     else
         print*, '\nError!'
         read *
-        return
     end if
 end subroutine nizyou
 
@@ -692,7 +677,8 @@ subroutine game_3()
     use, intrinsic :: iso_fortran_env
     implicit none
     character(len=10) d
-    integer(int64) hero_hp, hero_mp, enemy3_hp, enemy3_mp, n, x
+    integer, parameter :: LargeInt_K = selected_int_kind(18)
+    integer(kind=LargeInt_K) hero_hp, hero_mp, enemy3_hp, enemy3_mp, n, x
     integer(int64) :: mp = 0, y, level
     open(1, file='.level', status='old')
         read (1, *) level
@@ -741,8 +727,8 @@ subroutine game_3()
         hero_mp = 99;enemy3_mp = 20
     case (10)
         n = 0;x = 0
-        hero_hp = 99999999;enemy3_hp = 999999999
-        hero_mp = 99999999;enemy3_mp = 20
+        hero_hp = 99999999999999999_8;enemy3_hp = 999999999999999999_8
+        hero_mp = 99999999999999999_8;enemy3_mp = 20
     end select
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print*, '\n超戦略ゲーム  ~ shit video game ~\n\n\n\n\nEnterを押してください。'
@@ -777,10 +763,12 @@ subroutine game_3()
         print '(A)', '\nワイのステータス'
         print *, 'HP: ', hero_hp
         print *, 'MP: ', hero_mp
-        print '(A)', '1:攻撃, 2:魔法, 3:防御, 4:逃げる'
+        print '(A)', '1:攻撃, 2:魔法, 3:防御, 4:逃げる(q:止める)'
         write(*, '(A)', advance='no') ':'
         read (*, '(A)') d
-        if (d .eq. '1') then
+        if (d .eq. 'q') then
+            exit
+        else if (d .eq. '1') then
             n = add(5)
             select case(n)
             case (1)
@@ -1310,7 +1298,6 @@ subroutine randsu()
     else
         print*, '\nError!'
         read *
-        return
     end if
     contains
     integer(int64) function randon(n)
@@ -1416,8 +1403,8 @@ subroutine randsu()
                 seed(1) = c
                 call random_seed(put=seed)
                 call random_number(x)
-                y = x * 2147483647
-                rad = int(y)
+                y = x * 9223372036854775807_8
+                rad = int(y, kind=8)
                 if (rad .lt. n) exit
             end do
         end if
@@ -1429,12 +1416,10 @@ end subroutine randsu
 subroutine neipia() ! e = lim n->Infinity (1+1/n)**n | Σn=0 ∞ 1/n!
     use m_usc
     use, intrinsic :: iso_fortran_env
-    use, intrinsic :: ieee_arithmetic
     implicit none
     integer(int64), parameter :: n = 1024
     integer(int64) a
-    real(real128) :: b = 1.0_real128, e = 1.0_real128
-    call ieee_set_rounding_mode(ieee_nearest)
+    real(real128) :: b = 1.0_16, e = 1.0_16
     print '(A)', '\x1b[2J\x1b[3J\x1b[H'
     do a = 1, n
         b = b * a
@@ -1452,10 +1437,8 @@ end subroutine neipia
 subroutine y_zyoukon()
     use m_usc
     use, intrinsic :: iso_fortran_env
-    use, intrinsic :: ieee_arithmetic
     implicit none
     real(real128) x, y
-    call ieee_set_rounding_mode(ieee_nearest)
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', 'n乗根のnの値を入力してください。()'
     read (*, *, iostat=err) y
@@ -1474,21 +1457,19 @@ subroutine y_zyoukon()
         end if
         print '(A)', 'n乗根するx値を入力してください。'
         read (*, *, iostat=err) x
-        if (err .eq. 0) then
-            print*, '答え'
-            print*, x**(1/y)
-            z = x**(1/y)
-            print*, '\nEnterを押してください。'
-            read *
-        else
+        if (err .ne. 0) then
             print*, '\nError!'
             read *
             return
         end if
+        print*, '答え'
+        print*, x**(1 / y)
+        z = x**(1 / y)
+        print*, '\nEnterを押してください。'
+        read *
     else
         print*, '\nError!'
         read *
-        return
     end if
 end subroutine y_zyoukon
 
@@ -1509,7 +1490,6 @@ subroutine zettaiti()
     else
         print*, '\nError!'
         read *
-        return
     end if
 end subroutine zettaiti
 
@@ -1530,7 +1510,6 @@ subroutine sisu()
     else
         print*, '\nError!'
         read *
-        return
     end if
 end subroutine sisu
 
@@ -1551,7 +1530,6 @@ subroutine soukyokusin()
     else
         print*, '\nError!'
         read *
-        return
     end if
 end subroutine soukyokusin
 
@@ -1572,7 +1550,6 @@ subroutine soukyokucos()
     else
         print*, '\nError!'
         read *
-        return
     end if
 end subroutine soukyokucos
 
@@ -1593,7 +1570,6 @@ subroutine soukyokutan()
     else
         print*, '\nError!'
         read *
-        return
     end if
 end subroutine soukyokutan
 
@@ -1614,7 +1590,6 @@ subroutine gamma_f()
     else
         print*, '\nError!'
         read *
-        return
     end if
 end subroutine gamma_f
 
@@ -1645,7 +1620,7 @@ subroutine joke()
         print '(A)', 'So women are evil.'
         read *
     case default
-        ERROR STOP 'Error: There''s an anomaly in variable x'
+        error stop 'Error: There''s an anomaly in variable x'
     end select
     contains
     integer(int32) function randon()
@@ -1676,7 +1651,7 @@ subroutine undouhouteisiki()
     use, intrinsic :: iso_fortran_env
     implicit none
     integer(int64) i, err
-    real(real128), parameter :: pi = 3.141592653589793238462643383279502884
+    real(real128), parameter :: pi = 3.141592653589793238462643383279502884_16
     real(real128) g, V, angle, theta, x, z, u, w
     real(real128) dxdt, dzdt, dudt, dwdt
     !$ double precision st, en
@@ -1684,52 +1659,48 @@ subroutine undouhouteisiki()
     print '(A)', '初期速度 [m/s]'
     read (*, *, iostat=err) V
     if (err .eq. 0) then
-        print '(A)', '仰角 [deg]'
+        print '(A)', '仰角(0≦θ≦90) [deg]'
         read (*, *, iostat=err) angle
-        if (err .eq. 0) then
-            print '(A)', '\n計算中'
-            g = 9.80665
-            theta = pi / 180 * angle
-            x = 0.
-            z = 0.
-            u = V * cos(theta)
-            w = V * sin(theta)
-            open(11, file='output.txt', status='replace')
-            write(11, '("\t", F0.36, "\t", F0.36)') x, z
-            flush(11)
-            !$ st = omp_get_wtime()
-            !$omp parallel num_threads(64)
-            !$omp do
-            do i = 1, 600000 ! 一分間
-                !$omp critical
-                dxdt = u
-                dzdt = w
-                dudt = 0.
-                dwdt = -g
-                x = x + 0.0001 * dxdt
-                z = z + 0.0001 * dzdt
-                u = u + 0.0001 * dudt
-                w = w + 0.0001 * dwdt
-                write(11, '("\t", F0.36, "\t", F0.36)') x, z
-                flush(11)
-                !$omp end critical
-            end do
-            !$omp end do
-            !$omp end parallel
-            !$ en = omp_get_wtime()
-            close(11)
-            !$ print *, "Elapsed time :", en-st
-            print*, '\nEnterを押してください。'
-            read *
-        else
+        if (err .ne. 0) then
             print*, '\nError!'
             read *
             return
         end if
+        print '(A)', '\n計算中'
+        g = 9.806650_16
+        theta = pi / 180.0_16 * angle
+        x = 0.0_16
+        z = 0.0_16
+        u = V * cos(theta)
+        w = V * sin(theta)
+        open(11, file='output.txt', status='replace')
+        write(11, '("\t", F0.25, "\t", F0.25)') x, z
+        !$ st = omp_get_wtime()
+        !$omp parallel num_threads(64)
+        !$omp do
+        do i = 1, int(600000, kind=8) ! 一分間
+            !$omp critical
+            dxdt = u
+            dzdt = w
+            dudt = 0.0_16
+            dwdt = -g
+            x = x + 0.00010_16 * dxdt
+            z = z + 0.00010_16 * dzdt
+            u = u + 0.00010_16 * dudt
+            w = w + 0.00010_16 * dwdt
+            write(11, '("\t", F0.25, "\t", F0.25)') x, z
+            !$omp end critical
+        end do
+        !$omp end do
+        !$omp end parallel
+        !$ en = omp_get_wtime()
+        close(11)
+        !$ print *, "Elapsed time :", en-st
+        print*, '\nEnterを押してください。'
+        read *
     else
         print*, '\nError!'
         read *
-        return
     end if
 end subroutine undouhouteisiki
 
@@ -1748,7 +1719,7 @@ subroutine TX()
     use m_usc
     use, intrinsic :: iso_fortran_env
     implicit none
-    real(real128), parameter :: pi = 3.141592653589793238462643383279502884
+    real(real128), parameter :: pi = 3.141592653589793238462643383279502884_16
     real(real128) g, V, angle, theta, T, L, H, d, V2, H_T
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '初期速度 [m/s]'
@@ -1756,50 +1727,48 @@ subroutine TX()
     if (err .eq. 0) then
         print '(A)', '仰角(0≦θ≦90) [deg]'
         read (*, *, iostat=err) angle
-        if (err .eq. 0) then
-            if (0 > angle .and. angle > 90) then
-                print*, '変域にしたがってね。'
-                read *
-                return
-            end if
-            g = 9.80665
-            theta = pi / 180 * angle
-            d = sin(theta)
-            V2 = V * V
-
-            T = (2 * V * d) / g
-            L = (V2 * sin(2 * theta)) / g
-            H = (V2 * (d * d)) / 19.6133
-            H_T = (V * d) / g
-
-            print*, '\n滞空時間'
-            print '("\t", F0.36, " [sec]")', T
-            print*, '\n飛距離'
-            print '("\t", F0.36, " [m]")', L
-            print*, '\n最高高度時の時間'
-            print '("\t", F0.36, " [sec]")', H_T
-            print*, '\n最高高度'
-            print '("\t", F0.36, " [m]")', H
-            print*, '\nEnterを押してください。'
-            read *
-        else
+        if (err .ne. 0) then
             print*, '\nError!'
             read *
             return
+        else if (0 > angle .and. angle > 90) then
+            print*, '変域にしたがってね。'
+            read *
+            return
         end if
+        g = 9.806650_16
+        theta = pi / 180.0_16 * angle
+        d = sin(theta)
+        V2 = V * V
+
+        T = (2.0_16 * V * d) / g
+        L = (V2 * sin(2 * theta)) / g
+        H = (V2 * (d * d)) / 19.61330_16
+        H_T = (V * d) / g
+
+        print*, '\n滞空時間'
+        print '("\t", F0.36, " [sec]")', T
+        print*, '\n飛距離'
+        print '("\t", F0.36, " [m]")', L
+        print*, '\n最高高度時の時間'
+        print '("\t", F0.36, " [sec]")', H_T
+        print*, '\n最高高度'
+        print '("\t", F0.36, " [m]")', H
+        print*, '\nEnterを押してください。'
+        read *
     else
         print*, '\nError!'
         read *
-        return
     end if
 end subroutine TX
 
 subroutine ensyu()
     !$ use omp_lib
+    use, intrinsic :: iso_fortran_env
     implicit none
-    integer(kind=8), parameter :: vmax = 428800, bmax = 25728
-    integer(kind=8) vect(vmax), buffer(bmax)
-    integer(kind=8) n, L, more, num, carry, k, d
+    integer(int64), parameter :: vmax = 428800, bmax = 25728
+    integer(int64) vect(vmax), buffer(bmax)
+    integer(int64) n, L, more, num, carry, k, d
     !$ double precision st, en
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', 'ちょっと待っててね\n終わったあとは、メモ帳を&
@@ -1833,14 +1802,12 @@ end subroutine ensyu
 subroutine heikin()
     use m_usc
     use, intrinsic :: iso_fortran_env
-    use, intrinsic :: ieee_arithmetic
     implicit none
-    integer, parameter :: LargeInt_K = selected_int_kind (18)
+    integer, parameter :: LargeInt_K = selected_int_kind(18)
     integer(kind=LargeInt_K) i, max
     real(real128), allocatable :: x(:)
     real(real128) :: y = 0.
     character char
-    call ieee_set_rounding_mode(ieee_nearest)
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '観測値を入力してください。'
     read (*, *, iostat=err) max
@@ -1868,16 +1835,15 @@ subroutine heikin()
             end if
             y = y + x(i)
         end do
+        deallocate(x)
         print*, '\n答え'
         print*, y / max
         z = y / max
         print*, '\nEnterを押してください。'
         read *
-        deallocate(x)
     else
         print*, '\nError!'
         read *
-        return
     end if
 end subroutine heikin
 
@@ -1909,7 +1875,6 @@ subroutine kaizyou()
     else
         print*, '\nError!'
         read *
-        return
     end if
 end subroutine kaizyou
 
@@ -1943,7 +1908,6 @@ subroutine zetaf()
     else
         print*, '\nError!'
         read *
-        return
     end if
 end subroutine zetaf
 
@@ -1951,7 +1915,7 @@ subroutine collatz()
     use m_usc
     use, intrinsic :: iso_fortran_env
     implicit none
-    integer, parameter :: LargeInt_K = selected_int_kind (18)
+    integer, parameter :: LargeInt_K = selected_int_kind(18)
     real(real128), parameter :: q = 2
     real(real128) n, h
     integer(kind=LargeInt_K) i
@@ -1963,14 +1927,14 @@ subroutine collatz()
         print*, ''
         do
             h = mod(n, q)
-            if (n .eq. 1) then
-                exit
-            else if (h .eq. 0) then
-                n = n * 0.5
-            else if (h .eq. 1) then
+            if (n .eq. 1) exit
+            select case(int(h, kind=LargeInt_K))
+            case (1)
                 n = n * 3 + 1
-            end if
-            write (*, '(I0, ", ")', advance='no') int(n)
+            case (0)
+                n = n * 0.5
+            end select
+            write (*, '(I0, ", ")', advance='no') int(n, kind=LargeInt_K)
             i = i + 1
         end do
         print '("\n\n", I0, " 回の操作で答えが ", I0)', i, int(n)
@@ -1979,7 +1943,6 @@ subroutine collatz()
     else
         print*, '\nError!'
         read *
-        return
     end if
 end subroutine collatz
 
@@ -2001,7 +1964,6 @@ subroutine M_A()
     else
         print*, '\nError!'
         read *
-        return
     end if
 end subroutine M_A
 
@@ -2023,7 +1985,6 @@ subroutine M_S()
     else
         print*, '\nError!'
         read *
-        return
     end if
 end subroutine M_S
 
@@ -2052,7 +2013,6 @@ subroutine M_M()
     else
         print*, '\nError!'
         read *
-        return
     end if
 end subroutine M_M
 
@@ -2074,14 +2034,13 @@ subroutine M_D()
     else
         print*, '\nError!'
         read *
-        return
     end if
 end subroutine M_D
 
 subroutine soinsubunkai()
     use m_usc
     implicit none
-    integer, parameter :: LargeInt_K = selected_int_kind (18)
+    integer, parameter :: LargeInt_K = selected_int_kind(18)
     integer(kind=LargeInt_K) n, i, m, k
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
@@ -2109,14 +2068,13 @@ subroutine soinsubunkai()
     else
         print*, '\nError!'
         read *
-        return
     end if
 end subroutine soinsubunkai
 
 subroutine sosuhantei()
     use m_usc
     implicit none
-    integer, parameter :: LargeInt_K = selected_int_kind (18)
+    integer, parameter :: LargeInt_K = selected_int_kind(18)
     integer(kind=LargeInt_K) p, i
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
@@ -2135,6 +2093,8 @@ subroutine sosuhantei()
             print*, '\nEnterを押してください。'
             read *
             return
+        case default
+            error stop 'Error: An abnormal situation has occurred in the variable p.'
         end select
         if (mod(p, 2) .eq. 0 .or. mod(p, 3) .eq. 0) then
             print*, '\n答え'
@@ -2167,7 +2127,6 @@ subroutine sosuhantei()
     else
         print*, '\nError!'
         read *
-        return
     end if
 end subroutine sosuhantei
 
@@ -2249,6 +2208,55 @@ subroutine slot()
     end function
 end subroutine slot
 
+subroutine kanzensu()
+    use m_usc
+    implicit none
+    integer, parameter :: LargeInt_K = selected_int_kind(18)
+    integer(kind=LargeInt_K) x
+    real(kind=16) p, n, i, j
+    write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    print '(A)', 'xを入力してください。(x>100)'
+    read (*, *, iostat=err) x
+    if (err .eq. 0) then
+        i = 2; j = 0
+        print*, ''
+        do
+            if (j .eq. x) exit
+            n = (2.0_16 ** i) - 1.0_16
+            if (is_prime(int(n, kind=LargeInt_K))) then
+                p = (2.0_16 ** (i - 1.0_16)) * n
+                j = j + 1.0_16
+                write (*, '(F0.0, " ")', advance='no') p
+            end if
+            i = i + 1.0_16
+        end do
+        print*, '\n\nEnterを押してください。'
+        read *
+    else
+        print*, '\nError!'
+        read *
+    end if
+    contains
+    logical function is_prime(n)
+        implicit none
+        integer, parameter :: LargeInt_K = selected_int_kind(18)
+        integer(kind=LargeInt_K) n, i
+        select case(n)
+        case (0, 1)
+            is_prime = .false.
+        case (2)
+            is_prime = .true.
+        end select
+        if (mod(n, 2) .eq. 0) is_prime = .false.
+        i = 3
+        do while((i * i) <= n)
+            if (mod(n, i) .eq. 0) is_prime = .false.
+            i = i + 2
+        end do
+        is_prime = .true.
+    end function
+end subroutine kanzensu
+
 subroutine page_03()
     use, intrinsic :: iso_fortran_env
     implicit none
@@ -2257,6 +2265,7 @@ subroutine page_03()
         write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
         print '(A)', '\n-----------------------------------------'
         print*, '1 素数判定'
+        print*, '2 完全数'
         print*, '11 スロットゲーム\n'
         print*, '99 終了           02 Back'
         print '(A)', '-----------------------------------------'
@@ -2265,6 +2274,8 @@ subroutine page_03()
         select case(str)
         case ('1')
             call sosuhantei()
+        case ('2')
+            call kanzensu()
         case ('11')
             call slot()
         case ('00')
@@ -2568,31 +2579,31 @@ program calculator
     character(len=256) str
     character(len=24) string
     integer(int64) level, getuid, uid, i
-    real(real128) :: s = 0.0_real128
+    real(real128) :: s = 0.0_16
     !$ real(real64) :: time_begin_s,time_end_s
     uid = getuid()
     if (.not. uid .eq. 0) then !権限なし
         call getarg(1, str)
-        if (iargc() .eq. 0) then
-            call page_00()
-        else if (str .eq. 'help') then
+        if (iargc() .eq. 0) call page_00()
+        select case(str)
+        case ('help')
             call help()
-        else if (str .eq. 'page_00') then
+        case ('page_00')
             call page_00()
-        else if (str .eq. 'page_01') then
+        case ('page_01')
             call page_01()
-        else if (str .eq. 'page_02') then
+        case ('page_02')
             call page_02()
-        else if (str .eq. 'page_03') then
+        case ('page_03')
             call page_03()
-        else if (str .eq. 'benchmark') then
+        case ('benchmark')
             print '(A)', '\n計算中です。\n'
             !$ time_begin_s = omp_get_wtime()
             !$omp parallel num_threads(64)
             !$omp do
-            do i = 0, 10*15
+            do i = 0, 10*32767
                 !$omp critical
-                s = s + (((-1.)**i) / (2 * real(i) + 1))
+                s = s + ((-1.0_16)**i) / (2.0_16 * real(i, kind=16) + 1.0_16)
                 !$omp end critical
             end do
             !$omp end do
@@ -2600,7 +2611,7 @@ program calculator
             !$ time_end_s = omp_get_wtime()
             print*, 'Answer:', s * 4
             !$ print '(A, F13.5, A)', '\ntime:', time_end_s - time_begin_s, ' [sec]\n'
-        else if (str .eq. 'level') then
+        case ('level')
             open(11, file='.level', status='old', err=110)
                 read (11, *) level
                 flush(11)
@@ -2609,13 +2620,13 @@ program calculator
             print*, ''
             stop
 110         error stop "\nError: 超戦略ゲームをプレイしてください。\n"
-        else if (str .eq. 'time') then
+        case ('time')
             call fdate(string)
             print '("\n", A)', string
             print*, ''
-        else
+        case default
             print '(A)', '\nこの引数はありません。\n'
-        end if
+        end select
     else
         print '(A)', '\n※いつでもどこでも電卓が使えるようにして\n&
         &　いるためroot権限は実装しておりません。\n'
