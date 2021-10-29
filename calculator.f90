@@ -1184,7 +1184,7 @@ end subroutine n_atan2
 
 subroutine n_aimag()
     implicit none
-    complex(kind=8) z
+    complex(kind=16) z
     integer(kind=8) err
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)',  '入力例: (2.71, 0.99)\n※()も入力してください。\n'
@@ -1674,7 +1674,7 @@ subroutine undouhouteisiki()
         u = V * cos(theta)
         w = V * sin(theta)
         open(11, file='output.txt', status='replace')
-        write(11, '("\t", F0.25, "\t", F0.25)') x, z
+        write(11, '("\t", F0.23, "\t", F0.23)') x, z
         !$ st = omp_get_wtime()
         !$omp parallel num_threads(64)
         !$omp do
@@ -1688,7 +1688,7 @@ subroutine undouhouteisiki()
             z = z + 0.00010_16 * dzdt
             u = u + 0.00010_16 * dudt
             w = w + 0.00010_16 * dwdt
-            write(11, '("\t", F0.25, "\t", F0.25)') x, z
+            write(11, '("\t", F0.23, "\t", F0.23)') x, z
             !$omp end critical
         end do
         !$omp end do
@@ -1806,17 +1806,12 @@ subroutine heikin()
     integer, parameter :: LargeInt_K = selected_int_kind(18)
     integer(kind=LargeInt_K) i, max
     real(real128), allocatable :: x(:)
-    real(real128) :: y = 0.
+    real(real128) :: y = 0.0_16
     character char
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '観測値を入力してください。'
     read (*, *, iostat=err) max
     if (err .eq. 0) then
-        if (max > 1024) then
-            print*, '\nStop entering large values to save memory.'
-            read *
-            return
-        end if
         print*, ''
         allocate(x(max))
         do i = 1, max
@@ -1857,18 +1852,16 @@ subroutine kaizyou()
     print '(A)', '値を入力してください。'
     read (*, *, iostat=err) n
     if (err .eq. 0) then
-        ans = 1
+        ans = 1.0_16
         !$omp parallel num_threads(8)
         !$omp do
         do k = 1, n
-            !$omp critical
             ans = ans * k
-            !$omp end critical
         end do
         !$omp end do
         !$omp end parallel
         print*, '\n答え'
-        print '("  ", i0, "! = ", F0.4)', n, ans
+        print '("  ", i0, "! = ", F0.0)', n, ans
         z = ans
         print*, '\nEnterを押してください。'
         read *
@@ -1882,7 +1875,6 @@ subroutine zetaf()
     use m_usc
     use, intrinsic :: iso_fortran_env
     implicit none
-    integer(int64), parameter :: max = 2147483647
     integer(int64) i
     real(real128) zeta, s
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
@@ -1890,13 +1882,11 @@ subroutine zetaf()
     read (*, *, iostat=err) s
     if (err .eq. 0) then
         print '(A)', 'ちょっと待っててね\n'
-        zeta = 0
+        zeta = 0.0_16
         !$omp parallel num_threads(64)
         !$omp do
-        do i = 1, max
-            !$omp critical
-            zeta = zeta + (1 / (i**s))
-            !$omp end critical
+        do i = 1, 2147483647_8
+            zeta = zeta + (1.0_16 / (i**s))
         end do
         !$omp end do
         !$omp end parallel
@@ -1916,7 +1906,7 @@ subroutine collatz()
     use, intrinsic :: iso_fortran_env
     implicit none
     integer, parameter :: LargeInt_K = selected_int_kind(18)
-    real(real128), parameter :: q = 2
+    real(real128), parameter :: q = 2.0_16
     real(real128) n, h
     integer(kind=LargeInt_K) i
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
@@ -2221,7 +2211,7 @@ subroutine kanzensu()
             read *
             return
         end if
-        i = 2; j = 0
+        i = 2.0_16; j = 0.0_16
         print*, ''
         do
             if (j .eq. x) exit
@@ -2602,7 +2592,7 @@ program calculator
         case ('benchmark')
             print '(A)', '\n計算中です。\n'
             !$ time_begin_s = omp_get_wtime()
-            !$omp parallel num_threads(64)
+            !$omp parallel num_threads(4)
             !$omp do
             do i = 0, 10*32767
                 !$omp critical
