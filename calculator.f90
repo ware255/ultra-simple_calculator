@@ -1650,10 +1650,10 @@ subroutine undouhouteisiki()
     !$ use omp_lib
     use, intrinsic :: iso_fortran_env
     implicit none
-    integer(int64) i, err
-    real(real128), parameter :: pi = 3.141592653589793238462643383279502884_16
-    real(real128) g, V, angle, theta, x, z, u, w
-    real(real128) dxdt, dzdt, dudt, dwdt
+    integer(int64) i, j, err
+    real(real128), parameter :: pi = 3.1415926535897932384626433832795028840_16
+    real(real128) g, V, angle, theta, u, w, x, y
+    real(real128) dxdt, dydt, zero
     !$ double precision st, en
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '初期速度 [m/s]'
@@ -1665,34 +1665,33 @@ subroutine undouhouteisiki()
             print*, '\nError!'
             read *
             return
+        else if (0 > angle .and. angle > 90) then
+            print*, '変域にしたがってね。'
+            read *
+            return
         end if
         print '(A)', '\n計算中'
         g = 9.806650_16
         theta = pi / 180.0_16 * angle
-        x = 0.0_16
-        z = 0.0_16
+        zero = 0.0_16
+        x = zero
+        y = zero
         u = V * cos(theta)
         w = V * sin(theta)
         open(11, file='output.txt', status='replace')
-        write(11, '("\t", F0.23, "\t", F0.23)') x, z
+        write(11, '("\t", F0.23, "\t", F0.23)') x, y
         !$ st = omp_get_wtime()
-        !$omp parallel num_threads(64)
-        !$omp do
-        do i = 1, int(600000, kind=8) ! 一分間
-            !$omp critical
+        do i = 1, 600000_8 ! 一分間
             dxdt = u
-            dzdt = w
-            dudt = 0.0_16
-            dwdt = -g
-            x = x + 0.00010_16 * dxdt
-            z = z + 0.00010_16 * dzdt
-            u = u + 0.00010_16 * dudt
-            w = w + 0.00010_16 * dwdt
-            write(11, '("\t", F0.23, "\t", F0.23)') x, z
-            !$omp end critical
+            dydt = w
+            do j = 1, 1_8
+                x = x + 0.00010_16 * dxdt
+                y = y + 0.00010_16 * dydt
+                u = u + 0.00010_16 * zero
+                w = w + 0.00010_16 * (- g)
+                write(11, '("\t", F0.23, "\t", F0.23)') x, y
+            end do
         end do
-        !$omp end do
-        !$omp end parallel
         !$ en = omp_get_wtime()
         close(11)
         !$ print *, "Elapsed time :", en-st
@@ -1719,7 +1718,7 @@ subroutine TX()
     use m_usc
     use, intrinsic :: iso_fortran_env
     implicit none
-    real(real128), parameter :: pi = 3.141592653589793238462643383279502884_16
+    real(real128), parameter :: pi = 3.1415926535897932384626433832795028840_16
     real(real128) g, V, angle, theta, T, L, H, d, V2, H_T
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '初期速度 [m/s]'
@@ -1742,7 +1741,7 @@ subroutine TX()
         V2 = V * V
 
         T = (2.0_16 * V * d) / g
-        L = (V2 * sin(2 * theta)) / g
+        L = (V2 * sin(2.0_16 * theta)) / g
         H = (V2 * (d * d)) / 19.61330_16
         H_T = (V * d) / g
 
@@ -1853,13 +1852,9 @@ subroutine kaizyou()
     read (*, *, iostat=err) n
     if (err .eq. 0) then
         ans = 1.0_16
-        !$omp parallel num_threads(8)
-        !$omp do
         do k = 1, n
             ans = ans * k
         end do
-        !$omp end do
-        !$omp end parallel
         print*, '\n答え'
         print '("  ", i0, "! = ", F0.0)', n, ans
         z = ans
@@ -1883,13 +1878,9 @@ subroutine zetaf()
     if (err .eq. 0) then
         print '(A)', 'ちょっと待っててね\n'
         zeta = 0.0_16
-        !$omp parallel num_threads(64)
-        !$omp do
         do i = 1, 2147483647_8
             zeta = zeta + (1.0_16 / (i**s))
         end do
-        !$omp end do
-        !$omp end parallel
         print*, '\n答え'
         print*, zeta
         z = zeta
