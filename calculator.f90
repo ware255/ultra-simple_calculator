@@ -1870,16 +1870,20 @@ subroutine zetaf()
     use m_usc
     use, intrinsic :: iso_fortran_env
     implicit none
-    integer(int64) i
-    real(real128) zeta, s
+    real(real128), parameter :: e = 2.7182818284590452353602874713526624970_16
+    real(real128) zeta, s, k
+    integer(int64) i, j
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
     read (*, *, iostat=err) s
     if (err .eq. 0) then
-        print '(A)', 'ちょっと待っててね\n'
+        !print '(A)', 'ちょっと待っててね\n'
         zeta = 0.0_16
-        do i = 1, 2147483647_8
-            zeta = zeta + (1.0_16 / (i**s))
+        do i = 1, 4194302_8
+            k = log(real(i, 16))*s
+            do j = 1, 1
+                zeta = zeta + (1.0_16 / e**k)!i**s
+            end do
         end do
         print*, '\n答え'
         print*, zeta
