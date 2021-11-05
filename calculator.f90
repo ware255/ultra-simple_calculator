@@ -2022,10 +2022,11 @@ end subroutine M_D
 
 subroutine soinsubunkai()
     use m_usc, only: err
+    use, intrinsic :: iso_fortran_env, only: real128
     implicit none
     integer, parameter :: LargeInt_K = selected_int_kind(18)
     integer(LargeInt_K) n, i, m, k
-    real(16) n_
+    real(real128) n_
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
     read (*, *, iostat=err) n_
@@ -2257,7 +2258,7 @@ subroutine page_03()
         print '(A)', '\n-----------------------------------------'
         print*, '1 素数判定'
         print*, '2 完全数'
-        print*, '3 積分'
+        !print*, '3 積分'
         print*, '11 スロットゲーム\n'
         print*, '99 終了           02 Back'
         print '(A)', '-----------------------------------------'
@@ -2268,7 +2269,7 @@ subroutine page_03()
             call sosuhantei()
         case ('2')
             call kanzensu()
-        case ('3')
+        !case ('3')
             !call sekibun()
         case ('11')
             call slot()
