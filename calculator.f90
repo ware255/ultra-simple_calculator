@@ -1,8 +1,9 @@
 module m_usc
     use, intrinsic :: iso_fortran_env, only: real128, int64
     implicit none
-    real(real128) z
+    integer, parameter :: LargeInt_K = selected_int_kind(18)
     integer(int64) err
+    real(real128) z
 end module m_usc
 
 subroutine tasizan()
@@ -674,10 +675,10 @@ subroutine game_2()
 end subroutine game_2
 
 subroutine game_3()
+    use m_usc, only: LargeInt_K
     use, intrinsic :: iso_fortran_env
     implicit none
     character(len=10) d
-    integer, parameter :: LargeInt_K = selected_int_kind(18)
     integer(LargeInt_K) hero_hp, hero_mp, enemy3_hp, enemy3_mp, n, x
     integer(int64) :: mp = 0, y, level
     open(1, file='.level', status='old')
@@ -1803,7 +1804,6 @@ subroutine heikin()
     use m_usc
     use, intrinsic :: iso_fortran_env, only: real128
     implicit none
-    integer, parameter :: LargeInt_K = selected_int_kind(18)
     integer(LargeInt_K) i, max
     real(real128), allocatable :: x(:)
     real(real128) :: y = 0.0_16
@@ -1895,10 +1895,9 @@ subroutine zetaf()
 end subroutine zetaf
 
 subroutine collatz()
-    use m_usc, only: err
+    use m_usc, only: err, LargeInt_K
     use, intrinsic :: iso_fortran_env, only: real128
     implicit none
-    integer, parameter :: LargeInt_K = selected_int_kind(18)
     real(real128), parameter :: q = 2.0_16
     real(real128) n, h
     integer(LargeInt_K) i
@@ -2021,10 +2020,9 @@ subroutine M_D()
 end subroutine M_D
 
 subroutine soinsubunkai()
-    use m_usc, only: err
+    use m_usc, only: err, LargeInt_K
     use, intrinsic :: iso_fortran_env, only: real128
     implicit none
-    integer, parameter :: LargeInt_K = selected_int_kind(18)
     integer(LargeInt_K) n, i, m, k
     real(real128) n_
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
@@ -2058,11 +2056,11 @@ subroutine soinsubunkai()
 end subroutine soinsubunkai
 
 subroutine sosuhantei()
-    use m_usc, only: err
+    use m_usc, only: err, LargeInt_K
+    use, intrinsic :: iso_fortran_env, only: real128
     implicit none
-    integer, parameter :: LargeInt_K = selected_int_kind(18)
     integer(LargeInt_K) p, i
-    real(16) q
+    real(real128) q
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
     read (*, *, iostat=err) q
@@ -2195,11 +2193,11 @@ subroutine slot()
 end subroutine slot
 
 subroutine kanzensu()
-    use m_usc, only: err
+    use m_usc, only: err, LargeInt_K
+    use, intrinsic :: iso_fortran_env, only: real128
     implicit none
-    integer, parameter :: LargeInt_K = selected_int_kind(18)
     integer(LargeInt_K) x
-    real(16) p, n, i, j
+    real(real128) p, n, i, j
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', 'xを入力してください。(0 < x < 62)'
     read (*, *, iostat=err) x
@@ -2230,7 +2228,6 @@ subroutine kanzensu()
     contains
     pure logical function is_prime(n)
         implicit none
-        integer, parameter :: LargeInt_K = selected_int_kind(18)
         integer(LargeInt_K), intent(in) :: n
         integer(LargeInt_K) i
         select case(n)
