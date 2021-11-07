@@ -2575,6 +2575,8 @@ program calculator
     !$ real(real64) :: time_begin_s,time_end_s
     uid = getuid()
     if (.not. uid .eq. 0) then !権限なし
+        open(0, file='.save.dat', status='old', err=1)
+        close(0)
         call getarg(1, str)
         if (iargc() .eq. 0) call page_00()
         select case(str)
@@ -2619,6 +2621,12 @@ program calculator
         case default
             print '(A)', '\nこの引数はありません。\n'
         end select
+        stop
+1       print '(A)', '\nUltra-Simple_Calculatorをインストールしていただき\nありがとうございます。&
+        &あと、一応余計な一言ですが、\nテンキー使ったほうが楽ｗ\n'
+        open(10, file='.save.dat', status='new')
+        write(10, *) '1'
+        close(10)
     else
         print '(A)', '\n※いつでもどこでも電卓が使えるようにして\n&
         &　いるためroot権限は実装しておりません。\n'
