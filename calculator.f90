@@ -2627,6 +2627,8 @@ program calculator
         open(10, file='.save.dat', status='new')
         write(10, *) '1'
         close(10)
+        read *
+        call page_00()
     else
         print '(A)', '\n※いつでもどこでも電卓が使えるようにして\n&
         &　いるためroot権限は実装しておりません。\n'
