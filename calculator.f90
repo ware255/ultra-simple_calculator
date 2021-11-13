@@ -1794,11 +1794,16 @@ subroutine undouplot()
     implicit none
     open(11, file='data/output.txt', status='old', err=110)
     close(11)
-    call system('gnuplot')
+    open (10, file = 'output.plt', status = 'replace')
+    write (10, '(A)') 'plot "data/output.txt"'
+    write (10, '(A)') 'pause -1'
+    close (10)
+    call execute_command_line('wgnuplot "output.plt"')
     goto 120
 110 print*, '運動方程式を計算してください。'
 120 print*, '\nEnterを入力してください。'
     read *
+    call execute_command_line('rm -fr "output.plt"')
 end subroutine undouplot
 
 subroutine TX()
@@ -2317,15 +2322,6 @@ subroutine page_02()
             call undouhouteisiki()
         case ('4')
             write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-            print '(A)', '以下のコマンドを入力してください。\n'
-            print '(A)', '================================'
-            print '(A)', 'set style data dots    //グラフを線で表示'
-            print '(A)', 'set xrange [0:50]      //x軸を0~50'
-            print '(A)', 'set yrange [0:30]      //y軸を0~30'
-            print '(A)', 'plot "output.txt"      //グラフを表示'
-            print '(A)', '================================'
-            print '(A)', 'exit                   //終了コマンド'
-            print '(A)', '================================'
             call undouplot()
         case ('2')
             call TX()
