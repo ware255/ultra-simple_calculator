@@ -13,14 +13,14 @@ module m_usc
         read (*, '(A)') str
         read (str, *, iostat=err) x
         if (err .eq. 0) then
-            print*, '\n答え'
+            print*, new_line(' '), '答え'
             print*, z + x
             write(*, '("\n   " ,Z0)') int(z + x, LargeInt_K)
             z = z + x
-            print*, '\nEnterを押してください。'
+            print*, new_line(' '), 'Enterを押してください。'
             read *
         else
-            print*, '\nError!'
+            print*, new_line(' '), 'Error!'
             read *
         end if
     end subroutine M_A
@@ -31,14 +31,14 @@ module m_usc
         read (*, '(A)') str
         read (str, *, iostat=err) x
         if (err .eq. 0) then
-            print*, '\n答え'
+            print*, new_line(' '), '答え'
             print*, z - x
             write(*, '("\n   " ,Z0)') int(z - x, LargeInt_K)
             z = z - x
-            print*, '\nEnterを押してください。'
+            print*, new_line(' '), 'Enterを押してください。'
             read *
         else
-            print*, '\nError!'
+            print*, new_line(' '), 'Error!'
             read *
         end if
     end subroutine M_S
@@ -51,20 +51,20 @@ module m_usc
             print*, z * z
             write(*, '("\n   " ,Z0)') int(z * z, LargeInt_K)
             z = z * z
-            print*, '\nEnterを押してください。'
+            print*, new_line(' '), 'Enterを押してください。'
             read *
             return
         end if
         read (str, *, iostat=err) x
         if (err .eq. 0) then
-            print*, '\n答え'
+            print*, new_line(' '), '答え'
             print*, z * x
             write(*, '("\n   " ,Z0)') int(z * x, LargeInt_K)
             z = z * x
-            print*, '\nEnterを押してください。'
+            print*, new_line(' '), 'Enterを押してください。'
             read *
         else
-            print*, '\nError!'
+            print*, new_line(' '), 'Error!'
             read *
         end if
     end subroutine M_M
@@ -75,14 +75,14 @@ module m_usc
         read (*, '(A)') str
         read (str, *, iostat=err) x
         if (err .eq. 0) then
-            print*, '\n答え'
+            print*, new_line(' '), '答え'
             print*, z / x
             write(*, '("\n   " ,Z0)') int(z / x, LargeInt_K)
             z = z / x
-            print*, '\nEnterを押してください。'
+            print*, new_line(' '), 'Enterを押してください。'
             read *
         else
-            print*, '\nError!'
+            print*, new_line(' '), 'Error!'
             read *
         end if
     end subroutine M_D
@@ -1775,7 +1775,7 @@ subroutine undouhouteisiki()
                 x = x + 0.00010_16 * dxdt
                 y = y + 0.00010_16 * dydt
                 u = u + 0.00010_16 * zero
-                w = w + 0.00010_16 * (- g)
+                w = w + 0.00010_16 * (-g)
                 write(11, '("\t", F0.23, "\t", F0.23)') x, y
             end do
         end do
@@ -1956,7 +1956,6 @@ subroutine zetaf()
     use m_usc
     use, intrinsic :: iso_fortran_env, only: real128, int64
     implicit none
-    real(real128), parameter :: e = 2.7182818284590452353602874713526624970_16
     real(real128) zeta, s
     integer(int64) i
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
@@ -2111,9 +2110,10 @@ subroutine slot()
     use, intrinsic :: iso_fortran_env, only: real128, int64, int32
     implicit none
     character char
-    integer(int64) i, j, x, a, b, c, k
-    i = 0; a = 0; b = 0; c = 0; k = 0
-11  loop : do j = 0, 3
+    integer(int64) i, j, x, a, b, c, k, L
+    i = 0; a = 0; b = 0; c = 0; k = 0; L = 0
+11  loop :&
+    &do j = 0, 3
         write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
         print '(A)', '┌─────────────────┐'
         print '(A, I0, A, I0, A, I0, A)', '｜  ', a, '  |  ', b, '  |  ', c, ' ｜'
@@ -2130,29 +2130,29 @@ subroutine slot()
             c = x
         end select
         if (j .eq. 3) then
-            hantei : &
+            hantei :&
             &if (a .eq. b .and. b .eq. c) then
                 print '(A)', '\n当たりｷﾀ━━━━(ﾟ∀ﾟ)━━━━!!'
                 i = i - 2
-                k = k + 2
+                k = k + 73
                 read (*, '(A)') char
             else if (a .eq. 7 .and. b .eq. 7 .and. c .eq. 7) then
                 print '(A)', '\n超極レアスーパーナンバーｷﾀ━━━━(ﾟ∀ﾟ)━━━━!!'
                 print '(A)', '当たる超確率up'!(大噓)
                 i = i - 3
-                k = k + 3
+                k = k + 777
                 read (*, '(A)') char
             else if (a .eq. b .or. a .eq. c .or. b .eq. c) then
                 print '(A)', '\nリーチ(＞ω＜)/'
                 i = i - 1
-                k = k + 1
+                k = k + 7
                 read (*, '(A)') char
             else
                 print '(A)', '\nおしい！'
                 i = i + 1
-                k = k + 1
+                k = k + 3
                 if (i .eq. 5) then
-                    print '(A, I0, "回", I0)', '\nゲームオーバー\t記録:', k
+                    print '("\nゲームオーバー\t記録:", I0, "回 ", I0, "pints")', L, k
                     read (*, '(A)') char
                     exit loop
                 end if
@@ -2162,6 +2162,7 @@ subroutine slot()
         else if (char .eq. 'q') then
             exit loop
         end if
+        L = L + 1
     end do loop
     contains
     integer(int32) function randon()
@@ -2171,7 +2172,8 @@ subroutine slot()
         integer, allocatable :: seed(:)
         call random_seed(size=seedsize)
         allocate(seed(seedsize))
-        do
+        loop :&
+        &do
             call random_seed(get=seed)
             call system_clock(count=c)
             seed(1) = c
@@ -2179,8 +2181,8 @@ subroutine slot()
             call random_number(x)
             y = x*100
             rad = int(y)
-            if (rad .lt. 10) exit
-        end do
+            if (rad .lt. 10) exit loop
+        end do loop
         deallocate(seed)
         randon = rad
     end function
