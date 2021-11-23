@@ -1072,39 +1072,23 @@ subroutine nizihoutei()
     real(real128) a, b, c, k1, k2
     call ieee_set_rounding_mode(ieee_nearest)
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-    print '(A)', '一般: ax^2 + bx + c = 0\n'
-    print '(A)', 'a値を入力してください。'
-    read (*, *, iostat=err) a
+    print '(A)', '一般: ax^2 + bx + c = 0 (a /= 0)\n'
+    print '(A)', 'a, b, c値(係数)を入力してください。'
+    read (*, *, iostat=err) a, b, c
     if (err .eq. 0) then
-        print '(A)', 'b値を入力してください。'
-        read (*, *, iostat=err) b
-        if (err .eq. 0) then
-            print '(A)', 'c値を入力してください。'
-            read (*, *, iostat=err) c
-            if (err .eq. 0) then
-                print '(A)', '\n答え'
-                k1 = (-b+sqrt((b*b)-4*a*c)) / (2*a)
-                k2 = (-b-sqrt((b*b)-4*a*c)) / (2*a)
-                open (11, file='data/nizihoutei.txt', status='replace')
-                    write (11, *) k1
-                    flush(11)
-                    write (11, *) k2
-                    flush(11)
-                close (11)
-                print *, k1
-                print *, k2
-                print '(A)', '\nEnterを押してください。'
-                read *
-            else
-                print*, '\nError!'
-                read *
-                return
-            end if
-        else
-            print*, '\nError!'
-            read *
-            return
-        end if
+        print '(A)', '\n答え'
+        k1 = (-b+sqrt((b*b)-4*a*c)) / (2*a)
+        k2 = (-b-sqrt((b*b)-4*a*c)) / (2*a)
+        open (11, file='data/nizihoutei.txt', status='replace')
+            write (11, *) k1
+            flush(11)
+            write (11, *) k2
+            flush(11)
+        close (11)
+        print *, k1
+        print *, k2
+        print '(A)', '\nEnterを押してください。'
+        read *
     else
         print*, '\nError!'
         read *
@@ -1739,7 +1723,8 @@ subroutine undouhouteisiki()
     implicit none
     integer(int64) i, j
     real(real128), parameter :: pi = 3.1415926535897932384626433832795028840_16
-    real(real128) g, V, angle, theta, u, w, x, y
+    real(real128), parameter :: g = 9.806650_16
+    real(real128) V, angle, theta, u, w, x, y
     real(real128) dxdt, dydt, zero
     !$ double precision st, en
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
@@ -1758,7 +1743,7 @@ subroutine undouhouteisiki()
             return
         end if
         print '(A)', '\n計算中'
-        g = 9.806650_16
+        !$ st = omp_get_wtime()
         theta = pi / 180.0_16 * angle
         zero = 0.0_16
         x = zero
@@ -1767,7 +1752,6 @@ subroutine undouhouteisiki()
         w = V * sin(theta)
         open(11, file='data/output.txt', status='replace')
         write(11, '("\t", F0.23, "\t", F0.23)') x, y
-        !$ st = omp_get_wtime()
         do i = 1, 600000_8
             dxdt = u
             dydt = w
@@ -1779,9 +1763,9 @@ subroutine undouhouteisiki()
                 write(11, '("\t", F0.23, "\t", F0.23)') x, y
             end do
         end do
-        !$ en = omp_get_wtime()
         close(11)
-        !$ print *, "Elapsed time :", en-st
+        !$ en = omp_get_wtime()
+        !$ print *, "Elapsed time :", en - st
         print*, '\nEnterを押してください。'
         read *
     else
@@ -1790,21 +1774,40 @@ subroutine undouhouteisiki()
     end if
 end subroutine undouhouteisiki
 
-subroutine undouplot()
+subroutine ziyurakka()
+    !$ use omp_lib
+    use m_usc, only: err
+    use, intrinsic :: iso_fortran_env, only: real128, int64
     implicit none
-    open(11, file='data/output.txt', status='old', err=110)
-    close(11)
-    open (10, file = 'output.plt', status = 'replace')
-    write (10, '(A)') 'plot "data/output.txt"'
-    write (10, '(A)') 'pause -1'
-    close (10)
-    call execute_command_line('wgnuplot "output.plt"')
-    goto 120
-110 print*, '運動方程式を計算してください。'
-120 print*, '\nEnterを入力してください。'
-    read *
-    call execute_command_line('rm -fr "output.plt"')
-end subroutine undouplot
+    real(real128), parameter :: g = 9.806650_real128
+    real(real128) t, y, v0
+    integer(int64) i
+    !$ double precision st, en
+    write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    print '(A)', '初期速度 [m/s]'
+    read (*, *, iostat=err) v0
+    if (err .eq. 0) then
+        print '(A)', '\n計算中'
+        !$ st = omp_get_wtime()
+        t = 0
+        open(11, file='data/ziyurakka.txt', status='replace')
+        y = (v0 * t) + ((g * t * t) * 0.50_real128)
+        write(11, '("\t", F0.23, "\t", F0.23)') t, y
+        do i = 1, 600000_int64
+            t = t + 0.00010_real128
+            y = (v0 * t) + ((g * t * t) * 0.50_real128)
+            write(11, '("\t", F0.23, "\t", F0.23)') t, y
+        end do
+        close(11)
+        !$ en = omp_get_wtime()
+        !$ print *, "Elapsed time :", en - st
+        print*, '\nEnterを押してください。'
+        read *
+    else
+        print*, '\nError!'
+        read *
+    end if
+end subroutine ziyurakka
 
 subroutine TX()
     use m_usc, only: err
@@ -2139,7 +2142,7 @@ subroutine slot()
             &if (a .eq. b .and. b .eq. c) then
                 print '(A)', '\n当たりｷﾀ━━━━(ﾟ∀ﾟ)━━━━!!'
                 i = i - 2
-                k = k + 73
+                k = k + 255
                 read (*, '(A)') char
             else if (a .eq. 7 .and. b .eq. 7 .and. c .eq. 7) then
                 print '(A)', '\n超極レアスーパーナンバーｷﾀ━━━━(ﾟ∀ﾟ)━━━━!!'
@@ -2150,14 +2153,15 @@ subroutine slot()
             else if (a .eq. b .or. a .eq. c .or. b .eq. c) then
                 print '(A)', '\nリーチ(＞ω＜)/'
                 i = i - 1
-                k = k + 7
+                k = k + 127
                 read (*, '(A)') char
             else
                 print '(A)', '\nおしい！'
                 i = i + 1
-                k = k + 3
+                k = k + 63
                 if (i .eq. 5) then
                     print '("\nゲームオーバー\t記録:", I0, "回 ", I0, "pints")', L, k
+                    call sleep(2)
                     read (*, '(A)') char
                     exit loop
                 end if
@@ -2247,6 +2251,56 @@ subroutine kanzensu()
     end function
 end subroutine kanzensu
 
+subroutine sanzihoutei()
+    use m_usc, only: err
+    use, intrinsic :: iso_fortran_env, only: real128, int64
+    implicit none
+    real(real128) a, b, c, d
+    real(real128) x(3), t_, t1_, t2_, t3_
+    complex(real128) t
+    write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    print '(A)', '一般: ax^3 + bx^2 + cx + d = 0 (a /= 0)\n'
+    print '(A)', 'a, b, c, dの値を入力してください。'
+    read (*, *, iostat=err) a, b, c, d
+    if (err .eq. 0) then
+        t = 1_8 - sqrt(3.0_16)
+        t_ = - b / (3_8 * a)
+        ! ------------------------------------------ x(1) ---------------------------------------------
+        t1_ = - 2 * pow(b, 3_8) + 9 * c * a * b - 27 * d * (a * a)
+        t2_ = 4 * pow(3 * c * a * pow(- b, 2_8), 3_8) + pow(- 2 * pow(b, 3_8) + 9 * c * a * b - 27 * d * (a * a), 2_8)
+        t3_ = ((t1_ + t2_) ** (1.0_16 / 3.0_16)) / (3 * (2 ** (1.0_16 / 3.0_16)) * a)
+        ! ------------------------------------------ x(2) ---------------------------------------------
+        ! ------------------------------------------ x(3) ---------------------------------------------
+        print '(A)', '\n答え'
+        open (11, file='data/sanzihoutei.txt', status='replace')
+            write (11, *) x(1)
+            flush(11)
+            write (11, *) x(2)
+            flush(11)
+            write (11, *) x(3)
+            close (11)
+        print *, x(1)
+        print *, x(2)
+        print *, x(3)
+        print '(A)', '\nEnterを押してください。'
+        read *
+    else
+        print*, '\nError!'
+        read *
+        return
+    end if
+    contains
+    real(real128) function pow(x, n)
+        integer(int64) n, i
+        real(real128) x, tmp
+        tmp = x
+        do i = 2, n
+            x = x * tmp
+        end do
+        pow = x
+    end function pow
+end subroutine sanzihoutei
+
 subroutine page_03()
     use m_usc
     use, intrinsic :: iso_fortran_env
@@ -2257,6 +2311,7 @@ subroutine page_03()
         print '(A)', '\n-----------------------------------------'
         print*, '1 素数判定'
         print*, '2 完全数'
+        print*, '3 三次方程式'
         print*, '11 スロットゲーム\n'
         print*, '99 終了           02 Back'
         print '(A)', '-----------------------------------------'
@@ -2267,6 +2322,8 @@ subroutine page_03()
             call sosuhantei()
         case ('2')
             call kanzensu()
+        case ('3')
+            call sanzihoutei()
         case ('11')
             call slot()
         case ('00')
@@ -2303,7 +2360,7 @@ subroutine page_02()
         print*, '1 ガンマ関数 Γ(z)'
         print*, '2 斜方投射での滞空時間と飛距離'
         print*, '3 斜方投射(一分後まで)'
-        print*, '4 斜方投射(gnuplotでグラフを描画)'
+        print*, '4 自由落下(一分後まで)'
         print*, '5 円周率をtxtファイルで出力(桁数多め)'
         print*, '6 平均値'
         print*, '7 階乗(n!)'
@@ -2321,8 +2378,7 @@ subroutine page_02()
         case ('3')
             call undouhouteisiki()
         case ('4')
-            write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-            call undouplot()
+            call ziyurakka()
         case ('2')
             call TX()
         case ('5')
@@ -2465,7 +2521,7 @@ subroutine page_00()
         print*, '7 円の面積        18 逆三角関数(atan2(y,x))'
         print*, '8 円の周長        19 虚数部(z = (x, iy))'
         print*, '9 べき乗          20 常用対数(log10)'
-        print*, '10 2次方程式      21 自然対数(ln)'
+        print*, '10 二次方程式      21 自然対数(ln)'
         print*, '11 超戦略ゲーム\n'
         print*, '99 終了           01 Next_page'
         print '(A)', '-----------------------------------------'
