@@ -1069,22 +1069,22 @@ subroutine nizihoutei()
     use, intrinsic :: iso_fortran_env, only: real128
     use, intrinsic :: ieee_arithmetic
     implicit none
-    real(real128) a, b, c, k1, k2
+    complex(real128) a, b, c, k1, k2
     call ieee_set_rounding_mode(ieee_nearest)
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '一般: ax^2 + bx + c = 0 (a /= 0)\n'
     print '(A)', 'a, b, c値(係数)を入力してください。'
     read (*, *, iostat=err) a, b, c
     if (err .eq. 0) then
-        print '(A)', '\n答え'
-        k1 = (-b+sqrt((b*b)-4*a*c)) / (2*a)
-        k2 = (-b-sqrt((b*b)-4*a*c)) / (2*a)
+        k1 = (-b + sqrt((b * b) - 4 * a * c)) / (2 * a)
+        k2 = (-b - sqrt((b * b) - 4 * a * c)) / (2 * a)
         open (11, file='data/nizihoutei.txt', status='replace')
             write (11, *) k1
             flush(11)
             write (11, *) k2
             flush(11)
         close (11)
+        print '(A)', '\n答え'
         print *, k1
         print *, k2
         print '(A)', '\nEnterを押してください。'
@@ -1721,11 +1721,7 @@ subroutine undouhouteisiki()
     use m_usc, only: err
     use, intrinsic :: iso_fortran_env, only: real128, int64
     implicit none
-    integer(int64) i, j
-    real(real128), parameter :: pi = 3.1415926535897932384626433832795028840_16
-    real(real128), parameter :: g = 9.806650_16
-    real(real128) V, angle, theta, u, w, x, y
-    real(real128) dxdt, dydt, zero
+    real(real128) V, angle
     !$ double precision st, en
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '初期速度 [m/s]'
@@ -1744,26 +1740,32 @@ subroutine undouhouteisiki()
         end if
         print '(A)', '\n計算中'
         !$ st = omp_get_wtime()
-        theta = pi / 180.0_16 * angle
-        zero = 0.0_16
-        x = zero
-        y = zero
-        u = V * cos(theta)
-        w = V * sin(theta)
-        open(11, file='data/output.txt', status='replace')
-        write(11, '("\t", F0.23, "\t", F0.23)') x, y
-        do i = 1, 600000_8
-            dxdt = u
-            dydt = w
-            do j = 1, 1_8
-                x = x + 0.00010_16 * dxdt
-                y = y + 0.00010_16 * dydt
-                u = u + 0.00010_16 * zero
-                w = w + 0.00010_16 * (-g)
-                write(11, '("\t", F0.23, "\t", F0.23)') x, y
+        block
+            real(real128), parameter :: pi = 3.1415926535897932384626433832795028840_16
+            real(real128), parameter :: g = 9.806650_16
+            real(real128) dxdt, dydt, zero, theta, u, w, x, y
+            integer(int64) i, j
+            theta = pi / 180.0_16 * angle
+            zero = 0.0_16
+            x = zero
+            y = zero
+            u = V * cos(theta)
+            w = V * sin(theta)
+            open(11, file='data/output.txt', status='replace')
+            write(11, '("\t", F0.23, "\t", F0.23)') x, y
+            do i = 1, 600000_8
+                dxdt = u
+                dydt = w
+                do j = 1, 1_8
+                    x = x + 0.00010_16 * dxdt
+                    y = y + 0.00010_16 * dydt
+                    u = u + 0.00010_16 * zero
+                    w = w + 0.00010_16 * (-g)
+                    write(11, '("\t", F0.23, "\t", F0.23)') x, y
+                    end do
             end do
-        end do
-        close(11)
+            close(11)
+        end block
         !$ en = omp_get_wtime()
         !$ print *, "Elapsed time :", en - st
         print*, '\nEnterを押してください。'
@@ -1814,7 +1816,8 @@ subroutine TX()
     use, intrinsic :: iso_fortran_env, only: real128
     implicit none
     real(real128), parameter :: pi = 3.1415926535897932384626433832795028840_16
-    real(real128) g, V, angle, theta, T, L, H, d, V2, H_T
+    real(real128), parameter :: g = 9.806650_16
+    real(real128) V, angle, theta, T, L, H, d, V2, H_T
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '初期速度 [m/s]'
     read (*, *, iostat=err) V
@@ -1830,7 +1833,6 @@ subroutine TX()
             read *
             return
         end if
-        g = 9.806650_16
         theta = pi / 180.0_16 * angle
         d = sin(theta)
         V2 = V * V
@@ -2251,56 +2253,6 @@ subroutine kanzensu()
     end function
 end subroutine kanzensu
 
-subroutine sanzihoutei()
-    use m_usc, only: err
-    use, intrinsic :: iso_fortran_env, only: real128, int64
-    implicit none
-    real(real128) a, b, c, d
-    real(real128) x(3), t_, t1_, t2_, t3_
-    complex(real128) t
-    write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-    print '(A)', '一般: ax^3 + bx^2 + cx + d = 0 (a /= 0)\n'
-    print '(A)', 'a, b, c, dの値を入力してください。'
-    read (*, *, iostat=err) a, b, c, d
-    if (err .eq. 0) then
-        t = 1_8 - sqrt(3.0_16)
-        t_ = - b / (3_8 * a)
-        ! ------------------------------------------ x(1) ---------------------------------------------
-        t1_ = - 2 * pow(b, 3_8) + 9 * c * a * b - 27 * d * (a * a)
-        t2_ = 4 * pow(3 * c * a * pow(- b, 2_8), 3_8) + pow(- 2 * pow(b, 3_8) + 9 * c * a * b - 27 * d * (a * a), 2_8)
-        t3_ = ((t1_ + t2_) ** (1.0_16 / 3.0_16)) / (3 * (2 ** (1.0_16 / 3.0_16)) * a)
-        ! ------------------------------------------ x(2) ---------------------------------------------
-        ! ------------------------------------------ x(3) ---------------------------------------------
-        print '(A)', '\n答え'
-        open (11, file='data/sanzihoutei.txt', status='replace')
-            write (11, *) x(1)
-            flush(11)
-            write (11, *) x(2)
-            flush(11)
-            write (11, *) x(3)
-            close (11)
-        print *, x(1)
-        print *, x(2)
-        print *, x(3)
-        print '(A)', '\nEnterを押してください。'
-        read *
-    else
-        print*, '\nError!'
-        read *
-        return
-    end if
-    contains
-    real(real128) function pow(x, n)
-        integer(int64) n, i
-        real(real128) x, tmp
-        tmp = x
-        do i = 2, n
-            x = x * tmp
-        end do
-        pow = x
-    end function pow
-end subroutine sanzihoutei
-
 subroutine page_03()
     use m_usc
     use, intrinsic :: iso_fortran_env
@@ -2311,7 +2263,7 @@ subroutine page_03()
         print '(A)', '\n-----------------------------------------'
         print*, '1 素数判定'
         print*, '2 完全数'
-        print*, '3 三次方程式'
+        print*, '3 '!三次方程式'
         print*, '11 スロットゲーム\n'
         print*, '99 終了           02 Back'
         print '(A)', '-----------------------------------------'
@@ -2323,7 +2275,7 @@ subroutine page_03()
         case ('2')
             call kanzensu()
         case ('3')
-            call sanzihoutei()
+            !call sanzihoutei()
         case ('11')
             call slot()
         case ('00')
