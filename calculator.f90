@@ -14,7 +14,7 @@ module m_usc
         read (str, *, iostat=err) x
         if (err .eq. 0) then
             print*, new_line(' '), '答え'
-            print*, z + x
+            print '("   ", F0.36)', z + x
             write(*, '("\n   " ,Z0)') int(z + x, LargeInt_K)
             z = z + x
             print*, new_line(' '), 'Enterを押してください。'
@@ -32,7 +32,7 @@ module m_usc
         read (str, *, iostat=err) x
         if (err .eq. 0) then
             print*, new_line(' '), '答え'
-            print*, z - x
+            print '("   ", F0.36)', z - x
             write(*, '("\n   " ,Z0)') int(z - x, LargeInt_K)
             z = z - x
             print*, new_line(' '), 'Enterを押してください。'
@@ -48,7 +48,7 @@ module m_usc
         print '(A)', '値を入力してください。'
         read (*, '(A)') str
         if (str .eq. '') then
-            print*, z * z
+            print '("   ", F0.36)', z * z
             write(*, '("\n   " ,Z0)') int(z * z, LargeInt_K)
             z = z * z
             print*, new_line(' '), 'Enterを押してください。'
@@ -58,7 +58,7 @@ module m_usc
         read (str, *, iostat=err) x
         if (err .eq. 0) then
             print*, new_line(' '), '答え'
-            print*, z * x
+            print '("   ", F0.36)', z * x
             write(*, '("\n   " ,Z0)') int(z * x, LargeInt_K)
             z = z * x
             print*, new_line(' '), 'Enterを押してください。'
@@ -76,7 +76,7 @@ module m_usc
         read (str, *, iostat=err) x
         if (err .eq. 0) then
             print*, new_line(' '), '答え'
-            print*, z / x
+            print '("   ", F0.36)', z / x
             write(*, '("\n   " ,Z0)') int(z / x, LargeInt_K)
             z = z / x
             print*, new_line(' '), 'Enterを押してください。'
@@ -112,7 +112,7 @@ subroutine tasizan()
         else
             print '(F29.4, "  +  ", F0.4, "\n")', x, y
         end if
-        print*, x + y
+        print '("   ", F0.36)', x + y
         write(*, '("\n   " ,Z0)') int(x + y, LargeInt_K)
         z = x + y
         print*, '\nEnterを押してください。'
@@ -147,7 +147,7 @@ subroutine hikizan()
         else
             print '(F29.4, "  -  ", F0.4, "\n")', x, y
         end if
-        print*, x - y
+        print '("   ", F0.36)', x - y
         write(*, '("\n   " ,Z0)') int(x - y, LargeInt_K)
         z = x - y
         print*, '\nEnterを押してください。'
@@ -181,7 +181,7 @@ subroutine kakezan()
             else
                 print '(F29.4, "  ^  ", I0, "\n")', x, 2
             end if
-            print*, x * x
+            print '("   ", F0.36)', x * x
             write(*, '("\n   " ,Z0)') int(x * x, LargeInt_K)
             z = x * x
             print*, '\nEnterを押してください。'
@@ -202,7 +202,7 @@ subroutine kakezan()
         else
             print '(F29.4, "  *  ", F0.4, "\n")', x, y
         end if
-        print*, x * y
+        print '("   ", F0.36)', x * y
         write(*, '("\n   " ,Z0)') int(x * y, LargeInt_K)
         z = x * y
         print*, '\nEnterを押してください。'
@@ -239,7 +239,7 @@ subroutine warizan()
         else
             print '(F29.4, "  /  ", F0.4, "\n")', x, y
         end if
-        print*, x / y
+        print '("   ", F0.36)', x / y
         write(*, '("\n   " ,Z0)') int(x / y, LargeInt_K)
         z = x / y
         print*, '\nEnterを押してください。'
@@ -286,7 +286,7 @@ subroutine ensyuritu()
     read (*, *, iostat=err) r
     if (err .eq. 0) then
         print*, '\n答え'
-        print*, r * r * pi
+        print '("   ", F0.36)', r * r * pi
         z = r * r * pi
         print*, '\nEnterを押してください。'
         read *
@@ -307,7 +307,7 @@ subroutine syutyou()
     read (*, *, iostat=err) r
     if (err .eq. 0) then
         print*, '\n答え'
-        print*, 2 * pi * r
+        print '("   ", F0.36)', 2 * pi * r
         z = 2 * pi * r
         print*, '\nEnterを押してください。'
         read *
@@ -341,7 +341,7 @@ subroutine nizyou()
         else
             print '(F29.4, "  ^  ", F0.4, "\n")', x, y
         end if
-        print*, x**y
+        print '("   ", F0.36)', x**y
         write(*, '("\n   " ,Z0)') int(x + y, LargeInt_K)
         z = x**y
         print*, '\nEnterを押してください。'
@@ -1489,7 +1489,7 @@ subroutine neipia() ! e = lim n->Infinity (1+1/n)**n | Σn=0 ∞ 1/n!
     implicit none
     integer(int64), parameter :: n = 1024
     integer(int64) a
-    real(real128) :: b = 1.0_16, e = 1.0_16
+    real(real128) :: b = 1.0_real128, e = 1.0_real128
     print '(A)', '\x1b[2J\x1b[3J\x1b[H'
     do a = 1, n
         b = b * a
@@ -1741,12 +1741,12 @@ subroutine undouhouteisiki()
         print '(A)', '\n計算中'
         !$ st = omp_get_wtime()
         block
-            real(real128), parameter :: pi = 3.1415926535897932384626433832795028840_16
-            real(real128), parameter :: g = 9.806650_16
+            real(real128), parameter :: pi = 3.1415926535897932384626433832795028840_real128
+            real(real128), parameter :: g = 9.806650_real128
             real(real128) dxdt, dydt, zero, theta, u, w, x, y
             integer(int64) j
-            theta = pi / 180.0_16 * angle
-            zero = 0.0_16
+            theta = pi / 180.0_real128 * angle
+            zero = 0.0_real128
             x = zero
             y = zero
             u = V * cos(theta)
@@ -1757,10 +1757,10 @@ subroutine undouhouteisiki()
                 dxdt = u
                 dydt = w
                 do j = 1, 1_8
-                    x = x + 0.00010_16 * dxdt
-                    y = y + 0.00010_16 * dydt
-                    u = u + 0.00010_16 * zero
-                    w = w + 0.00010_16 * (-g)
+                    x = x + 0.00010_real128 * dxdt
+                    y = y + 0.00010_real128 * dydt
+                    u = u + 0.00010_real128 * zero
+                    w = w + 0.00010_real128 * (-g)
                     write(11, '("\t", F0.23, "\t", F0.23)') x, y
                     if (y < 0) exit zyu
                 end do
@@ -1816,8 +1816,8 @@ subroutine TX()
     use m_usc, only: err
     use, intrinsic :: iso_fortran_env, only: real128
     implicit none
-    real(real128), parameter :: pi = 3.1415926535897932384626433832795028840_16
-    real(real128), parameter :: g = 9.806650_16
+    real(real128), parameter :: pi = 3.1415926535897932384626433832795028840_real128
+    real(real128), parameter :: g = 9.806650_real128
     real(real128) V, angle, theta, T, L, H, d, V2, H_T
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '初期速度 [m/s]'
@@ -1834,13 +1834,13 @@ subroutine TX()
             read *
             return
         end if
-        theta = pi / 180.0_16 * angle
+        theta = pi / 180.0_real128 * angle
         d = sin(theta)
         V2 = V * V
 
-        T = (2.0_16 * V * d) / g
-        L = (V2 * sin(2.0_16 * theta)) / g
-        H = (V2 * (d * d)) / 19.61330_16
+        T = (2.0_real128 * V * d) / g
+        L = (V2 * sin(2.0_real128 * theta)) / g
+        H = (V2 * (d * d)) / 19.61330_real128
         H_T = (V * d) / g
 
         print*, '\n滞空時間'
@@ -1891,7 +1891,7 @@ subroutine ensyu()
         flush(11)
     close(11)
     write(*, "(1x, I1, '.'/(1x, 12I5.5))") buffer
-    !$ print *, "Elapsed time :", en-st
+    !$ print *, "Elapsed time :", en - st
     print*, '\nEnterを押してください。'
     read *
 end subroutine ensyu
@@ -1902,7 +1902,7 @@ subroutine heikin()
     implicit none
     integer(LargeInt_K) i, max
     real(real128), allocatable :: x(:)
-    real(real128) :: y = 0.0_16
+    real(real128) :: y = 0.0_real128
     character char
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '観測値を入力してください。'
@@ -1948,7 +1948,7 @@ subroutine kaizyou()
     print '(A)', '値を入力してください。'
     read (*, *, iostat=err) n
     if (err .eq. 0) then
-        ans = 1.0_16
+        ans = 1.0_real128
         do k = 1, n
             ans = ans * k
         end do
@@ -1973,9 +1973,9 @@ subroutine zetaf()
     print '(A)', '値を入力してください。'
     read (*, *, iostat=err) s
     if (err .eq. 0) then
-        zeta = 0.0_16
-        do i = 41943020_8, 1, -1
-            zeta = zeta + (1.0_16 / i**s)
+        zeta = 0.0_real128
+        do i = 41943020_int64, 1, -1
+            zeta = zeta + (1.0_real128 / i**s)
         end do
         print*, '\n答え'
         print*, zeta
@@ -1992,7 +1992,7 @@ subroutine collatz()
     use m_usc, only: err, LargeInt_K
     use, intrinsic :: iso_fortran_env, only: real128
     implicit none
-    real(real128), parameter :: q = 2.0_16
+    real(real128), parameter :: q = 2.0_real128
     real(real128) n, h
     integer(LargeInt_K) i
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
@@ -2008,7 +2008,7 @@ subroutine collatz()
             case (1)
                 n = n * 3 + 1
             case (0)
-                n = n * 0.5
+                n = n * 0.50_real128
             end select
             write (*, '(I0, ", ")', advance='no') int(n, LargeInt_K)
             i = i + 1
@@ -2069,7 +2069,7 @@ subroutine sosuhantei()
     read (*, *, iostat=err) q
     p = int(q, LargeInt_K)
     if (err .eq. 0) then
-        first : select case(p)
+        select case(p)
         case (0, 1)
             print*, '\n答え'
             print '("\t", I0, "は素数ではありません。")', p
@@ -2082,16 +2082,16 @@ subroutine sosuhantei()
             print*, '\nEnterを押してください。'
             read *
             return
-        end select first
-        second : if (mod(p, 2) .eq. 0 .or. mod(p, 3) .eq. 0) then
+        end select
+        if (mod(p, 2) .eq. 0 .or. mod(p, 3) .eq. 0) then
             print*, '\n答え'
             print '("\t", I0, "は素数ではありません。")', p
             print*, '\nEnterを押してください。'
             read *
             return
-        end if second
+        end if
         i = 5
-        Exit_ : do while ((i * i) <= p)
+        do while ((i * i) <= p)
             if (mod(p, i) .eq. 0) then
                 print*, '\n答え'
                 print '("\t", I0, "は素数ではありません。")', p
@@ -2106,7 +2106,7 @@ subroutine sosuhantei()
                 return
             end if
             i = i + 6
-        end do Exit_
+        end do
         print*, '\n答え'
         print '("\t", I0, "は素数です。")', p
         print*, '\nEnterを押してください。'
@@ -2202,7 +2202,7 @@ end subroutine slot
 
 subroutine kanzensu()
     use m_usc, only: err, LargeInt_K
-    use, intrinsic :: iso_fortran_env, only: real128
+    use, intrinsic :: iso_fortran_env, only: real128, int64
     implicit none
     integer(LargeInt_K) x
     real(real128) p, n, i, j
@@ -2215,18 +2215,19 @@ subroutine kanzensu()
             read *
             return
         end if
-        i = 2.0_16; j = 0.0_16
+        i = 2.0_real128
+        j = 0.0_real128
         print*, ''
-        main : do
+        do
             if (j .eq. x) exit
-            n = (2.0_16 ** i) - 1.0_16
+            n = (pow(2.0_real128, int(i, LargeInt_K))) - 1.0_real128
             if (is_prime(int(n, LargeInt_K))) then
-                p = (2.0_16 ** (i - 1.0_16)) * n
-                j = j + 1.0_16
+                p = pow(2.0_real128, int(i - 1.0_real128, LargeInt_K)) * n
+                j = j + 1.0_real128
                 write (*, '(F0.0, " ")', advance='no') p
             end if
-            i = i + 1.0_16
-        end do main
+            i = i + 1.0_real128
+        end do
         print*, '\n\nEnterを押してください。'
         read *
     else
@@ -2237,7 +2238,7 @@ subroutine kanzensu()
     logical function is_prime(n)
         implicit none
         integer(LargeInt_K), intent(in) :: n
-        integer(LargeInt_K) i
+        integer(LargeInt_K) :: i = 3
         select case(n)
         case (0, 1)
             is_prime = .false.
@@ -2245,13 +2246,24 @@ subroutine kanzensu()
             is_prime = .true.
         end select
         if (mod(n, 2) .eq. 0) is_prime = .false.
-        i = 3
         do while((i * i) <= n)
             if (mod(n, i) .eq. 0) is_prime = .false.
             i = i + 2
         end do
         is_prime = .true.
     end function
+    real(real128) function pow(x, n)
+        implicit none
+        real(real128), intent(in) :: x
+        integer(int64), intent(in) :: n
+        real(real128) k
+        integer(int64) i
+        k = 1
+        do i = 1, n
+            k = k * x
+        end do
+        pow = k
+    end function pow
 end subroutine kanzensu
 
 subroutine akkaman
@@ -2280,7 +2292,7 @@ subroutine akkaman
             ans = t - 3
         end select y
         print*, '\n答え'
-        print '(F0.0)', ans
+        print '("   ", F0.0)', ans
         z = ans
         print*, '\nEnterを押してください。'
         read *
@@ -2288,21 +2300,9 @@ subroutine akkaman
         print*, '\nError!'
         read *
     end if
-    contains
-    real(real128) function pow(x, n)
-        integer(int64), intent(in) :: n
-        integer(int64) i
-        real(real128) tmp, x
-        tmp = x
-        do i = 2, n
-            x = x * tmp
-        end do
-        pow = x
-    end function pow
 end subroutine akkaman
 
 subroutine sigmoid()
-    !$ use omp_lib
     use m_usc, only: err, LargeInt_K, z
     use, intrinsic :: iso_fortran_env, only: real128, int64
     implicit none
@@ -2328,27 +2328,27 @@ subroutine sigmoid()
 end subroutine sigmoid
 
 subroutine furie()
-    !$ use omp_lib
     use m_usc, only: err
     use, intrinsic :: iso_fortran_env, only: real128, int64
     implicit none
-    real(real128), parameter :: pi2 = 2 * 3.1415926535897932384626433832795028840_16
-    integer(int64), parameter :: max = 100000
     character(256) filename
-    integer(int64) i, j, k, n
-    real(real128) ReF, ImF, f(max), dummy
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-    print '(A)', 'ファイル名を入力してください。'
+    print '(A)', 'ファイル名を入力してください。(止める:q)'
     read (*, '(A)') filename
-    if (err .eq. 0) then
+    if (trim(filename) .eq. 'q') return
+    open(1, file=trim(filename), status='old', err=404)
+    write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    print '(A)', '\n計算中'
+    open(2, file='data/furie_im.txt', status='replace')
+    open(3, file='data/furie_re.txt', status='replace')
+    read (1, '()')
+    block
+        real(real128), parameter :: pi2 = 2 * 3.1415926535897932384626433832795028840_real128
+        integer(int64), parameter :: max = 100000
+        integer(int64) i, j, k, n
+        real(real128) ReF, ImF, f(max), dummy
         n = 0
-        write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-        print '(A)', '\n計算中'
-        open(1, file=trim(filename), status='old', err=404)
-        open(2, file='data/furie_im.txt', status='replace')
-        open(3, file='data/furie_re.txt', status='replace')
-        read (1, '()')
-        st:do k = 1, max
+        st: do k = 1, max
             read (1, *, iostat=err) f(k)
             if (err < 0) exit st
             n = n + 1
@@ -2364,19 +2364,51 @@ subroutine furie()
             write(2, '("\t", I0, "\t", F0.23)') j, ImF
             write(3, '("\t", I0, "\t", F0.23)') j, ReF
         end do
-        close(3)
-        close(2)
-        close(1)
+    end block
+    close(3)
+    close(2)
+    close(1)
+    print*, '\nEnterを押してください。'
+    read *
+    return
+404 print*, '\nそのようなファイルは、ありません(でした(´;ω;｀))'
+    read *
+end subroutine furie
+
+subroutine tan_h()
+    !$ use omp_lib
+    use m_usc, only: err, LargeInt_K, z
+    use, intrinsic :: iso_fortran_env, only: real128, int64
+    implicit none
+    real(real128), parameter :: pi = 3.1415926535897932384626433832795028840_real128
+    real(real128) theta, h, x, angle
+    write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    print '(A)', '距離(隣辺)を入力してください。[m]'
+    read (*, *, iostat=err) x
+    if (err .eq. 0) then
+        print '(A)', '仰角(0＜θ＜90) [deg]'
+        read (*, *, iostat=err) angle
+        if (err .ne. 0) then
+            print*, '\nError!'
+            read *
+            return
+        else if (0 .ge. angle .or. angle .ge. 90) then
+            print*, '変域にしたがってね。'
+            read *
+            return
+        end if
+        theta = pi / 180.0_real128 * angle
+        h = x * tan(theta)
+        print*, '\n答え'
+        print '("   h = ", F0.36)', h
+        z = h
         print*, '\nEnterを押してください。'
         read *
     else
         print*, '\nError!'
         read *
     end if
-    return
-404 print*, 'そのようなファイルは、ありません(でした(´;ω;｀))'
-    read *
-end subroutine furie
+end subroutine tan_h
 
 subroutine page_03()
     use m_usc
@@ -2391,6 +2423,7 @@ subroutine page_03()
         print*, '3 アッカーマン関数 A(m, n)'
         print*, '4 シグモイド関数 ςa(x)'
         print*, '5 離散的フーリエ変換'
+        print*, '6 tanθで建物の高さ'
         print*, '11 スロットゲーム\n'
         print*, '99 終了           02 Back'
         print '(A)', '-----------------------------------------'
@@ -2407,6 +2440,8 @@ subroutine page_03()
             call sigmoid()
         case ('5')
             call furie()
+        case ('6')
+            call tan_h()
         case ('11')
             call slot()
         case ('00')
@@ -2547,7 +2582,7 @@ subroutine page_01()
         case ('10')
             print '(A)', '\x1b[2J\x1b[3J\x1b[H'
             block
-                real(real128), parameter :: fai = (1.0_16 + sqrt(5.0_16)) * 0.5_16
+                real(real128), parameter :: fai = (1.0_real128 + sqrt(5.0_real128)) * 0.5_real128
                 print*, 'φ(黄金数)'
                 print '(2F40.36)', fai
                 print*, '\nEnterを押してください。'
@@ -2624,7 +2659,7 @@ subroutine page_00()
         case ('6')
             print '(A)', '\x1b[2J\x1b[3J\x1b[H'
             block
-                real(real128), parameter :: PI = 4.0_real128*atan(1.0_real128)
+                real(real128), parameter :: PI = 4.0_real128 * atan(1.0_real128)
                 print*, 'π(円周率)'
                 print '(2F40.36)', PI
                 print*, '\n Wikipediaでは以下(上の桁数に合わせた)'
@@ -2729,20 +2764,20 @@ program calculator
             print '(A)', '\n計算中です。\n'
             block
                 integer(int64) i
-                real(real128) :: s = 0.0_16
-                !$ real(real64) :: time_begin_s,time_end_s
+                real(real128) :: s = 0.0_real128
+                !$ real(real64) :: time_begin_s, time_end_s
                 !$ time_begin_s = omp_get_wtime()
                 !$omp parallel num_threads(3)
                 !$omp do
-                do i = 0, 10**8
+                do i = 100000000_int64, 0, -1
                     !$omp critical
-                    s = s + ((-1.0_16)**i) / (2.0_16 * real(i, 16) + 1.0_16)
+                    s = s + ((-1.0_real128)**i) / (2.0_real128 * real(i, real128) + 1.0_real128)
                     !$omp end critical
                 end do
                 !$omp end do
                 !$omp end parallel
                 !$ time_end_s = omp_get_wtime()
-                print*, 'Answer:', s * 4
+                print*, 'Answer:', s * 4.0_real128
                 !$ print '(A, F13.5, A)', '\ntime:', time_end_s - time_begin_s, ' [sec]\n'
             end block
         case ('level')
