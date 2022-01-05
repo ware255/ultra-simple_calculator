@@ -2026,31 +2026,52 @@ subroutine soinsubunkai()
     use m_usc, only: err, LargeInt_K
     use, intrinsic :: iso_fortran_env, only: real128
     implicit none
-    integer(LargeInt_K) n, i, m, k
-    real(real128) n_
+    integer(LargeInt_K) n, c, i
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
-    read (*, *, iostat=err) n_
-    n = int(n_, LargeInt_K)
+    read (*, *, iostat=err) n
     if (err .eq. 0) then
         print*, '\n答え'
-        write (*, '("\t", I0, A)', advance='no') n,' = 1'
-        k = n
-        i = 2
-        do while (i <= k)
-            m = mod(k, i)
-            if (m .eq. 0)then
-                write (*, '(A, I0)', advance='no') ' * ', i 
-                k = k / i
-                cycle
-            else if (k .eq. i) then
-                exit
-            else
-                i = i + 1
-                cycle
-            endif
+        write (*, '("\t", I0, A)', advance='no') n,' = '
+        if (n .eq. 1) then
+            write (*, '(A)', advance='no') '1'
+        end if
+
+        i = 5
+        do while ((i * i) <= n)
+            if (mod(n, i) .eq. 0) then
+                goto 19
+            else if (mod(n, (i + 2)) .eq. 0) then
+                goto 19
+            end if
+            i = i + 6
         end do
-        print*, '\n\nEnterを押してください。'
+
+        write (*, '(A, I0)', advance='no') '1 * ', n
+        goto 110
+
+19      c  = 0
+        do while (mod(n, 2) .eq. 0)
+            if (c .ne. 0) then
+                write (*, '(A)', advance='no') ' * '
+            end if
+            write (*, '(I0)', advance='no') 2
+            n = n / 2
+            c = c + 1
+        end do
+        i = 3
+        do while (i <= n)
+            do while (mod(n, i) .eq. 0)
+                if (c .ne. 0) then
+                    write (*, '(A)', advance='no') ' * '
+                end if
+                write (*, '(I0)', advance='no') i
+                n = n / i
+                c = c + 1
+            end do
+            i = i + 1
+        end do
+110     print*, '\n\nEnterを押してください。'
         read *
     else
         print*, '\nError!'
@@ -2410,6 +2431,15 @@ subroutine tan_h()
     end if
 end subroutine tan_h
 
+subroutine test()
+    use, intrinsic :: iso_fortran_env, only: real128, int64
+    implicit none
+    write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    print*, '計算中'
+    print*, '\nEnterを押してください。'
+    read *
+end subroutine test
+
 subroutine page_03()
     use m_usc
     use, intrinsic :: iso_fortran_env
@@ -2424,6 +2454,7 @@ subroutine page_03()
         print*, '4 シグモイド関数 ςa(x)'
         print*, '5 離散的フーリエ変換'
         print*, '6 tanθで建物の高さ'
+        print*, '7 '
         print*, '11 スロットゲーム\n'
         print*, '99 終了           02 Back'
         print '(A)', '-----------------------------------------'
@@ -2442,6 +2473,7 @@ subroutine page_03()
             call furie()
         case ('6')
             call tan_h()
+        case ('7')
         case ('11')
             call slot()
         case ('00')
@@ -2739,7 +2771,7 @@ end subroutine help
 
 program calculator
     !$ use omp_lib
-    use, intrinsic :: iso_fortran_env
+    use, intrinsic :: iso_fortran_env, only: int64, real64, real128
     implicit none
     character(256) str
     integer(int64) getuid, uid
@@ -2794,9 +2826,29 @@ program calculator
             end block
         case ('time')
             block
-                character(24) string
+                integer(int64) dt(8), tmp, J
+                real(real128) MJD, JD
+                character(24) string, d(3)
+                call date_and_time(d(1), d(2), d(3), dt)
+                tmp = dt(2)
+                if (tmp < 3) then
+                    dt(1) = dt(1) - 1
+                    dt(2) = dt(2) + 12
+                end if
+                J = int(365.250_real128 * dt(1), int64)
+                J = J + dt(1) / 400
+                J = J - dt(1) / 100
+                J = J + int(30.590_real128 * (dt(2) - 2.0_real128), int64)
+                J = J + dt(3)
+                JD = real(J, real128) + 1721088.50_real128
+                JD = JD + real(dt(5), real128) / 24.0_real128
+                JD = JD + real(dt(6), real128) / 1440.0_real128
+                JD = JD + real(dt(7), real128) / 86400.0_real128
+                MJD = JD - 2400000.50_real128
                 call fdate(string)
                 print '("\n", A)', string
+                print '("\nJulian day          : ", F0.16)', JD
+                print '("Modified Julius Day :   ", F0.16)', MJD
                 print*, ''
             end block
         case default
@@ -2804,14 +2856,89 @@ program calculator
         end select
         stop
 1       print '(A)', '\nUltra-Simple_Calculatorをインストールしていただき\nありがとうございます。&
-        &あと、一応余計な一言ですが、\nテンキー使ったほうが楽ｗ\n'
+        &あと、一応余計な一言ですが、\nテンキー使ったほうが楽ですよｗ\n'
         open(10, file='data/.save.dat', status='new')
         write(10, *) '1'
         close(10)
         read *
         call page_00()
     else
-        print '(A)', '\n※いつでもどこでも電卓が使えるようにして\n&
-        &　いるためroot権限は実装しておりません。\n'
+        print '(A)', '「大いなる力には大いなる責任が伴う」by ベンおじさん.'
+        read *
+        call getarg(1, str)
+        if (iargc() .eq. 0) call page_00()
+        select case(str)
+        case ('help')
+            call help()
+        case ('page_00', '00')
+            call page_00()
+        case ('page_01', '01')
+            call page_01()
+        case ('page_02', '02')
+            call page_02()
+        case ('page_03', '03')
+            call page_03()
+        case ('benchmark')
+            print '(A)', '計算中です。\n'
+            block
+                integer(int64) i
+                real(real128) :: s = 0.0_real128
+                !$ real(real64) :: time_begin_s, time_end_s
+                !$ time_begin_s = omp_get_wtime()
+                !$omp parallel num_threads(3)
+                !$omp do
+                do i = 100000000_int64, 0, -1
+                    !$omp critical
+                    s = s + ((-1.0_real128)**i) / (2.0_real128 * real(i, real128) + 1.0_real128)
+                    !$omp end critical
+                end do
+                !$omp end do
+                !$omp end parallel
+                !$ time_end_s = omp_get_wtime()
+                print*, 'Answer:', s * 4.0_real128
+                !$ print '(A, F13.5, A)', '\ntime:', time_end_s - time_begin_s, ' [sec]\n'
+            end block
+        case ('level')
+            block
+                integer(int64) level
+                open(11, file='data/.level', status='old', err=111)
+                    read (11, *) level
+                    flush(11)
+                close(11)
+                print '("現在のレベル:\t", I0)', level
+                print*, ''
+                stop
+111             error stop "Error: 超戦略ゲームをプレイしてください。\n"
+            end block
+        case ('time')
+            block
+                integer(int64) dt(8), tmp, J
+                real(real128) MJD, JD
+                character(24) string, d(3)
+                call date_and_time(d(1), d(2), d(3), dt)
+                tmp = dt(2)
+                if (tmp < 3) then
+                    dt(1) = dt(1) - 1
+                    dt(2) = dt(2) + 12
+                end if
+                J = int(365.250_real128 * dt(1), int64)
+                J = J + dt(1) / 400
+                J = J - dt(1) / 100
+                J = J + int(30.590_real128 * (dt(2) - 2.0_real128), int64)
+                J = J + dt(3)
+                JD = real(J, real128) + 1721088.50_real128
+                JD = JD + real(dt(5), real128) / 24.0_real128
+                JD = JD + real(dt(6), real128) / 1440.0_real128
+                JD = JD + real(dt(7), real128) / 86400.0_real128
+                MJD = JD - 2400000.50_real128
+                call fdate(string)
+                print '(A)', string
+                print '("\nJulian day          : ", F0.16)', JD
+                print '("Modified Julius Day :   ", F0.16)', MJD
+                print*, ''
+            end block
+        case default
+            print '(A)', 'この引数はありません。\n'
+        end select
     end if
 end program calculator
