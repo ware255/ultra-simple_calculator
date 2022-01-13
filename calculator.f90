@@ -89,7 +89,7 @@ module m_usc
 end module m_usc
 
 subroutine tasizan()
-    use m_usc
+    use m_usc, only: err, z, LargeInt_K
     use, intrinsic :: iso_fortran_env, only: real128
     implicit none
     real(real128) x, y
@@ -124,7 +124,7 @@ subroutine tasizan()
 end subroutine tasizan
 
 subroutine hikizan()
-    use m_usc
+    use m_usc, only: err, z, LargeInt_K
     use, intrinsic :: iso_fortran_env, only: real128
     implicit none
     real(real128) x, y
@@ -159,13 +159,11 @@ subroutine hikizan()
 end subroutine hikizan
 
 subroutine kakezan()
-    use m_usc
+    use m_usc, only: err, z, LargeInt_K
     use, intrinsic :: iso_fortran_env, only: real128
-    use, intrinsic :: ieee_arithmetic
     implicit none
     real(real128) x, y
-    character(256) :: str
-    call ieee_set_rounding_mode(ieee_nearest)
+    character(256) str
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
     read (*, *, iostat=err) x
@@ -214,12 +212,10 @@ subroutine kakezan()
 end subroutine kakezan
 
 subroutine warizan()
-    use m_usc
+    use m_usc, only: err, z, LargeInt_K
     use, intrinsic :: iso_fortran_env, only: real128
-    use, intrinsic :: ieee_arithmetic
     implicit none
     real(real128) x, y
-    call ieee_set_rounding_mode(ieee_nearest)
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
     read (*, *, iostat=err) x
@@ -251,7 +247,7 @@ subroutine warizan()
 end subroutine warizan
 
 subroutine heihoukon()
-    use m_usc
+    use m_usc, only: err, z, LargeInt_K
     use, intrinsic :: iso_fortran_env, only: real128
     implicit none
     real(real128) x
@@ -276,7 +272,7 @@ subroutine heihoukon()
 end subroutine heihoukon
 
 subroutine ensyuritu()
-    use m_usc
+    use m_usc, only: err, z, LargeInt_K
     use, intrinsic :: iso_fortran_env, only: real128
     implicit none
     real(real128), parameter :: pi = 4.0_real128*atan(1.0_real128)
@@ -297,7 +293,7 @@ subroutine ensyuritu()
 end subroutine ensyuritu
 
 subroutine syutyou()
-    use m_usc
+    use m_usc, only: err, z, LargeInt_K
     use, intrinsic :: iso_fortran_env, only: real128
     implicit none
     real(real128), parameter :: pi = 4.0_real128*atan(1.0_real128)
@@ -318,7 +314,7 @@ subroutine syutyou()
 end subroutine syutyou
 
 subroutine nizyou()
-    use m_usc
+    use m_usc, only: err, z, LargeInt_K
     use, intrinsic :: iso_fortran_env, only: real128
     implicit none
     real(real128) x, y
@@ -353,7 +349,7 @@ subroutine nizyou()
 end subroutine nizyou
 
 subroutine game_1()
-    use, intrinsic :: iso_fortran_env
+    use, intrinsic :: iso_fortran_env, only: int32, int64, real32
     implicit none
     character(10) d
     integer(int64) hero_hp, hero_mp, enemy1_hp, enemy1_mp, n, x
@@ -365,18 +361,18 @@ subroutine game_1()
     print*, '\n超戦略ゲーム  ~ shit video game ~\n\n\n\n\nEnterを押してください。'
     read *
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-    do
+    j:do
         if (hero_hp .le. 0) then
             print*, '\nGAME OVER'
             read *
             write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-            exit
+            exit j
         else if (enemy1_hp .le. 0) then
             print '(A)', '\n敵を撲殺することが出来た。ワイの勝利！！！'
             print '(A)', 'Ураааааааааааааааа!'
             read *
             write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-            exit
+            exit j
         end if
         print '(A)', '\n敵が現れた！'
         print *, 'HP: ', enemy1_hp
@@ -396,7 +392,7 @@ subroutine game_1()
                 print '(A)', '\n敵のダメージ1'
                 x = add(5)
                 hero_hp = hero_hp - x
-                print "('ワイのダメージ',i0)", x
+                print "('ワイのダメージ', I0)", x
                 read *
                 write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             case (2)
@@ -404,7 +400,7 @@ subroutine game_1()
                 x = add(5)
                 hero_hp = hero_hp - x
                 print '(A)', '\n敵のダメージ2'
-                print "('ワイのダメージ',i0)", x
+                print "('ワイのダメージ', I0)", x
                 read *
                 write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             case (3)
@@ -412,7 +408,7 @@ subroutine game_1()
                 x = add(5)
                 hero_hp = hero_hp - x
                 print '(A)', '\n敵のダメージ3'
-                print "('ワイのダメージ',i0)", x
+                print "('ワイのダメージ', I0)", x
                 read *
                 write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             case (4)
@@ -420,7 +416,7 @@ subroutine game_1()
                 x = add(5)
                 hero_hp = hero_hp - x
                 print '(A)', '\n敵のダメージ4'
-                print "('ワイのダメージ',i0)", x
+                print "('ワイのダメージ', I0)", x
                 read *
                 write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             case (5)
@@ -428,7 +424,7 @@ subroutine game_1()
                 x = add(5)
                 hero_hp = hero_hp - x
                 print '(A)', '\n敵のダメージ5'
-                print "('ワイのダメージ',i0)", x
+                print "('ワイのダメージ', I0)", x
                 read *
                 write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             case default
@@ -436,7 +432,7 @@ subroutine game_1()
                 print '(A)', '\n敵のダメージ0'
                 x = add(5)
                 hero_hp = hero_hp - x
-                print "('ワイのダメージ',i0)", x
+                print "('ワイのダメージ', I0)", x
                 read *
                 write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             end select
@@ -450,7 +446,7 @@ subroutine game_1()
                 print '(A)', 'MP: 1消費'
                 x = add(5)
                 hero_hp = hero_hp - x
-                print "('ワイのダメージ',i0)", x
+                print "('ワイのダメージ', I0)", x
                 read *
                 write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             case (2)
@@ -460,7 +456,7 @@ subroutine game_1()
                 hero_hp = hero_hp - x
                 print '(A)', '\n敵のダメージ6'
                 print '(A)', 'MP: 1消費'
-                print "('ワイのダメージ',i0)", x
+                print "('ワイのダメージ', I0)", x
                 read *
                 write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             case (3)
@@ -491,15 +487,15 @@ subroutine game_1()
             case (1)
                 write (*, '(A)', advance='no') '\n防御成功\n'
                 write (*, '(A)', advance='no') 'HP: 1回復\n'
-                do y = 5, 100000000
+                k:do y = 5, 100000000, 5
                     if (mp .eq. y) then
                         print '(A)', 'MP: 1回復'
                         hero_mp = hero_mp + 1
-                        exit
+                        exit k
                     else if (mp .lt. y) then
-                        exit
+                        exit k
                     end if
-                end do
+                end do k
                 read *
                 write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             case default
@@ -516,7 +512,7 @@ subroutine game_1()
                 print '(A)', '\n逃げ切れた'
                 read *
                 write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-                exit
+                exit j
             case default
                 print '(A)', '\n逃走失敗'
                 x = add(5)
@@ -530,7 +526,7 @@ subroutine game_1()
             read *
             write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
         end if
-    end do
+    end do j
     contains
     integer(int32) function add(n)
         implicit none
@@ -540,7 +536,7 @@ subroutine game_1()
         integer, allocatable :: seed(:)
         call random_seed(size=seedsize)
         allocate(seed(seedsize))
-        do
+        f:do
             call random_seed(get=seed)
             call system_clock(count=c)
             seed(1) = c
@@ -548,15 +544,15 @@ subroutine game_1()
             call random_number(x)
             y = x*100
             rad = int(y)
-            if (rad .lt. n) exit
-        end do
+            if (rad .lt. n) exit f
+        end do f
         deallocate(seed)
         add = rad
     end function
 end subroutine game_1
 
 subroutine game_2()
-    use, intrinsic :: iso_fortran_env
+    use, intrinsic :: iso_fortran_env, only: int32, int64, real32
     implicit none
     character(10) d
     integer(int64) hero_hp, hero_mp, enemy2_hp, enemy2_mp, n, x
@@ -568,18 +564,18 @@ subroutine game_2()
     print *, '\n超戦略ゲーム  ~ shit video game ~\n\n\n\n\nEnterを押してください。'
     read *
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-    do
+    j:do
         if (hero_hp .le. 0) then
             print *, '\nGAME OVER'
             read *
             write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-            exit
+            exit j
         else if (enemy2_hp .le. 0) then
             print '(A)', '\n敵を撲殺することが出来た。ワイの勝利！！！'
             print '(A)', 'Ураааааааааааааааа!'
             read *
             write (*,fmt='(a)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-            exit
+            exit j
         end if
         print*, ''
         print '(A)', '敵が現れた！'
@@ -695,14 +691,15 @@ subroutine game_2()
             case (1)
                 print '(A)', '\n防御成功'
                 print '(A)', 'HP: 1回復'
-                do y = 5, 100000000
+                k:do y = 5, 100000000, 5
                     if (mp .eq. y) then
                         print '(A)', 'MP: 1回復'
                         hero_mp = hero_mp + 2
+                        exit k
                     else if (mp .lt. y) then
-                        exit
+                        exit k
                     end if
-                end do
+                end do k
                 read *
                 write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             case default
@@ -719,7 +716,7 @@ subroutine game_2()
                 print '(A)', '\n逃げ切れた'
                 read *
                 write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-                exit
+                exit j
             case default
                 print '(A)', '\n逃走失敗'
                 x = add(5)
@@ -733,7 +730,7 @@ subroutine game_2()
             read *
             write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
         end if
-    end do
+    end do j
     contains
     integer(int32) function add(n)
         implicit none
@@ -743,7 +740,7 @@ subroutine game_2()
         integer, allocatable :: seed(:)
         call random_seed(size=seedsize)
         allocate(seed(seedsize))
-        do
+        f:do
             call random_seed(get=seed)
             call system_clock(count=c)
             seed(1) = c
@@ -751,8 +748,8 @@ subroutine game_2()
             call random_number(x)
             y = x*100
             rad = int(y)
-            if (rad .lt. n) exit
-        end do
+            if (rad .lt. n) exit f
+        end do f
         deallocate(seed)
         add = rad
     end function
@@ -760,7 +757,7 @@ end subroutine game_2
 
 subroutine game_3()
     use m_usc, only: LargeInt_K
-    use, intrinsic :: iso_fortran_env
+    use, intrinsic :: iso_fortran_env, only: int32, int64, real32
     implicit none
     character(10) d
     integer(LargeInt_K) hero_hp, hero_mp, enemy3_hp, enemy3_mp, n, x
@@ -814,17 +811,19 @@ subroutine game_3()
         n = 0;x = 0
         hero_hp = 99999999999999999_8;enemy3_hp = 999999999999999999_8
         hero_mp = 99999999999999999_8;enemy3_mp = 20
+    case default
+        error stop "\nError: Invalid string.\n"
     end select
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print*, '\n超戦略ゲーム  ~ shit video game ~\n\n\n\n\nEnterを押してください。'
     read *
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-    do
+    j:do
         if (hero_hp .le. 0) then
             print*, '\nGAME OVER'
             read *
             write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-            exit
+            exit j
         else if (enemy3_hp .le. 0) then
             print '(A)', '\n敵を撲殺することが出来た。ワイの勝利！！！'
             print '(A)', 'Ураааааааааааааааа!'
@@ -840,7 +839,7 @@ subroutine game_3()
             print '(A)', '\nレベル1上がった。'
 110         read *
             write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-            exit
+            exit j
         end if
         print '(A)', '\n敵が現れた！'
         print *, 'HP: ', enemy3_hp
@@ -852,7 +851,7 @@ subroutine game_3()
         write(*, '(A)', advance='no') ':'
         read (*, '(A)') d
         if (d .eq. 'q') then
-            exit
+            exit j
         else if (d .eq. '1') then
             n = add(5)
             select case(n)
@@ -956,14 +955,15 @@ subroutine game_3()
             case (1)
                 print '(A)', '\n防御成功'
                 print '(A)', 'HP: 1回復'
-                do y = 5, 100000000
+                k:do y = 5, 100000000, 5
                     if (mp .eq. y) then
                         print '(A)', 'MP: 1回復'
                         hero_mp = hero_mp + 1
+                        exit k
                     else if (mp .lt. y) then
-                        exit
+                        exit k
                     end if
-                end do
+                end do k
                 read *
                 write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             case default
@@ -980,7 +980,7 @@ subroutine game_3()
                 print '(A)', '\n逃げ切れた'
                 read *
                 write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-                exit
+                exit j
             case default
                 print '(A)', '\n逃走失敗'
                 x = add(5)
@@ -994,7 +994,7 @@ subroutine game_3()
             read *
             write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
         end if
-    end do
+    end do j
     contains
     integer(int32) function add(n)
         implicit none
@@ -1004,7 +1004,7 @@ subroutine game_3()
         integer, allocatable :: seed(:)
         call random_seed(size=seedsize)
         allocate(seed(seedsize))
-        do
+        f:do
             call random_seed(get=seed)
             call system_clock(count=c)
             seed(1) = c
@@ -1012,8 +1012,8 @@ subroutine game_3()
             call random_number(x)
             y = x*100
             rad = int(y)
-            if (rad .lt. n) exit
-        end do
+            if (rad .lt. n) exit f
+        end do f
         deallocate(seed)
         add = rad
     end function
@@ -1049,7 +1049,7 @@ subroutine game()
         integer, allocatable :: seed(:)
         call random_seed(size=seedsize)
         allocate(seed(seedsize))
-        do
+        m:do
             call random_seed(get=seed)
             call system_clock(count=c)
             seed(1) = c
@@ -1057,8 +1057,8 @@ subroutine game()
             call random_number(x)
             y = x*100
             rad = int(y)
-            if (rad .lt. 9) exit
-        end do
+            if (rad .lt. 9) exit m
+        end do m
         deallocate(seed)
         add = rad
     end function
@@ -1067,10 +1067,8 @@ end subroutine game
 subroutine nizihoutei()
     use m_usc, only: err
     use, intrinsic :: iso_fortran_env, only: real128
-    use, intrinsic :: ieee_arithmetic
     implicit none
     complex(real128) a, b, c, k1, k2
-    call ieee_set_rounding_mode(ieee_nearest)
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '一般: ax^2 + bx + c = 0 (a /= 0)\n'
     print '(A)', 'a, b, c値(係数)を入力してください。'
@@ -1097,7 +1095,7 @@ subroutine nizihoutei()
 end subroutine nizihoutei
 
 subroutine n_sin()
-    use m_usc
+    use m_usc, only: err, z
     use, intrinsic :: iso_fortran_env, only: real128
     implicit none
     real(real128) n
@@ -1118,7 +1116,7 @@ subroutine n_sin()
 end subroutine n_sin
 
 subroutine n_cos()
-    use m_usc
+    use m_usc, only: err, z
     use, intrinsic :: iso_fortran_env, only: real128
     implicit none
     real(real128) n
@@ -1139,7 +1137,7 @@ subroutine n_cos()
 end subroutine n_cos
 
 subroutine  n_tan()
-    use m_usc
+    use m_usc, only: err, z
     use, intrinsic :: iso_fortran_env, only: real128
     implicit none
     real(real128) n
@@ -1160,7 +1158,7 @@ subroutine  n_tan()
 end subroutine n_tan
 
 subroutine n_asin()
-    use m_usc
+    use m_usc, only: err, z
     use, intrinsic :: iso_fortran_env, only: real128
     implicit none
     real(real128) n
@@ -1181,7 +1179,7 @@ subroutine n_asin()
 end subroutine n_asin
 
 subroutine n_acos()
-    use m_usc
+    use m_usc, only: err, z
     use, intrinsic :: iso_fortran_env, only: real128
     implicit none
     real(real128) n
@@ -1202,7 +1200,7 @@ subroutine n_acos()
 end subroutine n_acos
 
 subroutine n_atan()
-    use m_usc
+    use m_usc, only: err, z
     use, intrinsic :: iso_fortran_env, only: real128
     implicit none
     real(real128) n
@@ -1223,7 +1221,7 @@ subroutine n_atan()
 end subroutine n_atan
 
 subroutine n_atan2()
-    use m_usc
+    use m_usc, only: err, z
     use, intrinsic :: iso_fortran_env, only: real128
     implicit none
     real(real128) x, y
@@ -1252,16 +1250,18 @@ subroutine n_atan2()
 end subroutine n_atan2
 
 subroutine n_aimag()
-    use m_usc, only: err
+    use m_usc, only: err, z
+    use, intrinsic :: iso_fortran_env, only: real128
     implicit none
-    complex(16) z
+    complex(real128) im
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)',  '入力例: (2.71, 0.99)\n※()も入力してください。\n'
     print '(A)', '値を入力してください。'
-    read (*, *, iostat=err) z
+    read (*, *, iostat=err) im
     if (err .eq. 0) then
         print*, '\n答え'
-        print*, aimag(z)
+        print*, aimag(im)
+        z = aimag(im)
         print*, '\nEnterを押してください。'
         read *
     else
@@ -1272,7 +1272,7 @@ subroutine n_aimag()
 end subroutine n_aimag
 
 subroutine n_log10()
-    use m_usc
+    use m_usc, only: err, z
     use, intrinsic :: iso_fortran_env, only: real128
     implicit none
     real(real128) n
@@ -1293,7 +1293,7 @@ subroutine n_log10()
 end subroutine n_log10
 
 subroutine n_log()
-    use m_usc
+    use m_usc, only: err, z
     use, intrinsic :: iso_fortran_env, only: real128
     implicit none
     real(real128) n
@@ -1314,7 +1314,7 @@ subroutine n_log()
 end subroutine n_log
 
 subroutine mozuro
-    use m_usc
+    use m_usc, only: err, z
     use, intrinsic :: iso_fortran_env, only: real128
     implicit none
     real(real128) a, n
@@ -1343,8 +1343,8 @@ subroutine mozuro
 end subroutine mozuro
 
 subroutine randsu()
-    use m_usc
-    use, intrinsic :: iso_fortran_env, only: real128, int64, int32
+    use m_usc, only: err, z, LargeInt_K
+    use, intrinsic :: iso_fortran_env, only: int32, int64, real128
     implicit none
     integer(int64) n
     real(real128) x
@@ -1505,7 +1505,7 @@ subroutine neipia() ! e = lim n->Infinity (1+1/n)**n | Σn=0 ∞ 1/n!
 end subroutine neipia
 
 subroutine y_zyoukon()
-    use m_usc
+    use m_usc, only: err, z
     use, intrinsic :: iso_fortran_env, only: real128
     implicit none
     real(real128) x, y
@@ -1544,7 +1544,7 @@ subroutine y_zyoukon()
 end subroutine y_zyoukon
 
 subroutine zettaiti()
-    use m_usc
+    use m_usc, only: err, z
     use, intrinsic :: iso_fortran_env, only: real128
     implicit none
     real(real128) x
@@ -1564,7 +1564,7 @@ subroutine zettaiti()
 end subroutine zettaiti
 
 subroutine sisu()
-    use m_usc
+    use m_usc, only: err, z
     use, intrinsic :: iso_fortran_env, only: real128
     implicit none
     real(real128) x
@@ -1584,7 +1584,7 @@ subroutine sisu()
 end subroutine sisu
 
 subroutine soukyokusin()
-    use m_usc
+    use m_usc, only: err, z
     use, intrinsic :: iso_fortran_env, only: real128
     implicit none
     real(real128) x
@@ -1604,7 +1604,7 @@ subroutine soukyokusin()
 end subroutine soukyokusin
 
 subroutine soukyokucos()
-    use m_usc
+    use m_usc, only: err, z
     use, intrinsic :: iso_fortran_env, only: real128
     implicit none
     real(real128) x
@@ -1624,7 +1624,7 @@ subroutine soukyokucos()
 end subroutine soukyokucos
 
 subroutine soukyokutan()
-    use m_usc
+    use m_usc, only: err, z
     use, intrinsic :: iso_fortran_env, only: real128
     implicit none
     real(real128) x
@@ -1644,7 +1644,7 @@ subroutine soukyokutan()
 end subroutine soukyokutan
 
 subroutine gamma_f()
-    use m_usc
+    use m_usc, only: err, z
     use, intrinsic :: iso_fortran_env, only: real128
     implicit none
     real(real128) x
@@ -1690,7 +1690,7 @@ subroutine joke()
         print '(A)', 'So women are evil.'
         read *
     case default
-        error stop 'Error: There''s an anomaly in variable x'
+        error stop '\nError: There''s an anomaly in variable x\n'
     end select
     contains
     integer(int32) function randon()
@@ -1864,13 +1864,14 @@ subroutine ensyu()
     use, intrinsic :: iso_fortran_env, only: int64
     implicit none
     integer(int64), parameter :: vmax = 428800, bmax = 25728
-    integer(int64) vect(vmax), buffer(bmax)
+    integer(int64), allocatable :: vect(:), buffer(:)!vect(vmax), buffer(bmax)
     integer(int64) n, L, more, num, carry, k, d
     !$ double precision st, en
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', 'ちょっと待っててね\n終わったあとは、メモ帳を&
     &大画面にした方がええで\n'
     !$ st = omp_get_wtime()
+    allocate(vect(vmax), buffer(bmax))
     vect(1:vmax) = 2
     more = 0
     do n = 1, bmax
@@ -1892,12 +1893,13 @@ subroutine ensyu()
     close(11)
     write(*, "(1x, I1, '.'/(1x, 12I5.5))") buffer
     !$ print *, "Elapsed time :", en - st
+    deallocate(vect, buffer)
     print*, '\nEnterを押してください。'
     read *
 end subroutine ensyu
 
 subroutine heikin()
-    use m_usc
+    use m_usc, only: err, z, LargeInt_K
     use, intrinsic :: iso_fortran_env, only: real128
     implicit none
     integer(LargeInt_K) i, max
@@ -1939,7 +1941,7 @@ subroutine heikin()
 end subroutine heikin
 
 subroutine kaizyou()
-    use m_usc
+    use m_usc, only: err, z
     use, intrinsic :: iso_fortran_env, only: real128, int64
     implicit none
     integer(int64) n, k
@@ -1949,8 +1951,10 @@ subroutine kaizyou()
     read (*, *, iostat=err) n
     if (err .eq. 0) then
         ans = 1.0_real128
-        do k = 1, n
+        k = 1
+        do while (k .eq. n)
             ans = ans * k
+            k = k + 1
         end do
         print*, '\n答え'
         print '("  ", i0, "! = ", F0.0)', n, ans
@@ -1964,7 +1968,7 @@ subroutine kaizyou()
 end subroutine kaizyou
 
 subroutine zetaf()
-    use m_usc
+    use m_usc, only: err, z
     use, intrinsic :: iso_fortran_env, only: real128, int64
     implicit none
     real(real128) zeta, s
@@ -2001,7 +2005,7 @@ subroutine collatz()
     if (err .eq. 0) then
         i = 0
         print*, ''
-        loop : do
+        loop:do
             h = mod(n, q)
             if (n .eq. 1) exit loop
             select case(int(h, LargeInt_K))
@@ -2036,7 +2040,6 @@ subroutine soinsubunkai()
         if (n .eq. 1) then
             write (*, '(A)', advance='no') '1'
         end if
-
         i = 5
         do while ((i * i) <= n)
             if (mod(n, i) .eq. 0) then
@@ -2046,10 +2049,8 @@ subroutine soinsubunkai()
             end if
             i = i + 6
         end do
-
         write (*, '(A, I0)', advance='no') '1 * ', n
         goto 110
-
 19      c  = 0
         do while (mod(n, 2) .eq. 0)
             if (c .ne. 0) then
@@ -2139,7 +2140,7 @@ subroutine sosuhantei()
 end subroutine sosuhantei
 
 subroutine slot()
-    use, intrinsic :: iso_fortran_env, only: real128, int64, int32
+    use, intrinsic :: iso_fortran_env, only: int32, int64, real128
     implicit none
     character char
     integer(int64) i, j, x, a, b, c, k, L
@@ -2180,7 +2181,7 @@ subroutine slot()
                 k = k + 127
                 read (*, '(A)') char
             else
-                print '(A)', '\nおしい！'
+                print '(A)', '\nおしい!'
                 i = i + 1
                 k = k + 63
                 if (i .eq. 5) then
@@ -2256,10 +2257,11 @@ subroutine kanzensu()
         read *
     end if
     contains
-    logical function is_prime(n)
+    pure logical function is_prime(n)
         implicit none
         integer(LargeInt_K), intent(in) :: n
-        integer(LargeInt_K) :: i = 3
+        integer(LargeInt_K) i
+        i = 3
         select case(n)
         case (0, 1)
             is_prime = .false.
@@ -2273,12 +2275,13 @@ subroutine kanzensu()
         end do
         is_prime = .true.
     end function
-    real(real128) function pow(x, n)
+
+    pure real(real128) function pow(x, n)
         implicit none
         real(real128), intent(in) :: x
-        integer(int64), intent(in) :: n
+        integer(LargeInt_K), intent(in) :: n
         real(real128) k
-        integer(int64) i
+        integer(LargeInt_K) i
         k = 1
         do i = 1, n
             k = k * x
@@ -2307,6 +2310,7 @@ subroutine akkaman
             ans = 2 * n + 3
         case default
             t = 2 ** (m - 2)
+            i = 2
             do i = 2, int(n + 3, LargeInt_K)
                 t = t * 2 ** (m - 2)
             end do
@@ -2365,11 +2369,13 @@ subroutine furie()
     read (1, '()')
     block
         real(real128), parameter :: pi2 = 2 * 3.1415926535897932384626433832795028840_real128
-        integer(int64), parameter :: max = 100000
+        integer(int64), parameter :: max = 1073741824
         integer(int64) i, j, k, n
-        real(real128) ReF, ImF, f(max), dummy
+        real(real128), allocatable :: f(:)
+        real(real128) ReF, ImF, dummy
+        allocate(f(max))
         n = 0
-        st: do k = 1, max
+        st:do k = 1, max
             read (1, *, iostat=err) f(k)
             if (err < 0) exit st
             n = n + 1
@@ -2385,6 +2391,7 @@ subroutine furie()
             write(2, '("\t", I0, "\t", F0.23)') j, ImF
             write(3, '("\t", I0, "\t", F0.23)') j, ReF
         end do
+        deallocate(f)
     end block
     close(3)
     close(2)
@@ -2441,8 +2448,7 @@ subroutine test()
 end subroutine test
 
 subroutine page_03()
-    use m_usc
-    use, intrinsic :: iso_fortran_env
+    use m_usc, only: M_A, M_S, M_M, M_D
     implicit none
     character(256) str
     do
@@ -2501,7 +2507,7 @@ subroutine page_03()
 end subroutine page_03
 
 subroutine page_02()
-    use m_usc
+    use m_usc, only: M_A, M_S, M_M, M_D
     implicit none
     character(256) str
     do
@@ -2570,8 +2576,8 @@ subroutine page_02()
 end subroutine page_02
 
 subroutine page_01()
-    use m_usc
-    use, intrinsic :: iso_fortran_env
+    use m_usc, only: z, M_A, M_S, M_M, M_D
+    use, intrinsic :: iso_fortran_env, only: real128
     implicit none
     character(256) str
     do
@@ -2617,6 +2623,7 @@ subroutine page_01()
                 real(real128), parameter :: fai = (1.0_real128 + sqrt(5.0_real128)) * 0.5_real128
                 print*, 'φ(黄金数)'
                 print '(2F40.36)', fai
+                z = fai
                 print*, '\nEnterを押してください。'
             end block
             read *
@@ -2655,8 +2662,8 @@ subroutine page_01()
 end subroutine page_01
 
 subroutine page_00()
-    use m_usc
-    use, intrinsic :: iso_fortran_env
+    use m_usc, only: z, M_A, M_S, M_M, M_D
+    use, intrinsic :: iso_fortran_env, only: real128
     implicit none
     character(256) str
     do
@@ -2694,6 +2701,7 @@ subroutine page_00()
                 real(real128), parameter :: PI = 4.0_real128 * atan(1.0_real128)
                 print*, 'π(円周率)'
                 print '(2F40.36)', PI
+                z = PI
                 print*, '\n Wikipediaでは以下(上の桁数に合わせた)'
                 print '(A)', '  3.141592653589793238462643383279502884'
                 print*, '\nEnterを押してください。'
@@ -2799,15 +2807,9 @@ program calculator
                 real(real128) :: s = 0.0_real128
                 !$ real(real64) :: time_begin_s, time_end_s
                 !$ time_begin_s = omp_get_wtime()
-                !$omp parallel num_threads(3)
-                !$omp do
                 do i = 100000000_int64, 0, -1
-                    !$omp critical
                     s = s + ((-1.0_real128)**i) / (2.0_real128 * real(i, real128) + 1.0_real128)
-                    !$omp end critical
                 end do
-                !$omp end do
-                !$omp end parallel
                 !$ time_end_s = omp_get_wtime()
                 print*, 'Answer:', s * 4.0_real128
                 !$ print '(A, F13.5, A)', '\ntime:', time_end_s - time_begin_s, ' [sec]\n'
@@ -2863,10 +2865,14 @@ program calculator
         read *
         call page_00()
     else
+        if (iargc() .eq. 0) then
+            print '(A)', '「大いなる力には大いなる責任が伴う」by ベンおじさん.'
+            read *
+            call page_00()
+        end if
         print '(A)', '「大いなる力には大いなる責任が伴う」by ベンおじさん.'
         read *
         call getarg(1, str)
-        if (iargc() .eq. 0) call page_00()
         select case(str)
         case ('help')
             call help()
@@ -2885,15 +2891,9 @@ program calculator
                 real(real128) :: s = 0.0_real128
                 !$ real(real64) :: time_begin_s, time_end_s
                 !$ time_begin_s = omp_get_wtime()
-                !$omp parallel num_threads(3)
-                !$omp do
                 do i = 100000000_int64, 0, -1
-                    !$omp critical
                     s = s + ((-1.0_real128)**i) / (2.0_real128 * real(i, real128) + 1.0_real128)
-                    !$omp end critical
                 end do
-                !$omp end do
-                !$omp end parallel
                 !$ time_end_s = omp_get_wtime()
                 print*, 'Answer:', s * 4.0_real128
                 !$ print '(A, F13.5, A)', '\ntime:', time_end_s - time_begin_s, ' [sec]\n'
@@ -2908,7 +2908,7 @@ program calculator
                 print '("現在のレベル:\t", I0)', level
                 print*, ''
                 stop
-111             error stop "Error: 超戦略ゲームをプレイしてください。\n"
+111             error stop "\nError: 超戦略ゲームをプレイしてください。\n"
             end block
         case ('time')
             block
