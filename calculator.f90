@@ -2030,40 +2030,38 @@ subroutine soinsubunkai()
     use m_usc, only: err, LargeInt_K
     use, intrinsic :: iso_fortran_env, only: real128
     implicit none
-    integer(LargeInt_K) n, c, i
+    integer(LargeInt_K) n, c, i, j
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
     read (*, *, iostat=err) n
     if (err .eq. 0) then
         print*, '\n答え'
         write (*, '("\t", I0, A)', advance='no') n,' = '
+        j = 0
         if (n .eq. 1) then
             write (*, '(A)', advance='no') '1'
+            goto 110
+        else if (mod(n, 2) .eq. 0) then
+            write (*, '(I0)', advance='no') 2
+            n = n / 2
+            j = 1
         end if
-        i = 5
-        do while ((i * i) <= n) ! 素数判定
-            if (mod(n, i) .eq. 0) then
-                goto 19
-            else if (mod(n, (i + 2)) .eq. 0) then
-                goto 19
-            end if
-            i = i + 6
-        end do
-        write (*, '(A, I0)', advance='no') '1 * ', n
-        goto 110
-19      do while (mod(n, 2) .eq. 0)
-            write (*, '(I0, " * ")', advance='no') 2
+        do while (mod(n, 2) .eq. 0)
+            write (*, '(" * ", I0)', advance='no') 2
             n = n / 2
         end do
-        c  = int(sqrt(real(n, real128)), LargeInt_K) !素因数分解
+        c  = int(sqrt(real(n, real128)), LargeInt_K) ! 素因数分解
+        if (j .eq. 0) then
+            write (*, '(I0)', advance='no') 1
+        end if
         do i = 3, c, 2
             do while (mod(n, i) .eq. 0)
-                write (*, '(I0, " * ")', advance='no') i
+                write (*, '(" * ", I0)', advance='no') i
                 n = n / i
             end do
         end do
         if (n .ne. 1) then
-            write (*, '(I0)', advance='no') n
+            write (*, '(" * ", I0)', advance='no') n
         end if
 110     print*, '\n\nEnterを押してください。'
         read *
