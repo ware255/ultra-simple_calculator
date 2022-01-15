@@ -2041,7 +2041,7 @@ subroutine soinsubunkai()
             write (*, '(A)', advance='no') '1'
         end if
         i = 5
-        do while ((i * i) <= n)
+        do while ((i * i) <= n) ! 素数判定
             if (mod(n, i) .eq. 0) then
                 goto 19
             else if (mod(n, (i + 2)) .eq. 0) then
@@ -2051,27 +2051,20 @@ subroutine soinsubunkai()
         end do
         write (*, '(A, I0)', advance='no') '1 * ', n
         goto 110
-19      c  = 0
-        do while (mod(n, 2) .eq. 0)
-            if (c .ne. 0) then
-                write (*, '(A)', advance='no') ' * '
-            end if
-            write (*, '(I0)', advance='no') 2
+19      do while (mod(n, 2) .eq. 0)
+            write (*, '(I0, " * ")', advance='no') 2
             n = n / 2
-            c = c + 1
         end do
-        i = 3
-        do while (i <= n)
+        c  = int(sqrt(real(n, real128)), LargeInt_K) !素因数分解
+        do i = 3, c, 2
             do while (mod(n, i) .eq. 0)
-                if (c .ne. 0) then
-                    write (*, '(A)', advance='no') ' * '
-                end if
-                write (*, '(I0)', advance='no') i
+                write (*, '(I0, " * ")', advance='no') i
                 n = n / i
-                c = c + 1
             end do
-            i = i + 1
         end do
+        if (n .ne. 1) then
+            write (*, '(I0)', advance='no') n
+        end if
 110     print*, '\n\nEnterを押してください。'
         read *
     else
@@ -2761,22 +2754,6 @@ subroutine page_00()
     end do
 end subroutine page_00
 
-subroutine help()
-    implicit none
-    print '(A)', '使用法: ./calculator [オプション]'
-    print '(A)', 'オプションがない場合はそのまま実行します。\n'
-    print '(A)', 'オプション:'
-    print*, 'page_00    -- 0ページ'
-    print*, 'page_01    -- 1ページ'
-    print*, 'page_02    -- 2ページ'
-    print*, 'page_03    -- 3ページ'
-    print*, 'help       -- 助けて'
-    print*, 'benchmark  -- ベンチマークのテスト'
-    print*, 'time       -- 現在の時刻\n'
-    print '(A)', '例:'
-    print '(A)', '$ ./calculator page_00'
-end subroutine help
-
 program calculator
     !$ use omp_lib
     use, intrinsic :: iso_fortran_env, only: int64, real64, real128
@@ -2941,4 +2918,20 @@ program calculator
             print '(A)', 'この引数はありません。\n'
         end select
     end if
+    contains
+    subroutine help()
+        implicit none
+        print '(A)', '使用法: ./calculator [オプション]'
+        print '(A)', 'オプションがない場合はそのまま実行します。\n'
+        print '(A)', 'オプション:'
+        print*, 'page_00    -- 0ページ'
+        print*, 'page_01    -- 1ページ'
+        print*, 'page_02    -- 2ページ'
+        print*, 'page_03    -- 3ページ'
+        print*, 'help       -- 助けて'
+        print*, 'benchmark  -- ベンチマークのテスト'
+        print*, 'time       -- 現在の時刻\n'
+        print '(A)', '例:'
+        print '(A)', '$ ./calculator page_00'
+    end subroutine help
 end program calculator
