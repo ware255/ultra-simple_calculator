@@ -2458,16 +2458,16 @@ subroutine lifegame()
     deallocate(seed)
     
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-    write (*, '(A)', advance='no') '-------------------------\n'
+    write (*, '(A)', advance='no') '-----------------\n'
     call p(cells(1:gridsize, 1:gridsize))
-    write (*, '(A)', advance='no') '-------------------------'
+    write (*, '(A)', advance='no') '-----------------'
     call sleep(1)
     do
         write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-        write (*, '(A)', advance='no') '-------------------------\n'
+        write (*, '(A)', advance='no') '-----------------\n'
         call n(cells)
         call p(cells(1:gridsize, 1:gridsize))
-        write (*, '(A)', advance='no') '-------------------------'
+        write (*, '(A)', advance='no') '-----------------'
         call sleep(1)
     end do
 contains
@@ -2481,9 +2481,8 @@ contains
                     write(*, '(A)', advance='no') ' '
                 end if
             end do
-            write(*,*)
+            print *, '|'
         end do
-        write(*,*)
     end subroutine p
 
     pure subroutine n(cells)
