@@ -6,7 +6,7 @@ module m_usc
     real(real128) z
     character(256), private :: str
     real(real128), private :: x
-    contains
+contains
     subroutine M_A()
         implicit none
         print '(A)', '値を入力してください。'
@@ -349,7 +349,7 @@ subroutine nizyou()
 end subroutine nizyou
 
 subroutine game_1()
-    use, intrinsic :: iso_fortran_env, only: int32, int64, real32
+    use, intrinsic :: iso_fortran_env, only: int32, int64, real64
     implicit none
     character(10) d
     integer(int64) hero_hp, hero_mp, enemy1_hp, enemy1_mp, n, x
@@ -527,12 +527,12 @@ subroutine game_1()
             write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
         end if
     end do j
-    contains
+contains
     integer(int32) function add(n)
         implicit none
         integer(int32) rad, n
         integer(int32) seedsize, c
-        real(real32) y, x
+        real(real64) y, x
         integer, allocatable :: seed(:)
         call random_seed(size=seedsize)
         allocate(seed(seedsize))
@@ -552,7 +552,7 @@ subroutine game_1()
 end subroutine game_1
 
 subroutine game_2()
-    use, intrinsic :: iso_fortran_env, only: int32, int64, real32
+    use, intrinsic :: iso_fortran_env, only: int32, int64, real64
     implicit none
     character(10) d
     integer(int64) hero_hp, hero_mp, enemy2_hp, enemy2_mp, n, x
@@ -731,12 +731,12 @@ subroutine game_2()
             write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
         end if
     end do j
-    contains
+contains
     integer(int32) function add(n)
         implicit none
         integer(int32) rad, n
         integer(int32) seedsize, c
-        real(real32) y, x
+        real(real64) y, x
         integer, allocatable :: seed(:)
         call random_seed(size=seedsize)
         allocate(seed(seedsize))
@@ -757,7 +757,7 @@ end subroutine game_2
 
 subroutine game_3()
     use m_usc, only: LargeInt_K
-    use, intrinsic :: iso_fortran_env, only: int32, int64, real32
+    use, intrinsic :: iso_fortran_env, only: int32, int64, real64
     implicit none
     character(10) d
     integer(LargeInt_K) hero_hp, hero_mp, enemy3_hp, enemy3_mp, n, x
@@ -995,12 +995,12 @@ subroutine game_3()
             write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
         end if
     end do j
-    contains
+contains
     integer(int32) function add(n)
         implicit none
         integer(int32) rad, n
         integer(int32) seedsize, c
-        real(real32) y, x
+        real(real64) y, x
         integer, allocatable :: seed(:)
         call random_seed(size=seedsize)
         allocate(seed(seedsize))
@@ -1020,9 +1020,9 @@ subroutine game_3()
 end subroutine game_3
 
 subroutine game()
-    use, intrinsic :: iso_fortran_env
+    use, intrinsic :: iso_fortran_env, only: int32, real64
     implicit none
-    integer(int64) n
+    integer(int32) n
     n = add()
     open(1, file='data/.level', status='old', err=110)
     close(1)
@@ -1040,13 +1040,13 @@ subroutine game()
         flush(2)
     close(2)
 120 write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-    contains
+contains
     integer(int32) function add()
         implicit none
         integer(int32) rad, c
         integer(int32) seedsize
-        real(int32) y, x
-        integer, allocatable :: seed(:)
+        real(real64) y, x
+        integer(int32), allocatable :: seed(:)
         call random_seed(size=seedsize)
         allocate(seed(seedsize))
         m:do
@@ -1369,7 +1369,7 @@ subroutine randsu()
         print*, '\nError!'
         read *
     end if
-    contains
+contains
     integer(int64) function randon(n)
         implicit none
         integer(int64) rad
@@ -1664,7 +1664,7 @@ subroutine gamma_f()
 end subroutine gamma_f
 
 subroutine joke()
-    use, intrinsic :: iso_fortran_env, only: real128, int64, int32
+    use, intrinsic :: iso_fortran_env, only: real64, int64, int32
     implicit none
     integer(int64) x
     x = randon()
@@ -1692,12 +1692,12 @@ subroutine joke()
     case default
         error stop '\nError: There''s an anomaly in variable x\n'
     end select
-    contains
+contains
     integer(int32) function randon()
         implicit none
         integer(int32) rad, c
         integer(int32) seedsize
-        real(real128) y, x
+        real(real64) y, x
         integer, allocatable :: seed(:)
         call random_seed(size=seedsize)
         allocate(seed(seedsize))
@@ -2036,10 +2036,14 @@ subroutine soinsubunkai()
     read (*, *, iostat=err) n
     if (err .eq. 0) then
         print*, '\n答え'
-        write (*, '("\t", I0, A)', advance='no') n,' = '
         j = 0
         if (n .eq. 1) then
-            write (*, '(A)', advance='no') '1'
+            write (*, '("\t", A)', advance='no') '1 /= 1(Not a prime number.)'
+            goto 110
+        end if
+        write (*, '("\t", I0, A)', advance='no') n,' = '
+        if (n .eq. 2) then
+            write (*, '("1 * ", I0)', advance='no') 2
             goto 110
         else if (mod(n, 2) .eq. 0) then
             write (*, '(I0)', advance='no') 2
@@ -2050,7 +2054,7 @@ subroutine soinsubunkai()
             write (*, '(" * ", I0)', advance='no') 2
             n = n / 2
         end do
-        c  = int(sqrt(real(n, real128)), LargeInt_K) ! 素因数分解
+        c  = int(sqrt(real(n, real128)), LargeInt_K)
         if (j .eq. 0) then
             write (*, '(I0)', advance='no') 1
         end if
@@ -2131,7 +2135,7 @@ subroutine sosuhantei()
 end subroutine sosuhantei
 
 subroutine slot()
-    use, intrinsic :: iso_fortran_env, only: int32, int64, real128
+    use, intrinsic :: iso_fortran_env, only: int32, int64, real64
     implicit none
     character char
     integer(int64) i, j, x, a, b, c, k, L
@@ -2184,16 +2188,17 @@ subroutine slot()
                 read (*, '(A)') char
             end if hantei
             goto 11
+        !else if (mod(, 3) .eq. 0)
         else if (char .eq. 'q') then
             exit loop
         end if
         L = L + 1
     end do loop
-    contains
+contains
     integer(int32) function randon()
         implicit none
         integer(int32) seedsize, c, rad
-        real(real128) y, x
+        real(real64) y, x
         integer, allocatable :: seed(:)
         call random_seed(size=seedsize)
         allocate(seed(seedsize))
@@ -2204,7 +2209,7 @@ subroutine slot()
             seed(1) = c
             call random_seed(put=seed)
             call random_number(x)
-            y = x*100
+            y = x*10
             rad = int(y)
             if (rad .lt. 10) exit loop
         end do loop
@@ -2223,7 +2228,7 @@ subroutine kanzensu()
     print '(A)', 'xを入力してください。(0 < x < 62)'
     read (*, *, iostat=err) x
     if (err .eq. 0) then
-        if (0 >= x .or. 62 <= x) then
+        if (0 .ge. x .or. 62 .le. x) then
             print*, '変域にしたがってください。'
             read *
             return
@@ -2247,8 +2252,8 @@ subroutine kanzensu()
         print*, '\nError!'
         read *
     end if
-    contains
-    pure logical function is_prime(n)
+contains
+    pure logical(int64) function is_prime(n)
         implicit none
         integer(LargeInt_K), intent(in) :: n
         integer(LargeInt_K) i
@@ -2260,7 +2265,7 @@ subroutine kanzensu()
             is_prime = .true.
         end select
         if (mod(n, 2) .eq. 0) is_prime = .false.
-        do while((i * i) <= n)
+        do while((i * i) .le. n)
             if (mod(n, i) .eq. 0) is_prime = .false.
             i = i + 2
         end do
@@ -2327,7 +2332,7 @@ subroutine sigmoid()
     print '(A)', 'aとxの値を入力してください。'
     read (*, *, iostat=err) a, x
     if (err .eq. 0) then
-        if (a < 0) then
+        if (a .lt. 0) then
             print*, 'gainの値を大きくしてください。'
             read *
             return
@@ -2368,7 +2373,7 @@ subroutine furie()
         n = 0
         st:do k = 1, max
             read (1, *, iostat=err) f(k)
-            if (err < 0) exit st
+            if (err .lt. 0) exit st
             n = n + 1
         end do st
         do j = 1, n
@@ -2429,14 +2434,85 @@ subroutine tan_h()
     end if
 end subroutine tan_h
 
-subroutine test()
-    use, intrinsic :: iso_fortran_env, only: real128, int64
+subroutine lifegame()
+    use, intrinsic :: iso_fortran_env, only: int32, int64, real64
     implicit none
+    integer(int64), parameter :: gridsize = 15
+    logical(int64) :: cells(0:gridsize + 1, 0:gridsize + 1) = .false.
+    integer(int32), allocatable :: seed(:)
+    integer(int64) i, j
+    integer(int32) seedsize
+    real(real64) rnums(gridsize, gridsize)
+
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-    print*, '計算中'
-    print*, '\nEnterを押してください。'
-    read *
-end subroutine test
+    print *, 'お待ちください。'
+
+    call random_seed(size=seedsize)
+    allocate(seed(seedsize))
+    do i = 1, seedsize
+        call system_clock(count=seed(i))
+    end do
+    call random_seed(put=seed(:))
+    call random_number(rnums)
+    where (rnums .gt. 0.80_real64) cells(1:gridsize, 1:gridsize) = .true.
+    deallocate(seed)
+    
+    write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    write (*, '(A)', advance='no') '-------------------------\n'
+    call p(cells(1:gridsize, 1:gridsize))
+    write (*, '(A)', advance='no') '-------------------------'
+    call sleep(1)
+    do
+        write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+        write (*, '(A)', advance='no') '-------------------------\n'
+        call n(cells)
+        call p(cells(1:gridsize, 1:gridsize))
+        write (*, '(A)', advance='no') '-------------------------'
+        call sleep(1)
+    end do
+contains
+    subroutine p(cells)
+        logical(int64), intent(inout) :: cells(:,:)
+        do i = 1, size(cells,1)
+            do j = 1, size(cells,2)
+                if (cells(i,j)) then
+                    write(*, '(A)', advance='no') '*'
+                else
+                    write(*, '(A)', advance='no') ' '
+                end if
+            end do
+            write(*,*)
+        end do
+        write(*,*)
+    end subroutine p
+
+    pure subroutine n(cells)
+        logical(int64), intent(inout) :: cells(:,:)
+        integer(int64) :: buffer(1:size(cells, 1) - 2, 1:size(cells, 2) - 2)
+        integer(int64) gridsize, i, j
+        gridsize = size(cells, 1)
+        buffer = 0
+        do j = -1, 1
+            do i = -1, 1
+                if (i .eq. 0 .and. j .eq. 0) then
+                    cycle
+                end if
+                where (cells(i + 2:gridsize - i - 1, j + 2:gridsize - j - 1)) buffer = buffer + 1
+            end do
+        end do
+        where (buffer .lt. 2 .or. buffer .gt. 3) cells(2:gridsize - 1, 2:gridsize - 1) = .false.
+        where (buffer .eq. 3) cells(2:gridsize - 1, 2:gridsize - 1) = .true.
+    end subroutine n
+end subroutine lifegame
+
+!subroutine test()
+!    use, intrinsic :: iso_fortran_env, only: real128, int64
+!    implicit none
+!    write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+!    print*, '計算中'
+!    print*, '\nEnterを押してください。'
+!    read *
+!end subroutine test
 
 subroutine page_03()
     use m_usc, only: M_A, M_S, M_M, M_D
@@ -2451,7 +2527,7 @@ subroutine page_03()
         print*, '4 シグモイド関数 ςa(x)'
         print*, '5 離散的フーリエ変換'
         print*, '6 tanθで建物の高さ'
-        print*, '7 '
+        print*, '7 Life Game'
         print*, '11 スロットゲーム\n'
         print*, '99 終了           02 Back'
         print '(A)', '-----------------------------------------'
@@ -2471,6 +2547,7 @@ subroutine page_03()
         case ('6')
             call tan_h()
         case ('7')
+            call lifegame()
         case ('11')
             call slot()
         case ('00')
@@ -2916,7 +2993,7 @@ program calculator
             print '(A)', 'この引数はありません。\n'
         end select
     end if
-    contains
+contains
     subroutine help()
         implicit none
         print '(A)', '使用法: ./calculator [オプション]'
