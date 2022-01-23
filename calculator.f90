@@ -2473,12 +2473,12 @@ subroutine lifegame()
 contains
     subroutine p(cells)
         logical(int64), intent(inout) :: cells(:,:)
-        do i = 1, size(cells,1)
-            do j = 1, size(cells,2)
+        do i = 1, size(cells, 1)
+            do j = 1, size(cells, 2)
                 if (cells(i,j)) then
-                    write(*, '(A)', advance='no') '*'
+                    write (*, '(A)', advance='no') '*'
                 else
-                    write(*, '(A)', advance='no') ' '
+                    write (*, '(A)', advance='no') ' '
                 end if
             end do
             print *, '|'
@@ -2504,7 +2504,68 @@ contains
     end subroutine n
 end subroutine lifegame
 
-!subroutine test()
+subroutine lumi_distance()
+    use m_usc, only: err, z
+    use, intrinsic :: iso_fortran_env, only: real128, int64
+    implicit none
+    real(real128) epsilon, a, err_, x, h
+    real(real128) trapezoid, midpoint, simpson
+    real(real128) new_simpson
+    integer(int64) i, n
+
+    write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    print '(A)', '赤方偏移xを入力してください。(0 < x < 1000)'
+    read (*, *, iostat=err) x
+    if (err .ne. 0) then
+        print*, '\nError!'
+        read *
+        return
+    else if (x <= 0.0_real128 .or. x >= 1000.0_real128) then
+        print '(A)', '\nちゃんと0 < x < 1000にしてください。'
+        read *
+        return
+    end if
+
+    a = 0.0_real128
+    simpson = 0.0_real128
+    err_ = 1.0_real128
+    epsilon = 0.00000010_real128
+    h = x - a
+    trapezoid = h * (f(a) + f(x)) * 0.5
+    n = 1
+    
+    do while (err_ > epsilon)
+        midpoint = 0
+        do i = 1, n
+            midpoint = midpoint + f(a + h * (i - 0.50_real128))
+        end do
+        midpoint = midpoint * h
+        new_simpson = (trapezoid + 2 * midpoint) / 3
+        err_ = abs(new_simpson - simpson) / abs(new_simpson)
+        simpson = new_simpson
+        h = h * 0.50_real128
+        trapezoid = (trapezoid + midpoint) * 0.50_real128
+        n = n * 2
+    end do
+
+    z = (1 + x) * simpson
+    print*, '\n答え'
+    print '("\t", F0.36, " [Mpc]")', z
+    print*, '\nEnterを押してください。'
+    read *
+contains
+    real(real128) function f(x)
+        implicit none
+        real(real128), parameter :: C = 299792.4580_real128
+        real(real128), parameter :: OMEGA_M = 0.30_real128
+        real(real128), parameter :: OMEGA_L = 0.70_real128
+        real(real128), parameter :: H_0 = 70.0_real128
+        real(real128), intent(in) :: x
+        f = C / H_0 / sqrt(OMEGA_M * ((1 + x) ** 3) + OMEGA_L)
+    end function
+end subroutine lumi_distance
+
+!subroutine test() ! template
 !    use, intrinsic :: iso_fortran_env, only: real128, int64
 !    implicit none
 !    write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
@@ -2526,7 +2587,8 @@ subroutine page_03()
         print*, '4 シグモイド関数 ςa(x)'
         print*, '5 離散的フーリエ変換'
         print*, '6 tanθで建物の高さ'
-        print*, '7 Life Game'
+        print*, '7 Life Game(止めるCtrl + C)'
+        print*, '8 光度距離計算'
         print*, '11 スロットゲーム\n'
         print*, '99 終了           02 Back'
         print '(A)', '-----------------------------------------'
@@ -2547,6 +2609,8 @@ subroutine page_03()
             call tan_h()
         case ('7')
             call lifegame()
+        case ('8')
+            call lumi_distance()
         case ('11')
             call slot()
         case ('00')
