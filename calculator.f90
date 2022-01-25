@@ -2362,6 +2362,7 @@ subroutine furie()
     print '(A)', '\n計算中'
     open(2, file='data/furie_im.txt', status='replace')
     open(3, file='data/furie_re.txt', status='replace')
+    open(4, file='data/furie_am.txt', status='replace')
     read (1, '()')
     block
         real(real128), parameter :: pi2 = 2 * 3.1415926535897932384626433832795028840_real128
@@ -2386,9 +2387,11 @@ subroutine furie()
             end do
             write(2, '("\t", I0, "\t", F0.23)') j, ImF
             write(3, '("\t", I0, "\t", F0.23)') j, ReF
+            write(4, '("\t", I0, "\t", F0.23)') j, ((ReF * ReF + ImF * ImF) ** 0.50_real128) / (n / 2)
         end do
         deallocate(f)
     end block
+    close(4)
     close(3)
     close(2)
     close(1)
@@ -2535,7 +2538,7 @@ subroutine lumi_distance()
     n = 1
     
     do while (err_ > epsilon)
-        midpoint = 0
+        midpoint = 0.0_real128
         do i = 1, n
             midpoint = midpoint + f(a + h * (i - 0.50_real128))
         end do
