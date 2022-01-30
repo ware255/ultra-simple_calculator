@@ -487,7 +487,8 @@ subroutine game_1()
             case (1)
                 write (*, '(A)', advance='no') '\n防御成功\n'
                 write (*, '(A)', advance='no') 'HP: 1回復\n'
-                k:do y = 5, 100000000, 5
+                k:&
+                &do y = 5, 100000000, 5
                     if (mp .eq. y) then
                         print '(A)', 'MP: 1回復'
                         hero_mp = hero_mp + 1
@@ -810,7 +811,7 @@ subroutine game_3()
     case (10)
         n = 0;x = 0
         hero_hp = 99999999999999999_8;enemy3_hp = 999999999999999999_8
-        hero_mp = 99999999999999999_8;enemy3_mp = 20
+        hero_mp = 99999999999999999_8;enemy3_mp = 15
     case default
         error stop "\nError: Invalid string.\n"
     end select
@@ -1485,7 +1486,7 @@ end subroutine randsu
 
 subroutine neipia() ! e = lim n->Infinity (1+1/n)**n | Σn=0 ∞ 1/n!
     use m_usc, only: z
-    use, intrinsic :: iso_fortran_env, only: real128, int64
+    use, intrinsic :: iso_fortran_env, only: int64, real128
     implicit none
     integer(int64), parameter :: n = 1024
     integer(int64) a
@@ -1664,7 +1665,7 @@ subroutine gamma_f()
 end subroutine gamma_f
 
 subroutine joke()
-    use, intrinsic :: iso_fortran_env, only: real64, int64, int32
+    use, intrinsic :: iso_fortran_env, only: int32, int64, real64
     implicit none
     integer(int64) x
     x = randon()
@@ -1744,7 +1745,6 @@ subroutine undouhouteisiki()
             real(real128), parameter :: pi = 3.1415926535897932384626433832795028840_real128
             real(real128), parameter :: g = 9.806650_real128
             real(real128) dxdt, dydt, zero, theta, u, w, x, y
-            integer(int64) j
             theta = pi / 180.0_real128 * angle
             zero = 0.0_real128
             x = zero
@@ -1753,17 +1753,16 @@ subroutine undouhouteisiki()
             w = V * sin(theta)
             open(11, file='data/output.txt', status='replace')
             write(11, '("\t", F0.23, "\t", F0.23)') x, y
-            zyu:do
+            zyu:&
+            &do
                 dxdt = u
                 dydt = w
-                do j = 1, 1_8
-                    x = x + 0.00010_real128 * dxdt
-                    y = y + 0.00010_real128 * dydt
-                    u = u + 0.00010_real128 * zero
-                    w = w + 0.00010_real128 * (-g)
-                    write(11, '("\t", F0.23, "\t", F0.23)') x, y
-                    if (y < 0) exit zyu
-                end do
+                x = x + 0.00010_real128 * dxdt
+                y = y + 0.00010_real128 * dydt
+                u = u + 0.00010_real128 * zero
+                w = w + 0.00010_real128 * (-g)
+                write(11, '("\t", F0.23, "\t", F0.23)') x, y
+                if (y < 0) exit zyu
             end do zyu
             close(11)
         end block
@@ -1780,7 +1779,7 @@ end subroutine undouhouteisiki
 subroutine ziyurakka()
     !$ use omp_lib
     use m_usc, only: err
-    use, intrinsic :: iso_fortran_env, only: real128, int64
+    use, intrinsic :: iso_fortran_env, only: int64, real128
     implicit none
     real(real128), parameter :: g = 9.806650_real128
     real(real128) t, y, v0
@@ -1796,10 +1795,12 @@ subroutine ziyurakka()
         open(11, file='data/ziyurakka.txt', status='replace')
         y = (v0 * t) + ((g * t * t) * 0.50_real128)
         write(11, '("\t", F0.23, "\t", F0.23)') t, y
-        do i = 1, 600000_int64
+        do concurrent (i = 1: 600000_int64)
+            block
             t = t + 0.00010_real128
             y = (v0 * t) + ((g * t * t) * 0.50_real128)
             write(11, '("\t", F0.23, "\t", F0.23)') t, y
+            end block
         end do
         close(11)
         !$ en = omp_get_wtime()
@@ -1864,7 +1865,7 @@ subroutine ensyu()
     use, intrinsic :: iso_fortran_env, only: int64
     implicit none
     integer(int64), parameter :: vmax = 428800, bmax = 25728
-    integer(int64), allocatable :: vect(:), buffer(:)!vect(vmax), buffer(bmax)
+    integer(int64), allocatable :: vect(:), buffer(:)
     integer(int64) n, L, more, num, carry, k, d
     !$ double precision st, en
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
@@ -1874,17 +1875,21 @@ subroutine ensyu()
     allocate(vect(vmax), buffer(bmax))
     vect(1:vmax) = 2
     more = 0
-    do n = 1, bmax
+    do concurrent (n = 1: bmax)
+        block
         carry = 0
-        do L = vmax, 1, -1
+        do concurrent (L = vmax: 1: -1)
+            block
             num = (100000 * vect(L)) + (carry * L)
             d = ((2*L) - 1)
             carry = num / d
             vect(L) = num - (carry * d)
+            end block
         end do
         k = carry / 100000
         buffer(n) = more + k
         more = carry - k * 100000
+        end block
     end do
     !$ en = omp_get_wtime()
     open(11, file='data/pi.txt', status='replace')
@@ -1978,8 +1983,10 @@ subroutine zetaf()
     read (*, *, iostat=err) s
     if (err .eq. 0) then
         zeta = 0.0_real128
-        do i = 41943020_int64, 1, -1
+        do concurrent (i = 1:41943020_int64)
+            block
             zeta = zeta + (1.0_real128 / i**s)
+            end block
         end do
         print*, '\n答え'
         print*, zeta
@@ -2058,11 +2065,13 @@ subroutine soinsubunkai()
         if (j .eq. 0) then
             write (*, '(I0)', advance='no') 1
         end if
-        do i = 3, c, 2
+        do concurrent (i = 3: c: 2)
+            block
             do while (mod(n, i) .eq. 0)
                 write (*, '(" * ", I0)', advance='no') i
                 n = n / i
             end do
+            end block
         end do
         if (n .ne. 1) then
             write (*, '(" * ", I0)', advance='no') n
@@ -2377,17 +2386,21 @@ subroutine furie()
             if (err .lt. 0) exit st
             n = n + 1
         end do st
-        do j = 1, n
+        do concurrent (j = 1: n)
+            block
             ReF = 0.0_real128
             ImF = 0.0_real128
-            do i = 1, n
+            do concurrent (i = 1: n)
+                block
                 dummy = pi2 * i * j / n
                 ReF = ReF + ( f(i) * cos(dummy))
                 ImF = ImF + (-f(i) * sin(dummy))
+                end block
             end do
             write(2, '("\t", I0, "\t", F0.23)') j, ImF
             write(3, '("\t", I0, "\t", F0.23)') j, ReF
             write(4, '("\t", I0, "\t", F0.23)') j, ((ReF * ReF + ImF * ImF) ** 0.50_real128) / (n / 2)
+            end block
         end do
         deallocate(f)
     end block
@@ -2413,7 +2426,7 @@ subroutine tan_h()
     print '(A)', '距離(隣辺)を入力してください。[m]'
     read (*, *, iostat=err) x
     if (err .eq. 0) then
-        print '(A)', '仰角(0＜θ＜90) [deg]'
+        print '(A)', '仰角(0 < θ < 90) [deg]'
         read (*, *, iostat=err) angle
         if (err .ne. 0) then
             print*, '\nError!'
@@ -2476,15 +2489,19 @@ subroutine lifegame()
 contains
     subroutine p(cells)
         logical(int64), intent(inout) :: cells(:,:)
-        do i = 1, size(cells, 1)
-            do j = 1, size(cells, 2)
+        do concurrent (i = 1: size(cells, 1))
+            block
+            do concurrent (j = 1: size(cells, 2))
+                block
                 if (cells(i,j)) then
                     write (*, '(A)', advance='no') '*'
                 else
                     write (*, '(A)', advance='no') ' '
                 end if
+                end block
             end do
             print *, '|'
+            end block
         end do
     end subroutine p
 
@@ -2494,13 +2511,17 @@ contains
         integer(int64) gridsize, i, j
         gridsize = size(cells, 1)
         buffer = 0
-        do j = -1, 1
-            do i = -1, 1
+        do concurrent (j = -1: 1)
+            block
+            do concurrent (i = -1: 1)
+                block
                 if (i .eq. 0 .and. j .eq. 0) then
                     cycle
                 end if
                 where (cells(i + 2:gridsize - i - 1, j + 2:gridsize - j - 1)) buffer = buffer + 1
+                end block
             end do
+            end block
         end do
         where (buffer .lt. 2 .or. buffer .gt. 3) cells(2:gridsize - 1, 2:gridsize - 1) = .false.
         where (buffer .eq. 3) cells(2:gridsize - 1, 2:gridsize - 1) = .true.
@@ -2534,12 +2555,12 @@ subroutine lumi_distance()
     err_ = 1.0_real128
     epsilon = 0.00000010_real128
     h = x - a
-    trapezoid = h * (f(a) + f(x)) * 0.5
+    trapezoid = h * (f(a) + f(x)) * 0.50_real128
     n = 1
     
     do while (err_ > epsilon)
         midpoint = 0.0_real128
-        do i = 1, n
+        do concurrent (i = 1: n)
             midpoint = midpoint + f(a + h * (i - 0.50_real128))
         end do
         midpoint = midpoint * h
@@ -2557,14 +2578,14 @@ subroutine lumi_distance()
     print*, '\nEnterを押してください。'
     read *
 contains
-    real(real128) function f(x)
+    pure real(real128) function f(x) !関数
         implicit none
         real(real128), parameter :: C = 299792.4580_real128
         real(real128), parameter :: OMEGA_M = 0.30_real128
         real(real128), parameter :: OMEGA_L = 0.70_real128
         real(real128), parameter :: H_0 = 70.0_real128
         real(real128), intent(in) :: x
-        f = C / H_0 / sqrt(OMEGA_M * ((1 + x) ** 3) + OMEGA_L)
+        f = C / H_0 / sqrt(OMEGA_M * ((1.0_real128 + x) ** 3) + OMEGA_L)
     end function
 end subroutine lumi_distance
 
@@ -2925,8 +2946,10 @@ program calculator
                 real(real128) :: s = 0.0_real128
                 !$ real(real64) :: time_begin_s, time_end_s
                 !$ time_begin_s = omp_get_wtime()
-                do i = 100000000_int64, 0, -1
+                do concurrent (i = 100000000_int64: 0: -1)
+                    block
                     s = s + ((-1.0_real128)**i) / (2.0_real128 * real(i, real128) + 1.0_real128)
+                    end block
                 end do
                 !$ time_end_s = omp_get_wtime()
                 print*, 'Answer:', s * 4.0_real128
@@ -3009,8 +3032,10 @@ program calculator
                 real(real128) :: s = 0.0_real128
                 !$ real(real64) :: time_begin_s, time_end_s
                 !$ time_begin_s = omp_get_wtime()
-                do i = 100000000_int64, 0, -1
+                do concurrent (i = 100000000_int64: 0: -1)
+                    block
                     s = s + ((-1.0_real128)**i) / (2.0_real128 * real(i, real128) + 1.0_real128)
+                    end block
                 end do
                 !$ time_end_s = omp_get_wtime()
                 print*, 'Answer:', s * 4.0_real128
