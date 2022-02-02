@@ -1,11 +1,34 @@
 module m_usc
-    use, intrinsic :: iso_fortran_env, only: real128, int64
+    use, intrinsic :: iso_fortran_env, only: int64, real128
     implicit none
+    real(real128), parameter :: pi = 3.1415926535897932384626433832795028840_real128
+    real(real128), parameter :: g = 9.806650_real128
     integer, parameter :: LargeInt_K = selected_int_kind(18)
+    integer(int64) :: mal = 10 ** 5, prec
     integer(int64) err
     real(real128) z
     character(256), private :: str
     real(real128), private :: x
+
+    ! .plus.  = +
+    interface operator(.plus.)
+        module procedure add
+    end interface
+
+    ! .minus. = -
+    interface operator(.minus.)
+        module procedure subtract
+    end interface
+
+    ! .times. = *
+    interface operator(.times.)
+        module procedure multiply
+    end interface
+
+    ! .div.   = /
+    interface operator(.div.)
+        module procedure divide
+    end interface
 contains
     subroutine M_A()
         implicit none
@@ -86,6 +109,62 @@ contains
             read *
         end if
     end subroutine M_D
+
+    function add(x, y) result(z)
+        implicit none
+        integer(int64), intent(in) :: x(0:prec), y(0:prec)
+        integer(int64) :: z(0:prec), i, zi, r
+        r = 0
+        do concurrent (i = prec: 0: -1)
+            block
+            zi = x(i) + y(i) + r
+            r = zi / mal
+            z(i) = zi - r * mal
+            end block
+        end do
+    end function add
+
+    function subtract(x, y) result(z)
+        implicit none
+        integer(int64), intent(in) :: x(0:prec), y(0:prec)
+        integer(int64) :: z(0:prec), i, zi, r
+        r = 1
+        do concurrent (i = prec: 0: -1)
+            block
+            zi = x(i) + (mal - 1 - y(i)) + r
+            r = zi / mal
+            z(i) = zi - r * mal
+            end block
+        end do
+    end function subtract
+
+    function multiply(x, s) result(z)
+        implicit none
+        integer(int64), intent(in) :: x(0:prec), s
+        integer(int64) :: z(0:prec), i, r, zi
+        r = 0
+        do concurrent (i = prec: 0: -1)
+            block
+            zi   = x(i) * s + r
+            r    = zi / mal
+            z(i) = zi - r * mal
+            end block
+        end do
+    end function multiply
+
+    function divide(x, s) result(z)
+        implicit none
+        integer(int64), intent(in) :: x(0:prec), s
+        integer(int64) :: z(0:prec), i, r, zi
+        r = 0
+        do concurrent (i = 0: prec)
+            block
+            zi   = x(i) + r * mal
+            z(i) = zi / s
+            r    = zi - s * z(i)
+            end block
+        end do
+    end function divide
 end module m_usc
 
 subroutine tasizan()
@@ -1742,8 +1821,7 @@ subroutine undouhouteisiki()
         print '(A)', '\n計算中'
         !$ st = omp_get_wtime()
         block
-            real(real128), parameter :: pi = 3.1415926535897932384626433832795028840_real128
-            real(real128), parameter :: g = 9.806650_real128
+            use m_usc, only: pi, g
             real(real128) dxdt, dydt, zero, theta, u, w, x, y
             theta = pi / 180.0_real128 * angle
             zero = 0.0_real128
@@ -1778,10 +1856,9 @@ end subroutine undouhouteisiki
 
 subroutine ziyurakka()
     !$ use omp_lib
-    use m_usc, only: err
+    use m_usc, only: err, g
     use, intrinsic :: iso_fortran_env, only: int64, real128
     implicit none
-    real(real128), parameter :: g = 9.806650_real128
     real(real128) t, y, v0
     integer(int64) i
     !$ double precision st, en
@@ -1814,11 +1891,9 @@ subroutine ziyurakka()
 end subroutine ziyurakka
 
 subroutine TX()
-    use m_usc, only: err
+    use m_usc, only: err, pi, g
     use, intrinsic :: iso_fortran_env, only: real128
     implicit none
-    real(real128), parameter :: pi = 3.1415926535897932384626433832795028840_real128
-    real(real128), parameter :: g = 9.806650_real128
     real(real128) V, angle, theta, T, L, H, d, V2, H_T
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '初期速度 [m/s]'
@@ -2358,7 +2433,7 @@ subroutine sigmoid()
 end subroutine sigmoid
 
 subroutine furie()
-    use m_usc, only: err
+    use m_usc, only: err, pi
     use, intrinsic :: iso_fortran_env, only: real128, int64
     implicit none
     character(256) filename
@@ -2374,12 +2449,12 @@ subroutine furie()
     open(4, file='data/furie_am.txt', status='replace')
     read (1, '()')
     block
-        real(real128), parameter :: pi2 = 2 * 3.1415926535897932384626433832795028840_real128
         integer(int64), parameter :: max = 1073741824
         integer(int64) i, j, k, n
         real(real128), allocatable :: f(:)
-        real(real128) ReF, ImF, dummy
+        real(real128) ReF, ImF, dummy, pi2
         allocate(f(max))
+        pi2 = pi * 2
         n = 0
         st:do k = 1, max
             read (1, *, iostat=err) f(k)
@@ -2417,10 +2492,9 @@ end subroutine furie
 
 subroutine tan_h()
     !$ use omp_lib
-    use m_usc, only: err, LargeInt_K, z
+    use m_usc, only: err, LargeInt_K, z, pi
     use, intrinsic :: iso_fortran_env, only: real128, int64
     implicit none
-    real(real128), parameter :: pi = 3.1415926535897932384626433832795028840_real128
     real(real128) theta, h, x, angle
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '距離(隣辺)を入力してください。[m]'
@@ -2594,6 +2668,59 @@ contains
     end function
 end subroutine lumi_distance
 
+subroutine pi_()
+    !$ use omp_lib
+    use, intrinsic :: iso_fortran_env, only: int64, real64
+    use m_usc, only: operator(.minus.), operator(.times.), operator(.div.), prec
+    implicit none
+    integer(int64) n_
+    integer(int64), allocatable :: pi(:), pi1(:), pi2(:), pi3(:)
+    !$ real(real64) :: time_begin_s, time_end_s
+    write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    print '(A)', 'n桁まで表示(0 < n < 100000000)'
+    read (*, *) n_
+    print '(A)', '\n計算中'
+    !$ time_begin_s = omp_get_wtime()
+    prec = ceiling(n_ / 5.0_real64) + 1
+    allocate(pi(0:prec), pi1(0:prec), pi2(0:prec), pi3(0:prec))
+    pi1 = arctan(10_int64)
+    pi1 = pi1 .times. 32_int64
+    pi2 = arctan(239_int64)
+    pi2 = pi2 .times.  4_int64
+    pi3 = arctan(515_int64)
+    pi3 = pi3 .times. 16_int64
+    pi  = pi1 .minus. pi2 
+    pi  = pi  .minus. pi3
+    !$ time_end_s = omp_get_wtime()
+    open (13, file='data/pi_.txt', status='replace')
+    write (13, '(1X, "Pi = 3.", I5, 9I6/ 19(7X, 10I6.5/)/ 20(7X, 10I6.5/)/)') pi(1:prec-1)
+    close (13)
+    !$ print '(A, F13.5, A)', '\ntime:', time_end_s - time_begin_s, ' [sec]\n'
+    print '(A)', 'Enterを押してください。'
+    read *
+contains
+    function Arctan(k) result(a)
+        implicit none
+        integer(int64), intent(in) :: k
+        integer(int64) :: a(0:prec), a0(0:prec), unity(0:prec), n, nmax
+        nmax = int(0.50_real64 * n_ / log10(real(k, real64)), int64) + 1
+        unity(0) = 1
+        unity(1:prec) = 0
+        a = 0
+        do concurrent (n = nmax: 1: -1)
+            block
+            a0 = unity .div. (2 * n + 1)
+            a = a0 .minus. a
+            a = a .div. k
+            a = a .div. k
+            end block
+        end do
+        a0 = unity
+        a = a0 .minus. a 
+        a = a .div. k
+    end function Arctan
+end subroutine pi_
+
 !subroutine test() ! template
 !    use, intrinsic :: iso_fortran_env, only: real128, int64
 !    implicit none
@@ -2618,6 +2745,7 @@ subroutine page_03()
         print*, '6 tanθで建物の高さ'
         print*, '7 Life Game'
         print*, '8 光度距離計算'
+        print*, '9 円周率その２(任意の桁数)'
         print*, '11 スロットゲーム\n'
         print*, '99 終了           02 Back'
         print '(A)', '-----------------------------------------'
@@ -2640,6 +2768,8 @@ subroutine page_03()
             call lifegame()
         case ('8')
             call lumi_distance()
+        case ('9')
+            call pi_()
         case ('11')
             call slot()
         case ('00')
@@ -2677,7 +2807,7 @@ subroutine page_02()
         print*, '2 斜方投射での滞空時間と飛距離'
         print*, '3 斜方投射(空気抵抗なし)'
         print*, '4 自由落下(一分後まで)'
-        print*, '5 円周率をtxtファイルで出力(桁数多め)'
+        print*, '5 円周率その１(桁数多め?)'
         print*, '6 平均値'
         print*, '7 階乗(n!)'
         print*, '8 リーマンゼータ関数 ζ(s)'
