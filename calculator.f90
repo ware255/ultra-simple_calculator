@@ -2451,16 +2451,19 @@ subroutine tan_h()
 end subroutine tan_h
 
 subroutine lifegame()
+    use m_usc, only: err
     use, intrinsic :: iso_fortran_env, only: int32, int64, real64
     implicit none
     integer(int64), parameter :: gridsize = 15
     logical(int64) :: cells(0:gridsize + 1, 0:gridsize + 1) = .false.
     integer(int32), allocatable :: seed(:)
-    integer(int64) i, j
+    integer(int64) i, j, k, max
     integer(int32) seedsize
     real(real64) rnums(gridsize, gridsize)
 
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    print '(A)', 'n世代まで(数値を入力)'
+    read (*, *, iostat=err) max
     print *, 'お待ちください。'
 
     call random_seed(size=seedsize)
@@ -2478,7 +2481,7 @@ subroutine lifegame()
     call p(cells(1:gridsize, 1:gridsize))
     write (*, '(A)', advance='no') '-----------------'
     call sleep(1)
-    do
+    do k = 2, max
         write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
         write (*, '(A)', advance='no') '-----------------\n'
         call n(cells)
@@ -2486,6 +2489,8 @@ subroutine lifegame()
         write (*, '(A)', advance='no') '-----------------'
         call sleep(1)
     end do
+    print '(A)', '\nThe End.'
+    read *
 contains
     subroutine p(cells)
         logical(int64), intent(inout) :: cells(:,:)
@@ -2611,7 +2616,7 @@ subroutine page_03()
         print*, '4 シグモイド関数 ςa(x)'
         print*, '5 離散的フーリエ変換'
         print*, '6 tanθで建物の高さ'
-        print*, '7 Life Game(止めるCtrl + C)'
+        print*, '7 Life Game'
         print*, '8 光度距離計算'
         print*, '11 スロットゲーム\n'
         print*, '99 終了           02 Back'
