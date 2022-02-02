@@ -10,23 +10,19 @@ module m_usc
     character(256), private :: str
     real(real128), private :: x
 
-    ! .plus.  = +
-    interface operator(.plus.)
+    interface operator(.plus.)    ! +
         module procedure add
     end interface
 
-    ! .minus. = -
-    interface operator(.minus.)
+    interface operator(.minus.)   ! -
         module procedure subtract
     end interface
 
-    ! .times. = *
-    interface operator(.times.)
+    interface operator(.times.)   ! *
         module procedure multiply
     end interface
 
-    ! .div.   = /
-    interface operator(.div.)
+    interface operator(.div.)     ! /
         module procedure divide
     end interface
 contains
