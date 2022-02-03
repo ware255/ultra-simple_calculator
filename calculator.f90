@@ -1,5 +1,5 @@
 module m_usc
-    use, intrinsic :: iso_fortran_env, only: int64, real128
+    use, intrinsic :: iso_fortran_env, only: int64, real64, real128
     implicit none
     real(real128), parameter :: pi = 3.1415926535897932384626433832795028840_real128
     real(real128), parameter :: g = 9.806650_real128
@@ -114,7 +114,7 @@ contains
         do concurrent (i = prec: 0: -1)
             block
             zi = x(i) + y(i) + r
-            r = zi / mal
+            r = int(zi * 0.000010_real64)
             z(i) = zi - r * mal
             end block
         end do
@@ -128,7 +128,7 @@ contains
         do concurrent (i = prec: 0: -1)
             block
             zi = x(i) + (mal - 1 - y(i)) + r
-            r = zi / mal
+            r = int(zi * 0.000010_real64)
             z(i) = zi - r * mal
             end block
         end do
@@ -142,7 +142,7 @@ contains
         do concurrent (i = prec: 0: -1)
             block
             zi   = x(i) * s + r
-            r    = zi / mal
+            r    = int(zi * 0.000010_real64)
             z(i) = zi - r * mal
             end block
         end do
@@ -2670,33 +2670,26 @@ subroutine pi_()
     use m_usc, only: operator(.minus.), operator(.times.), operator(.div.), operator(.plus.), prec
     implicit none
     integer(int64) n_
-    integer(int64), allocatable :: pi(:), pi1(:), pi2(:), pi3(:), pi4(:)
+    integer(int64), allocatable :: pi(:)
     !$ real(real64) :: time_begin_s, time_end_s
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-    print '(A)', 'n桁まで表示(0 < n < 100000000)'
+    print '(A)', 'n桁まで表示(0 < n < 1000000)'
     read (*, *) n_
     print '(A)', '\n計算中'
 
     !$ time_begin_s = omp_get_wtime()
-    prec = ceiling(n_ / 5.0_real64) + 1
-    allocate(pi(0:prec), pi1(0:prec), pi2(0:prec), pi3(0:prec), pi4(0:prec))
-    pi1 = Arctan(49_int64)
-    pi1 = pi1 .times. 48_int64
-    pi2 = Arctan(57_int64)
-    pi2 = pi2 .times. 128_int64
-    pi3 = Arctan(239_int64)
-    pi3 = pi3 .times. 20_int64
-    pi4 = Arctan(110443_int64)
-    pi4 = pi4 .times. 48_int64
-    pi = pi1 .plus. pi2
-    pi = pi .minus. pi3
-    pi = pi .plus. pi4
+    prec = ceiling(n_ * 0.20_real64) + 1
+    allocate(pi(0:prec))
+    pi = (Arctan(49_int64) .times. 48_int64) .plus. (Arctan(57_int64) .times&
+    &. 128_int64) .minus. (Arctan(239_int64) .times. 20_int64) .plus. (Arcta&
+    &n(110443_int64) .times. 48_int64)
     !$ time_end_s = omp_get_wtime()
     
     open (13, file='data/pi_.txt', status='replace')
     write (13, '(1X, "Pi = 3.", I5, 9I6/ 19(7X, 10I6.5/)/ 20(7X, 10I6.5/)/)') pi(1:prec - 1)
     close (13)
     print '(1X, "Pi = 3.", I5, 9I6/ 19(7X, 10I6.5/)/ 20(7X, 10I6.5/)/)', pi(1:prec - 1)
+    deallocate(pi)
     !$ print '(A, F13.5, A)', '\ntime:', time_end_s - time_begin_s, ' [sec]\n'
     print '(A)', 'Enterを押してください。'
     read *
@@ -2713,13 +2706,10 @@ contains
             block
             x_ = unity .div. (2 * n + 1)
             x = x_ .minus. x
-            x = x .div. k
-            x = x .div. k
+            x = (x .div. k) .div. k
             end block
         end do
-        x_ = unity
-        x = x_ .minus. x 
-        x = x .div. k
+        x = (unity .minus. x) .div. k
     end function Arctan
 end subroutine pi_
 
