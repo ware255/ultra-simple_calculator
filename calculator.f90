@@ -2667,53 +2667,59 @@ end subroutine lumi_distance
 subroutine pi_()
     !$ use omp_lib
     use, intrinsic :: iso_fortran_env, only: int64, real64
-    use m_usc, only: operator(.minus.), operator(.times.), operator(.div.), prec
+    use m_usc, only: operator(.minus.), operator(.times.), operator(.div.), operator(.plus.), prec
     implicit none
     integer(int64) n_
-    integer(int64), allocatable :: pi(:), pi1(:), pi2(:), pi3(:)
+    integer(int64), allocatable :: pi(:), pi1(:), pi2(:), pi3(:), pi4(:)
     !$ real(real64) :: time_begin_s, time_end_s
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', 'n桁まで表示(0 < n < 100000000)'
     read (*, *) n_
     print '(A)', '\n計算中'
+
     !$ time_begin_s = omp_get_wtime()
     prec = ceiling(n_ / 5.0_real64) + 1
-    allocate(pi(0:prec), pi1(0:prec), pi2(0:prec), pi3(0:prec))
-    pi1 = arctan(10_int64)
-    pi1 = pi1 .times. 32_int64
-    pi2 = arctan(239_int64)
-    pi2 = pi2 .times.  4_int64
-    pi3 = arctan(515_int64)
-    pi3 = pi3 .times. 16_int64
-    pi  = pi1 .minus. pi2 
-    pi  = pi  .minus. pi3
+    allocate(pi(0:prec), pi1(0:prec), pi2(0:prec), pi3(0:prec), pi4(0:prec))
+    pi1 = Arctan(49_int64)
+    pi1 = pi1 .times. 48_int64
+    pi2 = Arctan(57_int64)
+    pi2 = pi2 .times. 128_int64
+    pi3 = Arctan(239_int64)
+    pi3 = pi3 .times. 20_int64
+    pi4 = Arctan(110443_int64)
+    pi4 = pi4 .times. 48_int64
+    pi = pi1 .plus. pi2
+    pi = pi .minus. pi3
+    pi = pi .plus. pi4
     !$ time_end_s = omp_get_wtime()
+    
     open (13, file='data/pi_.txt', status='replace')
-    write (13, '(1X, "Pi = 3.", I5, 9I6/ 19(7X, 10I6.5/)/ 20(7X, 10I6.5/)/)') pi(1:prec-1)
+    write (13, '(1X, "Pi = 3.", I5, 9I6/ 19(7X, 10I6.5/)/ 20(7X, 10I6.5/)/)') pi(1:prec - 1)
     close (13)
+    print '(1X, "Pi = 3.", I5, 9I6/ 19(7X, 10I6.5/)/ 20(7X, 10I6.5/)/)', pi(1:prec - 1)
     !$ print '(A, F13.5, A)', '\ntime:', time_end_s - time_begin_s, ' [sec]\n'
     print '(A)', 'Enterを押してください。'
     read *
 contains
-    function Arctan(k) result(a)
+    function Arctan(k) result(x)
         implicit none
         integer(int64), intent(in) :: k
-        integer(int64) :: a(0:prec), a0(0:prec), unity(0:prec), n, nmax
+        integer(int64) :: x(0:prec), x_(0:prec), unity(0:prec), n, nmax
         nmax = int(0.50_real64 * n_ / log10(real(k, real64)), int64) + 1
         unity(0) = 1
         unity(1:prec) = 0
-        a = 0
+        x = 0
         do concurrent (n = nmax: 1: -1)
             block
-            a0 = unity .div. (2 * n + 1)
-            a = a0 .minus. a
-            a = a .div. k
-            a = a .div. k
+            x_ = unity .div. (2 * n + 1)
+            x = x_ .minus. x
+            x = x .div. k
+            x = x .div. k
             end block
         end do
-        a0 = unity
-        a = a0 .minus. a 
-        a = a .div. k
+        x_ = unity
+        x = x_ .minus. x 
+        x = x .div. k
     end function Arctan
 end subroutine pi_
 
