@@ -3,9 +3,11 @@ module m_usc
     implicit none
     real(real128), parameter :: pi = 3.1415926535897932384626433832795028840_real128
     real(real128), parameter :: g = 9.806650_real128
+    real(real64), parameter :: m_ = 0.000010_real64
     integer, parameter :: LargeInt_K = selected_int_kind(18)
-    integer(int64) :: mal = 10 ** 5, prec
-    integer(int64) err
+    integer(int64), parameter, private :: mal = 100000_int64
+    !integer(int64), private
+    integer(int64) err, prec
     real(real128) z
     character(256), private :: str
     real(real128), private :: x
@@ -109,55 +111,55 @@ contains
     function add(x, y) result(z)
         implicit none
         integer(int64), intent(in) :: x(0:prec), y(0:prec)
-        integer(int64) :: z(0:prec), i, zi, r
+        integer(int64) z(0:prec), i, zi, r
         r = 0
-        do concurrent (i = prec: 0: -1)
-            block
+        i = prec
+        do while (i >= 0)
             zi = x(i) + y(i) + r
-            r = int(zi * 0.000010_real64)
+            r = int(zi * m_)
             z(i) = zi - r * mal
-            end block
+            i = i - 1
         end do
     end function add
 
     function subtract(x, y) result(z)
         implicit none
         integer(int64), intent(in) :: x(0:prec), y(0:prec)
-        integer(int64) :: z(0:prec), i, zi, r
+        integer(int64) z(0:prec), i, zi, r
         r = 1
-        do concurrent (i = prec: 0: -1)
-            block
+        i = prec
+        do while (i >= 0)
             zi = x(i) + (mal - 1 - y(i)) + r
-            r = int(zi * 0.000010_real64)
+            r = int(zi * m_)
             z(i) = zi - r * mal
-            end block
+            i = i - 1
         end do
     end function subtract
 
     function multiply(x, s) result(z)
         implicit none
         integer(int64), intent(in) :: x(0:prec), s
-        integer(int64) :: z(0:prec), i, r, zi
+        integer(int64) z(0:prec), i, r, zi
         r = 0
-        do concurrent (i = prec: 0: -1)
-            block
-            zi   = x(i) * s + r
-            r    = int(zi * 0.000010_real64)
+        i = prec
+        do while (i >= 0)
+            zi = x(i) * s + r
+            r = int(zi * m_)
             z(i) = zi - r * mal
-            end block
+            i = i - 1
         end do
     end function multiply
 
     function divide(x, s) result(z)
         implicit none
         integer(int64), intent(in) :: x(0:prec), s
-        integer(int64) :: z(0:prec), i, r, zi
+        integer(int64) z(0:prec), i, r, zi
         r = 0
         do concurrent (i = 0: prec)
             block
-            zi   = x(i) + r * mal
+            zi = (x(i) + r * mal)
             z(i) = zi / s
-            r    = zi - s * z(i)
+            r = zi - s * z(i)
             end block
         end do
     end function divide
@@ -1831,10 +1833,10 @@ subroutine undouhouteisiki()
             &do
                 dxdt = u
                 dydt = w
-                x = x + 0.00010_real128 * dxdt
-                y = y + 0.00010_real128 * dydt
-                u = u + 0.00010_real128 * zero
-                w = w + 0.00010_real128 * (-g)
+                x = x + 0.00050_real128 * dxdt
+                y = y + 0.00050_real128 * dydt
+                u = u + 0.00050_real128 * zero
+                w = w + 0.00050_real128 * (-g)
                 write(11, '("\t", F0.23, "\t", F0.23)') x, y
                 if (y < 0) exit zyu
             end do zyu
@@ -1868,9 +1870,9 @@ subroutine ziyurakka()
         open(11, file='data/ziyurakka.txt', status='replace')
         y = (v0 * t) + ((g * t * t) * 0.50_real128)
         write(11, '("\t", F0.23, "\t", F0.23)') t, y
-        do concurrent (i = 1: 600000_int64)
+        do concurrent (i = 1: 600000_int64: 2)
             block
-            t = t + 0.00010_real128
+            t = t + 0.00020_real128
             y = (v0 * t) + ((g * t * t) * 0.50_real128)
             write(11, '("\t", F0.23, "\t", F0.23)') t, y
             end block
@@ -1952,7 +1954,7 @@ subroutine ensyu()
         do concurrent (L = vmax: 1: -1)
             block
             num = (100000 * vect(L)) + (carry * L)
-            d = ((2*L) - 1)
+            d = ((2 * L) - 1)
             carry = num / d
             vect(L) = num - (carry * d)
             end block
@@ -2028,9 +2030,8 @@ subroutine kaizyou()
     if (err .eq. 0) then
         ans = 1.0_real128
         k = 1
-        do while (k .eq. n)
+        do k = 1, n
             ans = ans * k
-            k = k + 1
         end do
         print*, '\n答え'
         print '("  ", i0, "! = ", F0.0)', n, ans
@@ -2669,7 +2670,7 @@ subroutine pi_()
     use, intrinsic :: iso_fortran_env, only: int64, real64
     use m_usc, only: operator(.minus.), operator(.times.), operator(.div.), operator(.plus.), prec
     implicit none
-    integer(int64) n_
+    integer(int64) n_, tmp
     integer(int64), allocatable :: pi(:)
     !$ real(real64) :: time_begin_s, time_end_s
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
@@ -2678,17 +2679,18 @@ subroutine pi_()
     print '(A)', '\n計算中'
 
     !$ time_begin_s = omp_get_wtime()
+    tmp = 48_int64
     prec = ceiling(n_ * 0.20_real64) + 1
     allocate(pi(0:prec))
-    pi = (Arctan(49_int64) .times. 48_int64) .plus. (Arctan(57_int64) .times&
-    &. 128_int64) .minus. (Arctan(239_int64) .times. 20_int64) .plus. (Arcta&
-    &n(110443_int64) .times. 48_int64)
+    pi = (Arctan(49_int64) .times. tmp) .plus. (Arctan(57_int64) .times. 128_int64)&
+    & .minus. (Arctan(239_int64) .times. 20_int64) .plus. (Arctan(110443_int64) .ti&
+    &mes. tmp)
     !$ time_end_s = omp_get_wtime()
     
     open (13, file='data/pi_.txt', status='replace')
-    write (13, '(1X, "Pi = 3.", I5, 9I6/ 19(7X, 10I6.5/)/ 20(7X, 10I6.5/)/)') pi(1:prec - 1)
+    write (13, '(" Pi = 3.", I5.5, 9I6.5/(7X, 10I6.5))') pi(1:prec - 1)
     close (13)
-    print '(1X, "Pi = 3.", I5, 9I6/ 19(7X, 10I6.5/)/ 20(7X, 10I6.5/)/)', pi(1:prec - 1)
+    print '(" Pi = 3.", I5.5, 9I6.5/(7X, 10I6.5))', pi(1:prec - 1)
     deallocate(pi)
     !$ print '(A, F13.5, A)', '\ntime:', time_end_s - time_begin_s, ' [sec]\n'
     print '(A)', 'Enterを押してください。'
@@ -2697,16 +2699,13 @@ contains
     function Arctan(k) result(x)
         implicit none
         integer(int64), intent(in) :: k
-        integer(int64) :: x(0:prec), x_(0:prec), unity(0:prec), n, nmax
-        nmax = int(0.50_real64 * n_ / log10(real(k, real64)), int64) + 1
-        unity(0) = 1
-        unity(1:prec) = 0
+        integer(int64) x(0:prec), unity(0:prec)
+        integer(int64) n
+        unity = [1, (0, n = 1, prec)]
         x = 0
-        do concurrent (n = nmax: 1: -1)
+        do concurrent (n = int(0.50_real64 * n_ / log10(real(k, real64)), int64) + 1: 1: -1)
             block
-            x_ = unity .div. (2 * n + 1)
-            x = x_ .minus. x
-            x = (x .div. k) .div. k
+            x = ((unity .div. (2 * n + 1)) .minus. x) .div. (k * k)
             end block
         end do
         x = (unity .minus. x) .div. k
