@@ -113,12 +113,12 @@ contains
         integer(int64), intent(in) :: x(0:prec), y(0:prec)
         integer(int64) z(0:prec), i, zi, r
         r = 0
-        i = prec
-        do while (i >= 0)
+        do concurrent (i = prec: 0: -1)
+            block
             zi = x(i) + y(i) + r
             r = int(zi * m_)
             z(i) = zi - r * mal
-            i = i - 1
+            end block
         end do
     end function add
 
@@ -127,12 +127,12 @@ contains
         integer(int64), intent(in) :: x(0:prec), y(0:prec)
         integer(int64) z(0:prec), i, zi, r
         r = 1
-        i = prec
-        do while (i >= 0)
+        do concurrent (i = prec: 0: -1)
+            block
             zi = x(i) + (mal - 1 - y(i)) + r
             r = int(zi * m_)
             z(i) = zi - r * mal
-            i = i - 1
+            end block
         end do
     end function subtract
 
@@ -141,12 +141,12 @@ contains
         integer(int64), intent(in) :: x(0:prec), s
         integer(int64) z(0:prec), i, r, zi
         r = 0
-        i = prec
-        do while (i >= 0)
+        do concurrent (i = prec: 0: -1)
+            block
             zi = x(i) * s + r
             r = int(zi * m_)
             z(i) = zi - r * mal
-            i = i - 1
+            end block
         end do
     end function multiply
 
