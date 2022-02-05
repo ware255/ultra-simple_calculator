@@ -2019,12 +2019,17 @@ subroutine kaizyou()
     use m_usc, only: err, z
     use, intrinsic :: iso_fortran_env, only: real128, int64
     implicit none
-    integer(int64) n, k
+    integer(16) n, k
     real(real128) ans
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
     read (*, *, iostat=err) n
     if (err .eq. 0) then
+        if (n >= 1025 .or. n <= 0) then
+            print *, 'Error'
+            read *
+            return
+        end if
         ans = 1.0_real128
         k = 1
         do k = 1, n
@@ -2301,7 +2306,7 @@ subroutine kanzensu()
     integer(16) x
     real(real128) p, n, i, j
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-    print '(A)', 'xを入力してください。(0 < x < 62)'
+    print '(A)', 'xを入力してください。(0 < x < 1025)'
     read (*, *, iostat=err) x
     if (err .eq. 0) then
         if (0 .ge. x .or. 1025 .le. x) then
