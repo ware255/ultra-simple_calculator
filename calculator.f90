@@ -108,7 +108,7 @@ contains
         end if
     end subroutine M_D
 
-    function add(x, y) result(z)
+    pure function add(x, y) result(z)
         implicit none
         integer(int64), intent(in) :: x(0:prec), y(0:prec)
         integer(int64) z(0:prec), i, zi, r
@@ -122,7 +122,7 @@ contains
         end do
     end function add
 
-    function subtract(x, y) result(z)
+    pure function subtract(x, y) result(z)
         implicit none
         integer(int64), intent(in) :: x(0:prec), y(0:prec)
         integer(int64) z(0:prec), i, zi, r
@@ -136,7 +136,7 @@ contains
         end do
     end function subtract
 
-    function multiply(x, s) result(z)
+    pure function multiply(x, s) result(z)
         implicit none
         integer(int64), intent(in) :: x(0:prec), s
         integer(int64) z(0:prec), i, r, zi
@@ -150,12 +150,12 @@ contains
         end do
     end function multiply
 
-    function divide(x, s) result(z)
+    pure function divide(x, s) result(z)
         implicit none
         integer(int64), intent(in) :: x(0:prec), s
         integer(int64) z(0:prec), i, r, zi
         r = 0
-        do concurrent (i = 0: prec)
+        do concurrent (i = 0: prec: 1)
             block
             zi = (x(i) + r * mal)
             z(i) = zi / s
@@ -2668,14 +2668,24 @@ end subroutine lumi_distance
 subroutine pi_()
     !$ use omp_lib
     use, intrinsic :: iso_fortran_env, only: int64, real64
-    use m_usc, only: operator(.minus.), operator(.times.), operator(.div.), operator(.plus.), prec
+    use m_usc, only: operator(.minus.), operator(.times.), operator(.div.)&
+    &, operator(.plus.), prec, err
     implicit none
     integer(int64) n_, tmp
     integer(int64), allocatable :: pi(:)
     !$ real(real64) :: time_begin_s, time_end_s
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-    print '(A)', 'n桁まで表示(0 < n < 1000000)'
-    read (*, *) n_
+    print '(A)', 'n桁まで表示(50 < n < 1000000)'
+    read (*, *, iostat=err) n_
+    if (err .ne. 0) then
+        print *, 'Error'
+        read *
+        return
+    else if (n_ < 50) then
+        print *, 'Error: 50以上にしてください。'
+        read *
+        return
+    end if
     print '(A)', '\n計算中'
 
     !$ time_begin_s = omp_get_wtime()
@@ -2696,11 +2706,12 @@ subroutine pi_()
     print '(A)', 'Enterを押してください。'
     read *
 contains
-    function Arctan(k) result(x)
+    pure function Arctan(k) result(x)
         implicit none
         integer(int64), intent(in) :: k
-        integer(int64) x(0:prec), unity(0:prec)
+        integer(int64), allocatable :: x(:), unity(:)
         integer(int64) n
+        allocate(x(0:prec), unity(0:prec))
         unity = [1, (0, n = 1, prec)]
         x = 0
         do concurrent (n = int(0.50_real64 * n_ / log10(real(k, real64)), int64) + 1: 1: -1)
