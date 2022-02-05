@@ -2682,7 +2682,7 @@ subroutine pi_()
         read *
         return
     else if (n_ < 50) then
-        print *, 'Error: 50以上にしてください。'
+        print *, 'Error'
         read *
         return
     end if
