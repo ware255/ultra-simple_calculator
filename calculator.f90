@@ -4,9 +4,7 @@ module m_usc
     real(real128), parameter :: pi = 3.1415926535897932384626433832795028840_real128
     real(real128), parameter :: g = 9.806650_real128
     real(real64), parameter :: m_ = 0.000010_real64
-    integer, parameter :: LargeInt_K = selected_int_kind(18)
     integer(int64), parameter, private :: mal = 100000_int64
-    !integer(int64), private
     integer(int64) err, prec
     real(real128) z
     character(256), private :: str
@@ -36,7 +34,7 @@ contains
         if (err .eq. 0) then
             print*, new_line(' '), '答え'
             print '("   ", F0.36)', z + x
-            write(*, '("\n   " ,Z0)') int(z + x, LargeInt_K)
+            write(*, '("\n   " ,Z0)') int(z + x, 16)
             z = z + x
             print*, new_line(' '), 'Enterを押してください。'
             read *
@@ -54,7 +52,7 @@ contains
         if (err .eq. 0) then
             print*, new_line(' '), '答え'
             print '("   ", F0.36)', z - x
-            write(*, '("\n   " ,Z0)') int(z - x, LargeInt_K)
+            write(*, '("\n   " ,Z0)') int(z - x, 16)
             z = z - x
             print*, new_line(' '), 'Enterを押してください。'
             read *
@@ -70,7 +68,7 @@ contains
         read (*, '(A)') str
         if (str .eq. '') then
             print '("   ", F0.36)', z * z
-            write(*, '("\n   " ,Z0)') int(z * z, LargeInt_K)
+            write(*, '("\n   " ,Z0)') int(z * z, 16)
             z = z * z
             print*, new_line(' '), 'Enterを押してください。'
             read *
@@ -80,7 +78,7 @@ contains
         if (err .eq. 0) then
             print*, new_line(' '), '答え'
             print '("   ", F0.36)', z * x
-            write(*, '("\n   " ,Z0)') int(z * x, LargeInt_K)
+            write(*, '("\n   " ,Z0)') int(z * x, 16)
             z = z * x
             print*, new_line(' '), 'Enterを押してください。'
             read *
@@ -98,7 +96,7 @@ contains
         if (err .eq. 0) then
             print*, new_line(' '), '答え'
             print '("   ", F0.36)', z / x
-            write(*, '("\n   " ,Z0)') int(z / x, LargeInt_K)
+            write(*, '("\n   " ,Z0)') int(z / x, 16)
             z = z / x
             print*, new_line(' '), 'Enterを押してください。'
             read *
@@ -166,7 +164,7 @@ contains
 end module m_usc
 
 subroutine tasizan()
-    use m_usc, only: err, z, LargeInt_K
+    use m_usc, only: err, z
     use, intrinsic :: iso_fortran_env, only: real128
     implicit none
     real(real128) x, y
@@ -190,7 +188,7 @@ subroutine tasizan()
             print '(F29.4, "  +  ", F0.4, "\n")', x, y
         end if
         print '("   ", F0.36)', x + y
-        write(*, '("\n   " ,Z0)') int(x + y, LargeInt_K)
+        write(*, '("\n   " ,Z0)') int(x + y, 16)
         z = x + y
         print*, '\nEnterを押してください。'
         read *
@@ -201,7 +199,7 @@ subroutine tasizan()
 end subroutine tasizan
 
 subroutine hikizan()
-    use m_usc, only: err, z, LargeInt_K
+    use m_usc, only: err, z
     use, intrinsic :: iso_fortran_env, only: real128
     implicit none
     real(real128) x, y
@@ -225,7 +223,7 @@ subroutine hikizan()
             print '(F29.4, "  -  ", F0.4, "\n")', x, y
         end if
         print '("   ", F0.36)', x - y
-        write(*, '("\n   " ,Z0)') int(x - y, LargeInt_K)
+        write(*, '("\n   " ,Z0)') int(x - y, 16)
         z = x - y
         print*, '\nEnterを押してください。'
         read *
@@ -236,7 +234,7 @@ subroutine hikizan()
 end subroutine hikizan
 
 subroutine kakezan()
-    use m_usc, only: err, z, LargeInt_K
+    use m_usc, only: err, z
     use, intrinsic :: iso_fortran_env, only: real128
     implicit none
     real(real128) x, y
@@ -257,7 +255,7 @@ subroutine kakezan()
                 print '(F29.4, "  ^  ", I0, "\n")', x, 2
             end if
             print '("   ", F0.36)', x * x
-            write(*, '("\n   " ,Z0)') int(x * x, LargeInt_K)
+            write(*, '("\n   " ,Z0)') int(x * x, 16)
             z = x * x
             print*, '\nEnterを押してください。'
             read *
@@ -278,7 +276,7 @@ subroutine kakezan()
             print '(F29.4, "  *  ", F0.4, "\n")', x, y
         end if
         print '("   ", F0.36)', x * y
-        write(*, '("\n   " ,Z0)') int(x * y, LargeInt_K)
+        write(*, '("\n   " ,Z0)') int(x * y, 16)
         z = x * y
         print*, '\nEnterを押してください。'
         read *
@@ -289,7 +287,7 @@ subroutine kakezan()
 end subroutine kakezan
 
 subroutine warizan()
-    use m_usc, only: err, z, LargeInt_K
+    use m_usc, only: err, z
     use, intrinsic :: iso_fortran_env, only: real128
     implicit none
     real(real128) x, y
@@ -313,7 +311,7 @@ subroutine warizan()
             print '(F29.4, "  /  ", F0.4, "\n")', x, y
         end if
         print '("   ", F0.36)', x / y
-        write(*, '("\n   " ,Z0)') int(x / y, LargeInt_K)
+        write(*, '("\n   " ,Z0)') int(x / y, 16)
         z = x / y
         print*, '\nEnterを押してください。'
         read *
@@ -324,7 +322,7 @@ subroutine warizan()
 end subroutine warizan
 
 subroutine heihoukon()
-    use m_usc, only: err, z, LargeInt_K
+    use m_usc, only: err, z
     use, intrinsic :: iso_fortran_env, only: real128
     implicit none
     real(real128) x
@@ -349,7 +347,7 @@ subroutine heihoukon()
 end subroutine heihoukon
 
 subroutine ensyuritu()
-    use m_usc, only: err, z, LargeInt_K
+    use m_usc, only: err, z
     use, intrinsic :: iso_fortran_env, only: real128
     implicit none
     real(real128), parameter :: pi = 4.0_real128*atan(1.0_real128)
@@ -370,7 +368,7 @@ subroutine ensyuritu()
 end subroutine ensyuritu
 
 subroutine syutyou()
-    use m_usc, only: err, z, LargeInt_K
+    use m_usc, only: err, z
     use, intrinsic :: iso_fortran_env, only: real128
     implicit none
     real(real128), parameter :: pi = 4.0_real128*atan(1.0_real128)
@@ -391,7 +389,7 @@ subroutine syutyou()
 end subroutine syutyou
 
 subroutine nizyou()
-    use m_usc, only: err, z, LargeInt_K
+    use m_usc, only: err, z
     use, intrinsic :: iso_fortran_env, only: real128
     implicit none
     real(real128) x, y
@@ -415,7 +413,7 @@ subroutine nizyou()
             print '(F29.4, "  ^  ", F0.4, "\n")', x, y
         end if
         print '("   ", F0.36)', x**y
-        write(*, '("\n   " ,Z0)') int(x + y, LargeInt_K)
+        write(*, '("\n   " ,Z0)') int(x + y, 16)
         z = x**y
         print*, '\nEnterを押してください。'
         read *
@@ -834,11 +832,10 @@ contains
 end subroutine game_2
 
 subroutine game_3()
-    use m_usc, only: LargeInt_K
     use, intrinsic :: iso_fortran_env, only: int32, int64, real64
     implicit none
     character(10) d
-    integer(LargeInt_K) hero_hp, hero_mp, enemy3_hp, enemy3_mp, n, x
+    integer(16) hero_hp, hero_mp, enemy3_hp, enemy3_mp, n, x
     integer(int64) :: mp = 0, y, level
     open(1, file='data/.level', status='old')
         read (1, *) level
@@ -1421,7 +1418,7 @@ subroutine mozuro
 end subroutine mozuro
 
 subroutine randsu()
-    use m_usc, only: err, z, LargeInt_K
+    use m_usc, only: err, z
     use, intrinsic :: iso_fortran_env, only: int32, int64, real128
     implicit none
     integer(int64) n
@@ -1439,7 +1436,7 @@ subroutine randsu()
         n = randon(x)
         print*, '\n出力'
         print*, n
-        write(*, '("\n   " ,Z0)') int(n, LargeInt_K)
+        write(*, '("\n   " ,Z0)') int(n, 16)
         z = n
         print*, '\nEnterを押してください。'
         read *
@@ -1977,10 +1974,10 @@ subroutine ensyu()
 end subroutine ensyu
 
 subroutine heikin()
-    use m_usc, only: err, z, LargeInt_K
+    use m_usc, only: err, z
     use, intrinsic :: iso_fortran_env, only: real128
     implicit none
-    integer(LargeInt_K) i, max
+    integer(16) i, max
     real(real128), allocatable :: x(:)
     real(real128) :: y = 0.0_real128
     character char
@@ -2072,12 +2069,12 @@ subroutine zetaf()
 end subroutine zetaf
 
 subroutine collatz()
-    use m_usc, only: err, LargeInt_K
+    use m_usc, only: err
     use, intrinsic :: iso_fortran_env, only: real128
     implicit none
     real(real128), parameter :: q = 2.0_real128
     real(real128) n, h
-    integer(LargeInt_K) i
+    integer(16) i
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
     read (*, *, iostat=err) n
@@ -2087,13 +2084,13 @@ subroutine collatz()
         loop:do
             h = mod(n, q)
             if (n .eq. 1) exit loop
-            select case(int(h, LargeInt_K))
+            select case(int(h, 16))
             case (1)
                 n = n * 3 + 1
             case (0)
                 n = n * 0.50_real128
             end select
-            write (*, '(I0, ", ")', advance='no') int(n, LargeInt_K)
+            write (*, '(I0, ", ")', advance='no') int(n, 16)
             i = i + 1
         end do loop
         print '("\n\n", I0, " 回の操作で答えが ", I0)', i, int(n)
@@ -2106,10 +2103,10 @@ subroutine collatz()
 end subroutine collatz
 
 subroutine soinsubunkai()
-    use m_usc, only: err, LargeInt_K
+    use m_usc, only: err
     use, intrinsic :: iso_fortran_env, only: real128
     implicit none
-    integer(LargeInt_K) n, c, i, j
+    integer(16) n, c, i, j
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
     read (*, *, iostat=err) n
@@ -2133,7 +2130,7 @@ subroutine soinsubunkai()
             write (*, '(" * ", I0)', advance='no') 2
             n = n / 2
         end do
-        c  = int(sqrt(real(n, real128)), LargeInt_K)
+        c  = int(sqrt(real(n, real128)), 16)
         if (j .eq. 0) then
             write (*, '(I0)', advance='no') 1
         end if
@@ -2157,15 +2154,13 @@ subroutine soinsubunkai()
 end subroutine soinsubunkai
 
 subroutine sosuhantei()
-    use m_usc, only: err, LargeInt_K
+    use m_usc, only: err
     use, intrinsic :: iso_fortran_env, only: real128
     implicit none
-    integer(LargeInt_K) p, i
-    real(real128) q
+    integer(16) p, i
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
-    read (*, *, iostat=err) q
-    p = int(q, LargeInt_K)
+    read (*, *, iostat=err) p
     if (err .eq. 0) then
         select case(p)
         case (0, 1)
@@ -2300,16 +2295,16 @@ contains
 end subroutine slot
 
 subroutine kanzensu()
-    use m_usc, only: err, LargeInt_K
+    use m_usc, only: err
     use, intrinsic :: iso_fortran_env, only: real128, int64
     implicit none
-    integer(LargeInt_K) x
+    integer(16) x
     real(real128) p, n, i, j
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', 'xを入力してください。(0 < x < 62)'
     read (*, *, iostat=err) x
     if (err .eq. 0) then
-        if (0 .ge. x .or. 62 .le. x) then
+        if (0 .ge. x .or. 1025 .le. x) then
             print*, '変域にしたがってください。'
             read *
             return
@@ -2319,9 +2314,9 @@ subroutine kanzensu()
         print*, ''
         do
             if (j .eq. x) exit
-            n = (pow(2.0_real128, int(i, LargeInt_K))) - 1.0_real128
-            if (is_prime(int(n, LargeInt_K))) then
-                p = pow(2.0_real128, int(i - 1.0_real128, LargeInt_K)) * n
+            n = (pow(2.0_real128, int(i, 16))) - 1.0_real128
+            if (is_prime(int(n, 16))) then
+                p = pow(2.0_real128, int(i - 1.0_real128, 16)) * n
                 j = j + 1.0_real128
                 write (*, '(F0.0, " ")', advance='no') p
             end if
@@ -2336,8 +2331,8 @@ subroutine kanzensu()
 contains
     pure logical(int64) function is_prime(n)
         implicit none
-        integer(LargeInt_K), intent(in) :: n
-        integer(LargeInt_K) i
+        integer(16), intent(in) :: n
+        integer(16) i
         i = 3
         select case(n)
         case (0, 1)
@@ -2356,9 +2351,9 @@ contains
     pure real(real128) function pow(x, n)
         implicit none
         real(real128), intent(in) :: x
-        integer(LargeInt_K), intent(in) :: n
+        integer(16), intent(in) :: n
         real(real128) k
-        integer(LargeInt_K) i
+        integer(16) i
         k = 1
         do i = 1, n
             k = k * x
@@ -2369,16 +2364,16 @@ end subroutine kanzensu
 
 subroutine akkaman
     !$ use omp_lib
-    use m_usc, only: err, LargeInt_K, z
+    use m_usc, only: err, z
     use, intrinsic :: iso_fortran_env, only: real128, int64
     implicit none
-    integer(int64) i
+    integer(16) i
     real(real128) m, n, t, ans
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', 'm, nの値を入力してください。'
     read (*, *, iostat=err) m, n
     if (err .eq. 0) then
-        y:select case (int(m, LargeInt_K))
+        y:select case (int(m, 16))
         case (0)
             ans = n + 1
         case (1)
@@ -2388,7 +2383,7 @@ subroutine akkaman
         case default
             t = 2 ** (m - 2)
             i = 2
-            do i = 2, int(n + 3, LargeInt_K)
+            do i = 2, int(n + 3, 16)
                 t = t * 2 ** (m - 2)
             end do
             ans = t - 3
@@ -2405,7 +2400,7 @@ subroutine akkaman
 end subroutine akkaman
 
 subroutine sigmoid()
-    use m_usc, only: err, LargeInt_K, z
+    use m_usc, only: err, z
     use, intrinsic :: iso_fortran_env, only: real128, int64
     implicit none
     real(real128) a, x
@@ -2489,7 +2484,7 @@ end subroutine furie
 
 subroutine tan_h()
     !$ use omp_lib
-    use m_usc, only: err, LargeInt_K, z, pi
+    use m_usc, only: err, z, pi
     use, intrinsic :: iso_fortran_env, only: real128, int64
     implicit none
     real(real128) theta, h, x, angle
@@ -2671,7 +2666,7 @@ subroutine pi_()
     use m_usc, only: operator(.minus.), operator(.times.), operator(.div.)&
     &, operator(.plus.), prec, err
     implicit none
-    integer(int64) n_, tmp
+    integer(int64) n_
     integer(int64), allocatable :: pi(:)
     !$ real(real64) :: time_begin_s, time_end_s
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
@@ -2689,12 +2684,11 @@ subroutine pi_()
     print '(A)', '\n計算中'
 
     !$ time_begin_s = omp_get_wtime()
-    tmp = 48_int64
     prec = ceiling(n_ * 0.20_real64) + 1
     allocate(pi(0:prec))
-    pi = (Arctan(49_int64) .times. tmp) .plus. (Arctan(57_int64) .times. 128_int64)&
+    pi = (Arctan(49_int64) .times. 48_int64) .plus. (Arctan(57_int64) .times. 128_int64)&
     & .minus. (Arctan(239_int64) .times. 20_int64) .plus. (Arctan(110443_int64) .ti&
-    &mes. tmp)
+    &mes. 48_int64)
     !$ time_end_s = omp_get_wtime()
     
     open (13, file='data/pi_.txt', status='replace')
@@ -2714,9 +2708,9 @@ contains
         allocate(x(0:prec), unity(0:prec))
         unity = [1, (0, n = 1, prec)]
         x = 0
-        do concurrent (n = int(0.50_real64 * n_ / log10(real(k, real64)), int64) + 1: 1: -1)
+        do concurrent (n = int(0.50_real64 * n_ / log10(real(k, real64))) + 1: 1: -1)
             block
-            x = ((unity .div. (2 * n + 1)) .minus. x) .div. (k * k)
+            x = ((unity .div. (n + n + 1)) .minus. x) .div. (k * k)
             end block
         end do
         x = (unity .minus. x) .div. k
