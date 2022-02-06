@@ -3,8 +3,7 @@ module m_usc
     implicit none
     real(real128), parameter :: pi = 3.1415926535897932384626433832795028840_real128
     real(real128), parameter :: g = 9.806650_real128
-    real(real64), parameter :: m_ = 0.000010_real64
-    integer(int64), parameter, private :: mal = 100000_int64
+    integer(int64), parameter, private :: mal = 10 ** 8
     integer(int64) err, prec
     real(real128) z
     character(256), private :: str
@@ -114,7 +113,7 @@ contains
         do concurrent (i = prec: 0: -1)
             block
             zi = x(i) + y(i) + r
-            r = int(zi * m_)
+            r = zi / mal
             z(i) = zi - r * mal
             end block
         end do
@@ -128,7 +127,7 @@ contains
         do concurrent (i = prec: 0: -1)
             block
             zi = x(i) + (mal - 1 - y(i)) + r
-            r = int(zi * m_)
+            r = zi / mal
             z(i) = zi - r * mal
             end block
         end do
@@ -142,7 +141,7 @@ contains
         do concurrent (i = prec: 0: -1)
             block
             zi = x(i) * s + r
-            r = int(zi * m_)
+            r = zi / mal
             z(i) = zi - r * mal
             end block
         end do
@@ -1932,7 +1931,7 @@ end subroutine TX
 
 subroutine ensyu()
     !$ use omp_lib
-    use, intrinsic :: iso_fortran_env, only: int64
+    use, intrinsic :: iso_fortran_env, only: int64, real64
     implicit none
     integer(int64), parameter :: vmax = 428800, bmax = 25728
     integer(int64), allocatable :: vect(:), buffer(:)
@@ -1956,7 +1955,7 @@ subroutine ensyu()
             vect(L) = num - (carry * d)
             end block
         end do
-        k = carry / 100000
+        k = int(carry * 0.000010_real64, int64)
         buffer(n) = more + k
         more = carry - k * 100000
         end block
@@ -2017,33 +2016,39 @@ end subroutine heikin
 
 subroutine kaizyou()
     use m_usc, only: err, z
-    use, intrinsic :: iso_fortran_env, only: real128, int64
+    use, intrinsic :: iso_fortran_env, only: real128
     implicit none
-    integer(16) n, k
-    real(real128) ans
+    integer(16) n
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
     read (*, *, iostat=err) n
     if (err .eq. 0) then
-        if (n >= 1025 .or. n <= 0) then
+        if (n >= 38 .or. n <= 0) then
             print *, 'Error'
             read *
             return
         end if
-        ans = 1.0_real128
-        k = 1
-        do k = 1, n
-            ans = ans * k
-        end do
+        z = f(n)
         print*, '\n答え'
-        print '("  ", i0, "! = ", F0.0)', n, ans
-        z = ans
+        print '("  ", I0, "! = ", F0.0)', n, z
         print*, '\nEnterを押してください。'
         read *
     else
         print*, '\nError!'
         read *
     end if
+contains
+    pure real(real128) function f(x) result(y)
+        implicit none
+        integer(16), intent(in) :: x
+        integer(16) i
+        y = 1
+        do concurrent (i = 1: x: 1)
+            block
+            y = y * i
+            end block
+        end do
+    end function f
 end subroutine kaizyou
 
 subroutine zetaf()
@@ -2057,7 +2062,7 @@ subroutine zetaf()
     read (*, *, iostat=err) s
     if (err .eq. 0) then
         zeta = 0.0_real128
-        do concurrent (i = 1:41943020_int64)
+        do concurrent (i = 41943020_int64: 1: -1)
             block
             zeta = zeta + (1.0_real128 / i**s)
             end block
@@ -2091,7 +2096,7 @@ subroutine collatz()
             if (n .eq. 1) exit loop
             select case(int(h, 16))
             case (1)
-                n = n * 3 + 1
+                n = (n + n + n) + 1
             case (0)
                 n = n * 0.50_real128
             end select
@@ -2451,7 +2456,7 @@ subroutine furie()
         real(real128), allocatable :: f(:)
         real(real128) ReF, ImF, dummy, pi2
         allocate(f(max))
-        pi2 = pi * 2
+        pi2 = pi + pi
         n = 0
         st:do k = 1, max
             read (1, *, iostat=err) f(k)
@@ -2645,7 +2650,7 @@ subroutine lumi_distance()
         simpson = new_simpson
         h = h * 0.50_real128
         trapezoid = (trapezoid + midpoint) * 0.50_real128
-        n = n * 2
+        n = n + n
     end do
 
     z = (1 + x) * simpson
@@ -2689,7 +2694,7 @@ subroutine pi_()
     print '(A)', '\n計算中'
 
     !$ time_begin_s = omp_get_wtime()
-    prec = ceiling(n_ * 0.20_real64) + 1
+    prec = ceiling(n_ / 8.0_real64) + 1
     allocate(pi(0:prec))
     pi = (Arctan(49_int64) .times. 48_int64) .plus. (Arctan(57_int64) .times. 128_int64)&
     & .minus. (Arctan(239_int64) .times. 20_int64) .plus. (Arctan(110443_int64) .ti&
@@ -2697,9 +2702,9 @@ subroutine pi_()
     !$ time_end_s = omp_get_wtime()
     
     open (13, file='data/pi_.txt', status='replace')
-    write (13, '(" Pi = 3.", I5.5, 9I6.5/(7X, 10I6.5))') pi(1:prec - 1)
+    write (13, '(" Pi = 3.", I8.8, 4I9.8/(7X, 5I9.8))') pi(1:prec - 1)
     close (13)
-    print '(" Pi = 3.", I5.5, 9I6.5/(7X, 10I6.5))', pi(1:prec - 1)
+    print '(" Pi = 3.", I8.8, 4I9.8/(7X, 5I9.8))', pi(1:prec - 1)
     deallocate(pi)
     !$ print '(A, F13.5, A)', '\ntime:', time_end_s - time_begin_s, ' [sec]\n'
     print '(A)', 'Enterを押してください。'
