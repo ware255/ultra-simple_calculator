@@ -152,7 +152,7 @@ contains
         integer(int64), intent(in) :: x(0:prec), s
         integer(int64) z(0:prec), i, r, zi
         r = 0
-        do concurrent (i = 0: prec: 1)
+        do concurrent (i = 0: prec)
             block
             zi = (x(i) + r * mal)
             z(i) = zi / s
@@ -2694,11 +2694,10 @@ subroutine pi_()
     print '(A)', '\n計算中'
 
     !$ time_begin_s = omp_get_wtime()
-    prec = ceiling(n_ / 8.0_real64) + 1
+    prec = ceiling(n_ * 0.1250_real64) + 1
     allocate(pi(0:prec))
     pi = (Arctan(49_int64) .times. 48_int64) .plus. (Arctan(57_int64) .times. 128_int64)&
-    & .minus. (Arctan(239_int64) .times. 20_int64) .plus. (Arctan(110443_int64) .ti&
-    &mes. 48_int64)
+    & .minus. (Arctan(239_int64) .times. 20_int64) .plus. (Arctan(110443_int64) .times. 48_int64)
     !$ time_end_s = omp_get_wtime()
     
     open (13, file='data/pi_.txt', status='replace')
@@ -2713,14 +2712,13 @@ contains
     pure function Arctan(k) result(x)
         implicit none
         integer(int64), intent(in) :: k
-        integer(int64), allocatable :: x(:), unity(:)
-        integer(int64) n
-        allocate(x(0:prec), unity(0:prec))
+        integer(int64) x(0:prec), unity(0:prec), n, t
         unity = [1, (0, n = 1, prec)]
         x = 0
+        t = k * k
         do concurrent (n = int(0.50_real64 * n_ / log10(real(k, real64))) + 1: 1: -1)
             block
-            x = ((unity .div. (n + n + 1)) .minus. x) .div. (k * k)
+            x = ((unity .div. (n + n + 1)) .minus. x) .div. t
             end block
         end do
         x = (unity .minus. x) .div. k
