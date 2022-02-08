@@ -4,7 +4,8 @@ module m_usc
     real(real128), parameter :: pi = 3.1415926535897932384626433832795028840_real128
     real(real128), parameter :: g = 9.806650_real128
     integer(int64), parameter, private :: mal = 10 ** 8
-    integer(int64) err, prec
+    integer(int64) prec
+    integer(int64) err
     real(real128) z
     character(256), private :: str
     real(real128), private :: x
@@ -150,15 +151,32 @@ contains
     pure function divide(x, s) result(z)
         implicit none
         integer(int64), intent(in) :: x(0:prec), s
-        integer(int64) z(0:prec), i, r, zi
+        integer(int64) z(0:prec), i, r, zi, t
+        real(16) m
         r = 0
-        do concurrent (i = 0: prec)
-            block
-            zi = (x(i) + r * mal)
-            z(i) = zi / s
-            r = zi - s * z(i)
-            end block
-        end do
+        m = 1 / s
+        if (mod(prec, 2) .eq. 0) then
+            do concurrent (i = 1: prec: 2)
+                block
+                t = i - 1
+                zi = (x(t) + r * mal)
+                z(t) = zi / s
+                r = zi - s * z(t)
+
+                zi = (x(i) + r * mal)
+                z(i) = zi / s
+                r = zi - s * z(i)
+                end block
+            end do
+        else
+            do concurrent (i = 0: prec: 1)
+                block
+                zi = (x(i) + r * mal)
+                z(i) = zi / s
+                r = zi - s * z(i)
+                end block
+            end do
+        end if
     end function divide
 end module m_usc
 
@@ -1944,19 +1962,58 @@ subroutine ensyu()
     allocate(vect(vmax), buffer(bmax))
     vect(1:vmax) = 2
     more = 0
-    do concurrent (n = 1: bmax)
+    do concurrent (n = 1: bmax: 4)
         block
         carry = 0
         do concurrent (L = vmax: 1: -1)
             block
             num = (100000 * vect(L)) + (carry * L)
-            d = ((2 * L) - 1)
+            d = ((L + L) - 1)
             carry = num / d
             vect(L) = num - (carry * d)
             end block
         end do
         k = int(carry * 0.000010_real64, int64)
         buffer(n) = more + k
+        more = carry - k * 100000
+
+        carry = 0
+        do concurrent (L = vmax: 1: -1)
+            block
+            num = (100000 * vect(L)) + (carry * L)
+            d = ((L + L) - 1)
+            carry = num / d
+            vect(L) = num - (carry * d)
+            end block
+        end do
+        k = int(carry * 0.000010_real64, int64)
+        buffer(n+1) = more + k
+        more = carry - k * 100000
+
+        carry = 0
+        do concurrent (L = vmax: 1: -1)
+            block
+            num = (100000 * vect(L)) + (carry * L)
+            d = ((L + L) - 1)
+            carry = num / d
+            vect(L) = num - (carry * d)
+            end block
+        end do
+        k = int(carry * 0.000010_real64, int64)
+        buffer(n+2) = more + k
+        more = carry - k * 100000
+
+        carry = 0
+        do concurrent (L = vmax: 1: -1)
+            block
+            num = (100000 * vect(L)) + (carry * L)
+            d = ((L + L) - 1)
+            carry = num / d
+            vect(L) = num - (carry * d)
+            end block
+        end do
+        k = int(carry * 0.000010_real64, int64)
+        buffer(n+3) = more + k
         more = carry - k * 100000
         end block
     end do
@@ -2053,18 +2110,18 @@ end subroutine kaizyou
 
 subroutine zetaf()
     use m_usc, only: err, z
-    use, intrinsic :: iso_fortran_env, only: real128, int64
+    use, intrinsic :: iso_fortran_env, only: int64, real64
     implicit none
-    real(real128) zeta, s
+    real(real64) zeta, s
     integer(int64) i
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
     read (*, *, iostat=err) s
     if (err .eq. 0) then
-        zeta = 0.0_real128
+        zeta = 0.0_real64
         do concurrent (i = 41943020_int64: 1: -1)
             block
-            zeta = zeta + (1.0_real128 / i**s)
+            zeta = zeta + (1.0_real64 / i**s)
             end block
         end do
         print*, '\n答え'
@@ -2389,7 +2446,7 @@ subroutine akkaman
         case (1)
             ans = n + 2
         case (2)
-            ans = 2 * n + 3
+            ans = n + n + 3
         case default
             t = 2 ** (m - 2)
             i = 2
@@ -2709,7 +2766,7 @@ subroutine pi_()
     print '(A)', 'Enterを押してください。'
     read *
 contains
-    pure function Arctan(k) result(x)
+    function Arctan(k) result(x)
         implicit none
         integer(int64), intent(in) :: k
         integer(int64) x(0:prec), unity(0:prec), n, t
