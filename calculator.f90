@@ -40,8 +40,8 @@ contains
         read (str, *, iostat=err) x
         if (err .eq. 0) then
             print*, new_line(' '), '答え'
-            print '("   ", F0.36)', z + x
-            write(*, '("\n   " ,Z0)') int(z + x, 16)
+            print '(3X, F0.36)', z + x
+            write(*, '("\n", 3X, Z0)') int(z + x, 16)
             z = z + x
             print*, new_line(' '), 'Enterを押してください。'
             read *
@@ -58,8 +58,8 @@ contains
         read (str, *, iostat=err) x
         if (err .eq. 0) then
             print*, new_line(' '), '答え'
-            print '("   ", F0.36)', z - x
-            write(*, '("\n   " ,Z0)') int(z - x, 16)
+            print '(3X, F0.36)', z - x
+            write(*, '("\n", 3X, Z0)') int(z - x, 16)
             z = z - x
             print*, new_line(' '), 'Enterを押してください。'
             read *
@@ -74,8 +74,8 @@ contains
         print '(A)', '値を入力してください。'
         read (*, '(A)') str
         if (str .eq. '') then
-            print '("   ", F0.36)', z * z
-            write(*, '("\n   " ,Z0)') int(z * z, 16)
+            print '(3X, F0.36)', z * z
+            write(*, '("\n", 3X, Z0)') int(z * z, 16)
             z = z * z
             print*, new_line(' '), 'Enterを押してください。'
             read *
@@ -84,8 +84,8 @@ contains
         read (str, *, iostat=err) x
         if (err .eq. 0) then
             print*, new_line(' '), '答え'
-            print '("   ", F0.36)', z * x
-            write(*, '("\n   " ,Z0)') int(z * x, 16)
+            print '(3X, F0.36)', z * x
+            write(*, '("\n", 3X, Z0)') int(z * x, 16)
             z = z * x
             print*, new_line(' '), 'Enterを押してください。'
             read *
@@ -102,8 +102,8 @@ contains
         read (str, *, iostat=err) x
         if (err .eq. 0) then
             print*, new_line(' '), '答え'
-            print '("   ", F0.36)', z / x
-            write(*, '("\n   " ,Z0)') int(z / x, 16)
+            print '(3X, F0.36)', z / x
+            write(*, '("\n", 3X, Z0)') int(z / x, 16)
             z = z / x
             print*, new_line(' '), 'Enterを押してください。'
             read *
@@ -211,8 +211,8 @@ subroutine tasizan()
         else
             print '(F29.4, "  +  ", F0.4, "\n")', x, y
         end if
-        print '("   ", F0.36)', x + y
-        write(*, '("\n   " ,Z0)') int(x + y, 16)
+        print '(3X, F0.36)', x + y
+        write(*, '("\n", 3X, Z0)') int(x + y, 16)
         z = x + y
         print*, '\nEnterを押してください。'
         read *
@@ -246,8 +246,8 @@ subroutine hikizan()
         else
             print '(F29.4, "  -  ", F0.4, "\n")', x, y
         end if
-        print '("   ", F0.36)', x - y
-        write(*, '("\n   " ,Z0)') int(x - y, 16)
+        print '(3X, F0.36)', x - y
+        write(*, '("\n", 3X, Z0)') int(x - y, 16)
         z = x - y
         print*, '\nEnterを押してください。'
         read *
@@ -278,8 +278,8 @@ subroutine kakezan()
             else
                 print '(F29.4, "  ^  ", I0, "\n")', x, 2
             end if
-            print '("   ", F0.36)', x * x
-            write(*, '("\n   " ,Z0)') int(x * x, 16)
+            print '(3X, F0.36)', x * x
+            write(*, '("\n", 3X, Z0)') int(x * x, 16)
             z = x * x
             print*, '\nEnterを押してください。'
             read *
@@ -299,8 +299,8 @@ subroutine kakezan()
         else
             print '(F29.4, "  *  ", F0.4, "\n")', x, y
         end if
-        print '("   ", F0.36)', x * y
-        write(*, '("\n   " ,Z0)') int(x * y, 16)
+        print '(3X, F0.36)', x * y
+        write(*, '("\n", 3X, Z0)') int(x * y, 16)
         z = x * y
         print*, '\nEnterを押してください。'
         read *
@@ -334,8 +334,8 @@ subroutine warizan()
         else
             print '(F29.4, "  /  ", F0.4, "\n")', x, y
         end if
-        print '("   ", F0.36)', x / y
-        write(*, '("\n   " ,Z0)') int(x / y, 16)
+        print '(3X, F0.36)', x / y
+        write(*, '("\n", 3X, Z0)') int(x / y, 16)
         z = x / y
         print*, '\nEnterを押してください。'
         read *
@@ -381,7 +381,7 @@ subroutine ensyuritu()
     read (*, *, iostat=err) r
     if (err .eq. 0) then
         print*, '\n答え'
-        print '("   ", F0.36)', r * r * pi
+        print '(3X, F0.36)', r * r * pi
         z = r * r * pi
         print*, '\nEnterを押してください。'
         read *
@@ -395,15 +395,15 @@ subroutine syutyou()
     use m_usc, only: err, z
     use, intrinsic :: iso_fortran_env, only: real128
     implicit none
-    real(real128), parameter :: pi = 4.0_real128*atan(1.0_real128)
+    real(real128), parameter :: pi = 4.0_real128 * atan(1.0_real128)
     real(real128) r
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
     read (*, *, iostat=err) r
     if (err .eq. 0) then
         print*, '\n答え'
-        print '("   ", F0.36)', 2 * pi * r
-        z = 2 * pi * r
+        print '(3X, F0.36)', (pi + pi) * r
+        z = (pi + pi) * r
         print*, '\nEnterを押してください。'
         read *
     else
@@ -436,8 +436,8 @@ subroutine nizyou()
         else
             print '(F29.4, "  ^  ", F0.4, "\n")', x, y
         end if
-        print '("   ", F0.36)', x**y
-        write(*, '("\n   " ,Z0)') int(x + y, 16)
+        print '(3X, F0.36)', x**y
+        write(*, '("\n", 3X, Z0)') int(x + y, 16)
         z = x**y
         print*, '\nEnterを押してください。'
         read *
@@ -908,8 +908,8 @@ subroutine game_3()
         hero_mp = 99;enemy3_mp = 20
     case (10)
         n = 0;x = 0
-        hero_hp = 99999999999999999_8;enemy3_hp = 999999999999999999_8
-        hero_mp = 99999999999999999_8;enemy3_mp = 15
+        hero_hp = 99999999999999999999_16;enemy3_hp = 999999999999999999999999999_16
+        hero_mp = 99999999999999999999_16;enemy3_mp = 15
     case default
         error stop "\nError: Invalid string.\n"
     end select
@@ -1103,16 +1103,16 @@ contains
         integer, allocatable :: seed(:)
         call random_seed(size=seedsize)
         allocate(seed(seedsize))
-        f:do
+        l:do
             call random_seed(get=seed)
             call system_clock(count=c)
             seed(1) = c
             call random_seed(put=seed)
             call random_number(x)
-            y = x*100
+            y = x * 100
             rad = int(y)
-            if (rad .lt. n) exit f
-        end do f
+            if (rad .lt. n) exit l
+        end do l
         deallocate(seed)
         add = rad
     end function
@@ -1154,7 +1154,7 @@ contains
             seed(1) = c
             call random_seed(put=seed)
             call random_number(x)
-            y = x*100
+            y = x * 100
             rad = int(y)
             if (rad .lt. 9) exit m
         end do m
@@ -1167,14 +1167,16 @@ subroutine nizihoutei()
     use m_usc, only: err
     use, intrinsic :: iso_fortran_env, only: real128
     implicit none
-    complex(real128) a, b, c, k1, k2
+    real(real128) a, b, c
+    complex(real128) k1, k2, a_, b_, c_
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '一般: ax^2 + bx + c = 0 (a /= 0)\n'
     print '(A)', 'a, b, c値(係数)を入力してください。'
     read (*, *, iostat=err) a, b, c
     if (err .eq. 0) then
-        k1 = (-b + sqrt((b * b) - 4 * a * c)) / (2 * a)
-        k2 = (-b - sqrt((b * b) - 4 * a * c)) / (2 * a)
+        a_ = a; b_ = b; c_ = c
+        k1 = (-b_ + sqrt((b_ * b_) - 4 * a_ * c_)) / (a_ + a_)
+        k2 = (-b_ - sqrt((b_ * b_) - 4 * a_ * c_)) / (a_ + a_)
         open (11, file='data/nizihoutei.txt', status='replace')
             write (11, *) k1
             flush(11)
@@ -1203,8 +1205,8 @@ subroutine n_sin()
     read (*, *, iostat=err) n
     if (err .eq. 0) then
         print*, '\n答え'
-        print*, sin(n)
         z = sin(n)
+        print*, z
         print '(A)', '\nEnterを押してください。'
         read *
     else
@@ -1224,8 +1226,8 @@ subroutine n_cos()
     read (*, *, iostat=err) n
     if (err .eq. 0) then
         print '(A)', '\n答え'
-        print*, cos(n)
         z = cos(n)
+        print*, z
         print*, '\nEnterを押してください。'
         read *
     else
@@ -1245,8 +1247,8 @@ subroutine  n_tan()
     read (*, *, iostat=err) n
     if (err .eq. 0) then
         print*, '\n答え'
-        print*, tan(n)
         z = tan(n)
+        print*, z
         print*, '\nEnterを押してください。'
         read *
     else
@@ -1266,8 +1268,8 @@ subroutine n_asin()
     read (*, *, iostat=err) n
     if (err .eq. 0) then
         print*, '\n答え'
-        print*, asin(n)
         z = asin(n)
+        print*, z
         print*, '\nEnterを押してください。'
         read *
     else
@@ -1287,8 +1289,8 @@ subroutine n_acos()
     read (*, *, iostat=err) n
     if (err .eq. 0) then
         print*, '\n答え'
-        print*, acos(n)
         z = acos(n)
+        print*, z
         print*, '\nEnterを押してください。'
         read *
     else
@@ -1308,8 +1310,8 @@ subroutine n_atan()
     read (*, *, iostat=err) n
     if (err .eq. 0) then
         print*, '\n答え'
-        print*, atan(n)
         z = atan(n)
+        print*, z
         print*, '\nEnterを押してください。'
         read *
     else
@@ -1332,8 +1334,8 @@ subroutine n_atan2()
         read (*, *, iostat=err) x
         if (err .eq. 0) then
             print*, '\n答え'
-            print*, atan2(y, x)
             z = atan2(y, x)
+            print*, z
             print*, '\nEnterを押してください。'
             read *
         else
@@ -1359,8 +1361,8 @@ subroutine n_aimag()
     read (*, *, iostat=err) im
     if (err .eq. 0) then
         print*, '\n答え'
-        print*, aimag(im)
         z = aimag(im)
+        print*, z
         print*, '\nEnterを押してください。'
         read *
     else
@@ -1380,8 +1382,8 @@ subroutine n_log10()
     read (*, *, iostat=err) n
     if (err .eq. 0) then
         print*, '\n答え'
-        print*, log10(n)
         z = log10(n)
+        print*, z
         print*, '\nEnterを押してください。'
         read *
     else
@@ -1401,8 +1403,8 @@ subroutine n_log()
     read (*, *, iostat=err) n
     if (err .eq. 0) then
         print*, '\n答え'
-        print*, log(n)
         z = log(n)
+        print*, z
         print*, '\nEnterを押してください。'
         read *
     else
@@ -1425,8 +1427,8 @@ subroutine mozuro
         read (*, *, iostat=err) n
         if (err .eq. 0) then
             print*, '\n答え'
-            print*, mod(a, n)
             z = mod(a, n)
+            print*, z
             print*, '\nEnterを押してください。'
             read *
         else
@@ -1484,7 +1486,7 @@ contains
                 seed(1) = c
                 call random_seed(put=seed)
                 call random_number(x)
-                y = x*1024
+                y = x * 1024
                 rad = int(y)
                 if (rad .lt. n) exit
             end do
@@ -1495,7 +1497,7 @@ contains
                 seed(1) = c
                 call random_seed(put=seed)
                 call random_number(x)
-                y = x*7812524
+                y = x * 7812524
                 rad = int(y)
                 if (rad .lt. n) exit
             end do
@@ -1506,7 +1508,7 @@ contains
                 seed(1) = c
                 call random_seed(put=seed)
                 call random_number(x)
-                y = x*15625024
+                y = x * 15625024
                 rad = int(y)
                 if (rad .lt. n) exit
             end do
@@ -1517,7 +1519,7 @@ contains
                 seed(1) = c
                 call random_seed(put=seed)
                 call random_number(x)
-                y = x*31250024
+                y = x * 31250024
                 rad = int(y)
                 if (rad .lt. n) exit
             end do
@@ -1528,7 +1530,7 @@ contains
                 seed(1) = c
                 call random_seed(put=seed)
                 call random_number(x)
-                y = x*62500024
+                y = x * 62500024
                 rad = int(y)
                 if (rad .lt. n) exit
             end do
@@ -1539,7 +1541,7 @@ contains
                 seed(1) = c
                 call random_seed(put=seed)
                 call random_number(x)
-                y = x*125000024
+                y = x * 125000024
                 rad = int(y)
                 if (rad .lt. n) exit
             end do
@@ -1550,7 +1552,7 @@ contains
                 seed(1) = c
                 call random_seed(put=seed)
                 call random_number(x)
-                y = x*250000024
+                y = x * 250000024
                 rad = int(y)
                 if (rad .lt. n) exit
             end do
@@ -1561,7 +1563,7 @@ contains
                 seed(1) = c
                 call random_seed(put=seed)
                 call random_number(x)
-                y = x*500000024
+                y = x * 500000024
                 rad = int(y)
                 if (rad .lt. n) exit
             end do
@@ -1598,7 +1600,7 @@ subroutine neipia() ! e = lim n->Infinity (1+1/n)**n | Σn=0 ∞ 1/n!
     print '(2F40.36)', e
     z = e
     print*, '\n Wikipediaでは以下(上の桁数に合わせた)'
-    print '(A)', '  2.718281828459045235360287471352662497'
+    print '(2X, A)', '2.718281828459045235360287471352662497'
     print*, '\nEnterを押してください。'
     read *
 end subroutine neipia
@@ -1632,8 +1634,8 @@ subroutine y_zyoukon()
             return
         end if
         print*, '答え'
-        print*, x**(1 / y)
-        z = x**(1 / y)
+        z = x ** (1 / y)
+        print*, z
         print*, '\nEnterを押してください。'
         read *
     else
@@ -1652,8 +1654,8 @@ subroutine zettaiti()
     read (*, *, iostat=err) x
     if (err .eq. 0) then
         print*, '\n答え'
-        print*, abs(x)
         z = abs(x)
+        print*, z
         print*, '\nEnterを押してください。'
         read *
     else
@@ -1672,8 +1674,8 @@ subroutine sisu()
     read (*, *, iostat=err) x
     if (err .eq. 0) then
         print*, '\n答え'
-        print*, exp(x)
         z = exp(x)
+        print*, z
         print*, '\nEnterを押してください。'
         read *
     else
@@ -1692,8 +1694,8 @@ subroutine soukyokusin()
     read (*, *, iostat=err) x
     if (err .eq. 0) then
         print*, '\n答え'
-        print*, sinh(x)
         z = sinh(x)
+        print*, z
         print*, '\nEnterを押してください。'
         read *
     else
@@ -1712,8 +1714,8 @@ subroutine soukyokucos()
     read (*, *, iostat=err) x
     if (err .eq. 0) then
         print*, '\n答え'
-        print*, cosh(x)
         z = cosh(x)
+        print*, z
         print*, '\nEnterを押してください。'
         read *
     else
@@ -1732,8 +1734,8 @@ subroutine soukyokutan()
     read (*, *, iostat=err) x
     if (err .eq. 0) then
         print*, '\n答え'
-        print*, tanh(x)
         z = tanh(x)
+        print*, z
         print*, '\nEnterを押してください。'
         read *
     else
@@ -1752,8 +1754,8 @@ subroutine gamma_f()
     read (*, *, iostat=err) x
     if (err .eq. 0) then
         print*, '\n答え'
-        print*, gamma(x)
         z = gamma(x)
+        print*, z
         print*, '\nEnterを押してください。'
         read *
     else
@@ -1806,7 +1808,7 @@ contains
             seed(1) = c
             call random_seed(put=seed)
             call random_number(x)
-            y = x*100
+            y = x * 10
             rad = int(y)
             if (rad .lt. 5) exit
         end do
@@ -1939,13 +1941,13 @@ subroutine TX()
         H_T = (V * d) / g
 
         print*, '\n滞空時間'
-        print '("\t", F0.36, " [sec]")', T
+        print '(3X, F0.36, " [sec]")', T
         print*, '\n飛距離'
-        print '("\t", F0.36, " [m]")', L
+        print '(3X, F0.36, " [m]")', L
         print*, '\n最高高度時の時間'
-        print '("\t", F0.36, " [sec]")', H_T
+        print '(3X, F0.36, " [sec]")', H_T
         print*, '\n最高高度'
-        print '("\t", F0.36, " [m]")', H
+        print '(3X, F0.36, " [m]")', H
         print*, '\nEnterを押してください。'
         read *
     else
@@ -1963,7 +1965,7 @@ subroutine ensyu()
     integer(int64) n, L, more, num, carry, k, d
     !$ double precision st, en
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-    print '(A)', 'ちょっと待っててね\n終わったあとは、メモ帳を&
+    print '(A)', '計算中です。\n終わったあとは、メモ帳を&
     &大画面にした方がええで\n'
     !$ st = omp_get_wtime()
     allocate(vect(vmax), buffer(bmax))
@@ -2095,7 +2097,7 @@ subroutine kaizyou()
         end if
         z = f(n)
         print*, '\n答え'
-        print '("  ", I0, "! = ", F0.0)', n, z
+        print '(3X, I0, "! = ", F0.0)', n, z
         print*, '\nEnterを押してください。'
         read *
     else
@@ -2156,9 +2158,9 @@ subroutine collatz()
     if (err .eq. 0) then
         i = 0
         print*, ''
-        loop:do
+        l:do
             h = mod(n, q)
-            if (n .eq. 1) exit loop
+            if (n .eq. 1) exit l
             select case(int(h, 16))
             case (1)
                 n = (n + n + n) + 1
@@ -2167,7 +2169,7 @@ subroutine collatz()
             end select
             write (*, '(I0, ", ")', advance='no') int(n, 16)
             i = i + 1
-        end do loop
+        end do l
         print '("\n\n", I0, " 回の操作で答えが ", I0)', i, int(n)
         print*, '\nEnterを押してください。'
         read *
@@ -2353,17 +2355,16 @@ contains
         integer, allocatable :: seed(:)
         call random_seed(size=seedsize)
         allocate(seed(seedsize))
-        loop :&
-        &do
+        l:do
             call random_seed(get=seed)
             call system_clock(count=c)
             seed(1) = c
             call random_seed(put=seed)
             call random_number(x)
-            y = x*10
+            y = x * 10
             rad = int(y)
-            if (rad .lt. 10) exit loop
-        end do loop
+            if (rad .lt. 10) exit l
+        end do l
         deallocate(seed)
         randon = rad
     end function
@@ -2387,8 +2388,8 @@ subroutine kanzensu()
         i = 2.0_real128
         j = 0.0_real128
         print*, ''
-        do
-            if (j .eq. x) exit
+        l:do
+            if (j .eq. x) exit l
             n = (pow(2.0_real128, int(i, 16))) - 1.0_real128
             if (is_prime(int(n, 16))) then
                 p = pow(2.0_real128, int(i - 1.0_real128, 16)) * n
@@ -2396,7 +2397,7 @@ subroutine kanzensu()
                 write (*, '(F0.0, 1X)', advance='no') p
             end if
             i = i + 1.0_real128
-        end do
+        end do l
         print*, '\n\nEnterを押してください。'
         read *
     else
@@ -2464,7 +2465,7 @@ subroutine akkaman
             ans = t - 3
         end select y
         print*, '\n答え'
-        print '("   ", F0.0)', ans
+        print '(3X, F0.0)', ans
         z = ans
         print*, '\nEnterを押してください。'
         read *
@@ -2489,8 +2490,8 @@ subroutine sigmoid()
             return
         end if
         print*, '\n答え'
-        print*, (tanh(a * x * 0.50_real128) + 1) * 0.50_real128
         z = (tanh(a * x * 0.50_real128) + 1) * 0.50_real128
+        print*, z
         print*, '\nEnterを押してください。'
         read *
     else
@@ -2562,7 +2563,7 @@ subroutine tan_h()
     use m_usc, only: err, z, pi
     use, intrinsic :: iso_fortran_env, only: real128, int64
     implicit none
-    real(real128) theta, h, x, angle
+    real(real128) theta, x, angle
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '距離(隣辺)を入力してください。[m]'
     read (*, *, iostat=err) x
@@ -2579,10 +2580,9 @@ subroutine tan_h()
             return
         end if
         theta = pi / 180.0_real128 * angle
-        h = x * tan(theta)
+        z = x * tan(theta)
         print*, '\n答え'
-        print '("   h = ", F0.36)', h
-        z = h
+        print '(3X, "h = ", F0.36)', z
         print*, '\nEnterを押してください。'
         read *
     else
@@ -2748,11 +2748,11 @@ subroutine pi_()
     print '(A)', 'n桁まで表示(50 < n < 1000000)'
     read (*, *, iostat=err) n_
     if (err .ne. 0) then
-        print*, 'Error!'
+        print*, '\nError!'
         read *
         return
     else if (n_ < 50) then
-        print*, 'Error!'
+        print*, '\nError!'
         read *
         return
     end if
@@ -2761,8 +2761,10 @@ subroutine pi_()
     !$ time_begin_s = omp_get_wtime()
     prec = ceiling(n_ * 0.1250_real64) + 1
     allocate(pi(0:prec))
-    pi = (Arctan(49_int64) .times. 48_int64) .plus. (Arctan(57_int64) .times. 128_int64)&
-    & .minus. (Arctan(239_int64) .times. 20_int64) .plus. (Arctan(110443_int64) .times. 48_int64)
+    pi = (Arctan(49_int64) .times. 48_int64) .&
+    &plus. (Arctan(57_int64) .times. 128_int64) .&
+    &minus. (Arctan(239_int64) .times. 20_int64) .&
+    &plus. (Arctan(110443_int64) .times. 48_int64)
     !$ time_end_s = omp_get_wtime()
     
     open (13, file='data/pi_.txt', status='replace')
@@ -2799,11 +2801,11 @@ subroutine fibonattisuretu()
     print '(A)', 'xを入力してください。(0 < x < 185)'
     read (*, *, iostat=err) x
     if (err .ne. 0) then
-        print*, 'Error!'
+        print*, '\nError!'
         read *
         return
     else if (x <= 0 .or. x >= 185) then
-        print*, 'Error!'
+        print*, '\nError!'
         read *
         return
     end if
