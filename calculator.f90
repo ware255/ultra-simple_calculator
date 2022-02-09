@@ -26,6 +26,13 @@ module m_usc
         module procedure divide
     end interface
 contains
+    subroutine Memory()
+        implicit none
+        print*, new_line(' '), z
+        print*, new_line(' '), 'Enterを押してください。'
+        read *
+    end subroutine Memory
+
     subroutine M_A()
         implicit none
         print '(A)', '値を入力してください。'
@@ -2035,18 +2042,19 @@ subroutine heikin()
     implicit none
     integer(16) i, max
     real(real128), allocatable :: x(:)
-    real(real128) :: y = 0.0_real128
-    character char
+    real(real128) y
+    character(37) char
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '観測値を入力してください。'
     read (*, *, iostat=err) max
     if (err .eq. 0) then
         print*, ''
         allocate(x(max))
+        y = 0.0_real128
         do i = 1, max
             print '(I0, "つ目の値を入力してください。(止めるときはqを入力)")', i
             read (*, '(A)') char
-            if (char .eq. 'q') then
+            if (trim(char) .eq. 'q') then
                 deallocate(x)
                 return
             end if
@@ -2385,7 +2393,7 @@ subroutine kanzensu()
             if (is_prime(int(n, 16))) then
                 p = pow(2.0_real128, int(i - 1.0_real128, 16)) * n
                 j = j + 1.0_real128
-                write (*, '(F0.0, " ")', advance='no') p
+                write (*, '(F0.0, 1X)', advance='no') p
             end if
             i = i + 1.0_real128
         end do
@@ -2740,11 +2748,11 @@ subroutine pi_()
     print '(A)', 'n桁まで表示(50 < n < 1000000)'
     read (*, *, iostat=err) n_
     if (err .ne. 0) then
-        print *, 'Error'
+        print*, 'Error!'
         read *
         return
     else if (n_ < 50) then
-        print *, 'Error'
+        print*, 'Error!'
         read *
         return
     end if
@@ -2782,6 +2790,40 @@ contains
     end function Arctan
 end subroutine pi_
 
+subroutine fibonattisuretu()
+    use m_usc, only: err
+    use, intrinsic :: iso_fortran_env, only: real128, int64
+    implicit none
+    integer(16) r, x, y, z, i
+    write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    print '(A)', 'xを入力してください。(0 < x < 185)'
+    read (*, *, iostat=err) x
+    if (err .ne. 0) then
+        print*, 'Error!'
+        read *
+        return
+    else if (x <= 0 .or. x >= 185) then
+        print*, 'Error!'
+        read *
+        return
+    end if
+    r = 0
+    y = 1
+    print*, ''
+    l:do i = 1, x
+        if (x - 1 .eq. i) then
+            write (*, '(I0)', advance='no') y
+            exit l
+        end if
+        write (*, '(I0, ",", 1X)', advance='no') y
+        z = r + y
+        r = y
+        y = z
+    end do l
+    print*, '\n\nEnterを押してください。'
+    read *
+end subroutine fibonattisuretu
+
 !subroutine test() ! template
 !    use, intrinsic :: iso_fortran_env, only: real128, int64
 !    implicit none
@@ -2792,7 +2834,7 @@ end subroutine pi_
 !end subroutine test
 
 subroutine page_03()
-    use m_usc, only: M_A, M_S, M_M, M_D
+    use m_usc, only: M_A, M_S, M_M, M_D, Memory
     implicit none
     character(256) str
     do
@@ -2807,6 +2849,7 @@ subroutine page_03()
         print*, '7 Life Game'
         print*, '8 光度距離計算'
         print*, '9 円周率その２(任意の桁数)'
+        print*, '10 フィボナッチ数列'
         print*, '11 スロットゲーム\n'
         print*, '99 終了           02 Back'
         print '(A)', '-----------------------------------------'
@@ -2831,6 +2874,8 @@ subroutine page_03()
             call lumi_distance()
         case ('9')
             call pi_()
+        case ('10')
+            call fibonattisuretu()
         case ('11')
             call slot()
         case ('00')
@@ -2850,6 +2895,8 @@ subroutine page_03()
             call M_M()
         case ('M/', 'm/')
             call M_D()
+        case ('M', 'm')
+            call Memory()
         case default
             print*, 'そんなもんねぇよｗ'
             read *
@@ -2858,7 +2905,7 @@ subroutine page_03()
 end subroutine page_03
 
 subroutine page_02()
-    use m_usc, only: M_A, M_S, M_M, M_D
+    use m_usc, only: M_A, M_S, M_M, M_D, Memory
     implicit none
     character(256) str
     do
@@ -2919,6 +2966,8 @@ subroutine page_02()
             call M_M()
         case ('M/', 'm/')
             call M_D()
+        case ('M', 'm')
+            call Memory()
         case default
             print*, 'そんなもんねぇよｗ'
             read *
@@ -2927,7 +2976,7 @@ subroutine page_02()
 end subroutine page_02
 
 subroutine page_01()
-    use m_usc, only: z, M_A, M_S, M_M, M_D
+    use m_usc, only: z, M_A, M_S, M_M, M_D, Memory
     use, intrinsic :: iso_fortran_env, only: real128
     implicit none
     character(256) str
@@ -3005,6 +3054,8 @@ subroutine page_01()
             call M_M()
         case ('M/', 'm/')
             call M_D()
+        case ('M', 'm')
+            call Memory()
         case default
             print*, 'そんなもんねぇよｗ'
             read *
@@ -3013,7 +3064,7 @@ subroutine page_01()
 end subroutine page_01
 
 subroutine page_00()
-    use m_usc, only: z, M_A, M_S, M_M, M_D
+    use m_usc, only: z, M_A, M_S, M_M, M_D, Memory
     use, intrinsic :: iso_fortran_env, only: real128
     implicit none
     character(256) str
@@ -3105,6 +3156,8 @@ subroutine page_00()
             call M_M()
         case ('M/', 'm/')
             call M_D()
+        case ('M', 'm')
+            call Memory()
         case default
             print*, 'そんなもんねぇよｗ'
             read *

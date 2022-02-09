@@ -38,14 +38,15 @@ CUIで機能します。「GUIの方がいい」と欲張らないでくださ�
      超戦略ゲームでのレベル
      $ ./calculator level
 ## 動作確認済みOS
-     ・WSL Debian
-     ・Linux Mint
+     ・WSL Debian (64bit)
+     ・Linux Mint (32bit)
      ・その他Linux
 ※Windowsではエスケープシーケンスが対応しておりませんので使用しないでください。(一応対応はしてるっぽいですが、そういうふうにしてない)
 ## LICENSE
       MIT License 
 <br><br><br>
 ## メモ
+2022 02/09 フィボナッチ数列を追加<br>
 2022 02/06 円周率の計算をさらに高速化<br>
 2022 02/05 integer(LargeInt_K)をinteger(16)に変更<br>
 2022 02/03 円周率の計算を高野喜久雄の公式に変更<br>
