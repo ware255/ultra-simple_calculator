@@ -46,7 +46,7 @@ contains
             print*, new_line(' '), 'Enterを押してください。'
             read *
         else
-            print*, new_line(' '), 'Error!'
+            print*, new_line(' '), char(7), 'Error!'
             read *
         end if
     end subroutine M_A
@@ -64,7 +64,7 @@ contains
             print*, new_line(' '), 'Enterを押してください。'
             read *
         else
-            print*, new_line(' '), 'Error!'
+            print*, new_line(' '), char(7), 'Error!'
             read *
         end if
     end subroutine M_S
@@ -90,7 +90,7 @@ contains
             print*, new_line(' '), 'Enterを押してください。'
             read *
         else
-            print*, new_line(' '), 'Error!'
+            print*, new_line(' '), char(7), 'Error!'
             read *
         end if
     end subroutine M_M
@@ -108,7 +108,7 @@ contains
             print*, new_line(' '), 'Enterを押してください。'
             read *
         else
-            print*, new_line(' '), 'Error!'
+            print*, new_line(' '), char(7), 'Error!'
             read *
         end if
     end subroutine M_D
@@ -199,7 +199,7 @@ subroutine tasizan()
         print '(A)', '値を入力してください。'
         read (*, *, iostat=err) y
         if (err .ne. 0) then
-            print*, '\nError!'
+            print*, char(7), '\nError!'
             read *
             return
         end if
@@ -217,7 +217,7 @@ subroutine tasizan()
         print*, '\nEnterを押してください。'
         read *
     else
-        print*, '\nError!'
+        print*, char(7), '\nError!'
         read *
     end if
 end subroutine tasizan
@@ -234,7 +234,7 @@ subroutine hikizan()
         print '(A)', '値を入力してください。'
         read (*, *, iostat=err) y
         if (err .ne. 0) then
-            print*, '\nError!'
+            print*, char(7), '\nError!'
             read *
             return
         end if
@@ -252,7 +252,7 @@ subroutine hikizan()
         print*, '\nEnterを押してください。'
         read *
     else
-        print*, '\nError!'
+        print*, char(7), '\nError!'
         read *
     end if
 end subroutine hikizan
@@ -287,7 +287,7 @@ subroutine kakezan()
         end if
         read (str, *, iostat=err) y
         if (err .ne. 0) then
-            print*, '\nError!'
+            print*, char(7), '\nError!'
             read *
             return
         end if
@@ -305,7 +305,7 @@ subroutine kakezan()
         print*, '\nEnterを押してください。'
         read *
     else
-        print*, '\nError!'
+        print*, char(7), '\nError!'
         read *
     end if
 end subroutine kakezan
@@ -322,7 +322,7 @@ subroutine warizan()
         print '(A)', '値を入力してください。'
         read (*, *, iostat=err) y
         if (err .ne. 0) then
-            print*, '\nError!'
+            print*, char(7), '\nError!'
             read *
             return
         end if
@@ -340,7 +340,7 @@ subroutine warizan()
         print*, '\nEnterを押してください。'
         read *
     else
-        print*, '\nError!'
+        print*, char(7), '\nError!'
         read *
     end if
 end subroutine warizan
@@ -365,7 +365,7 @@ subroutine heihoukon()
         print*, '\nEnterを押してください。'
         read *
     else
-        print*, '\nError!'
+        print*, char(7), '\nError!'
         read *
     end if
 end subroutine heihoukon
@@ -407,7 +407,7 @@ subroutine syutyou()
         print*, '\nEnterを押してください。'
         read *
     else
-        print*, '\nError!'
+        print*, char(7), '\nError!'
         read *
     end if
 end subroutine syutyou
@@ -424,7 +424,7 @@ subroutine nizyou()
         print '(A)', 'n乗する値を入力してください。'
         read (*, *, iostat=err) y
         if (err .ne. 0) then
-            print*, '\nError!'
+            print*, char(7), '\nError!'
             read *
             return
         end if
@@ -442,7 +442,7 @@ subroutine nizyou()
         print*, '\nEnterを押してください。'
         read *
     else
-        print*, '\nError!'
+        print*, char(7), '\nError!'
         read *
     end if
 end subroutine nizyou
@@ -642,7 +642,7 @@ contains
             seed(1) = c
             call random_seed(put=seed)
             call random_number(x)
-            y = x*100
+            y = x * 100
             rad = int(y)
             if (rad .lt. n) exit f
         end do f
@@ -1154,7 +1154,7 @@ contains
             seed(1) = c
             call random_seed(put=seed)
             call random_number(x)
-            y = x * 100
+            y = x * 10
             rad = int(y)
             if (rad .lt. 9) exit m
         end do m
@@ -1189,7 +1189,7 @@ subroutine nizihoutei()
         print '(A)', '\nEnterを押してください。'
         read *
     else
-        print*, '\nError!'
+        print*, char(7), '\nError!'
         read *
         return
     end if
@@ -1210,7 +1210,7 @@ subroutine n_sin()
         print '(A)', '\nEnterを押してください。'
         read *
     else
-        print*, '\nError!'
+        print*, char(7), '\nError!'
         read *
         return
     end if
@@ -1231,7 +1231,7 @@ subroutine n_cos()
         print*, '\nEnterを押してください。'
         read *
     else
-        print*, '\nError!'
+        print*, char(7), '\nError!'
         read *
         return
     end if
@@ -1252,7 +1252,7 @@ subroutine  n_tan()
         print*, '\nEnterを押してください。'
         read *
     else
-        print*, '\nError!'
+        print*, char(7), '\nError!'
         read *
         return
     end if
@@ -1273,7 +1273,7 @@ subroutine n_asin()
         print*, '\nEnterを押してください。'
         read *
     else
-        print*, '\nError!'
+        print*, char(7), '\nError!'
         read *
         return
     end if
@@ -1294,7 +1294,7 @@ subroutine n_acos()
         print*, '\nEnterを押してください。'
         read *
     else
-        print*, '\nError!'
+        print*, char(7), '\nError!'
         read *
         return
     end if
@@ -1315,7 +1315,7 @@ subroutine n_atan()
         print*, '\nEnterを押してください。'
         read *
     else
-        print*, '\nError!'
+        print*, char(7), '\nError!'
         read *
         return
     end if
@@ -1339,12 +1339,12 @@ subroutine n_atan2()
             print*, '\nEnterを押してください。'
             read *
         else
-            print*, '\nError!'
+            print*, char(7), '\nError!'
             read *
             return
         end if
     else
-        print*, '\nError!'
+        print*, char(7), '\nError!'
         read *
         return
     end if
@@ -1366,7 +1366,7 @@ subroutine n_aimag()
         print*, '\nEnterを押してください。'
         read *
     else
-        print*, '\nError!'
+        print*, char(7), '\nError!'
         read *
         return
     end if
@@ -1387,7 +1387,7 @@ subroutine n_log10()
         print*, '\nEnterを押してください。'
         read *
     else
-        print*, '\nError!'
+        print*, char(7), '\nError!'
         read *
         return
     end if
@@ -1408,7 +1408,7 @@ subroutine n_log()
         print*, '\nEnterを押してください。'
         read *
     else
-        print*, '\nError!'
+        print*, char(7), '\nError!'
         read *
         return
     end if
@@ -1432,12 +1432,12 @@ subroutine mozuro
             print*, '\nEnterを押してください。'
             read *
         else
-            print*, '\nError!'
+            print*, char(7), '\nError!'
             read *
             return
         end if
     else
-        print*, '\nError!'
+        print*, char(7), '\nError!'
         read *
         return
     end if
@@ -1467,7 +1467,7 @@ subroutine randsu()
         print*, '\nEnterを押してください。'
         read *
     else
-        print*, '\nError!'
+        print*, char(7), '\nError!'
         read *
     end if
 contains
@@ -1629,7 +1629,7 @@ subroutine y_zyoukon()
         print '(A)', 'n乗根するx値を入力してください。'
         read (*, *, iostat=err) x
         if (err .ne. 0) then
-            print*, '\nError!'
+            print*, char(7), '\nError!'
             read *
             return
         end if
@@ -1639,7 +1639,7 @@ subroutine y_zyoukon()
         print*, '\nEnterを押してください。'
         read *
     else
-        print*, '\nError!'
+        print*, char(7), '\nError!'
         read *
     end if
 end subroutine y_zyoukon
@@ -1659,7 +1659,7 @@ subroutine zettaiti()
         print*, '\nEnterを押してください。'
         read *
     else
-        print*, '\nError!'
+        print*, char(7), '\nError!'
         read *
     end if
 end subroutine zettaiti
@@ -1679,7 +1679,7 @@ subroutine sisu()
         print*, '\nEnterを押してください。'
         read *
     else
-        print*, '\nError!'
+        print*, char(7), '\nError!'
         read *
     end if
 end subroutine sisu
@@ -1699,7 +1699,7 @@ subroutine soukyokusin()
         print*, '\nEnterを押してください。'
         read *
     else
-        print*, '\nError!'
+        print*, char(7), '\nError!'
         read *
     end if
 end subroutine soukyokusin
@@ -1719,7 +1719,7 @@ subroutine soukyokucos()
         print*, '\nEnterを押してください。'
         read *
     else
-        print*, '\nError!'
+        print*, char(7), '\nError!'
         read *
     end if
 end subroutine soukyokucos
@@ -1739,7 +1739,7 @@ subroutine soukyokutan()
         print*, '\nEnterを押してください。'
         read *
     else
-        print*, '\nError!'
+        print*, char(7), '\nError!'
         read *
     end if
 end subroutine soukyokutan
@@ -1759,7 +1759,7 @@ subroutine gamma_f()
         print*, '\nEnterを押してください。'
         read *
     else
-        print*, '\nError!'
+        print*, char(7), '\nError!'
         read *
     end if
 end subroutine gamma_f
@@ -1869,7 +1869,7 @@ subroutine undouhouteisiki()
         print*, '\nEnterを押してください。'
         read *
     else
-        print*, '\nError!'
+        print*, char(7), '\nError!'
         read *
     end if
 end subroutine undouhouteisiki
@@ -1905,7 +1905,7 @@ subroutine ziyurakka()
         print*, '\nEnterを押してください。'
         read *
     else
-        print*, '\nError!'
+        print*, char(7), '\nError!'
         read *
     end if
 end subroutine ziyurakka
@@ -1950,7 +1950,7 @@ subroutine TX()
         print*, '\nEnterを押してください。'
         read *
     else
-        print*, '\nError!'
+        print*, char(7), '\nError!'
         read *
     end if
 end subroutine TX
@@ -1964,7 +1964,7 @@ subroutine ensyu()
     integer(int64) n, L, more, num, carry, k, d
     !$ double precision st, en
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-    print '(A)', '計算中です。\n終わったあとは、メモ帳を&
+    print '(A)', '\n計算中です。\n終わったあとは、メモ帳を&
     &大画面にした方がええで\n'
     !$ st = omp_get_wtime()
     allocate(vect(vmax), buffer(bmax))
@@ -1975,66 +1975,76 @@ subroutine ensyu()
         carry = 0
         do concurrent (L = vmax: 1: -1)
             block
-            num = (100000 * vect(L)) + (carry * L)
+            num = 100000 * vect(L) + f(carry, L)
             d = ((L + L) - 1)
             carry = num / d
             vect(L) = num - (carry * d)
             end block
         end do
-        k = int(carry * 0.000010_real64, int64)
+        k = carry / 100000
         buffer(n) = more + k
-        more = carry - k * 100000
+        more = carry - f(100000_int64, k)
 
         carry = 0
         do concurrent (L = vmax: 1: -1)
             block
-            num = (100000 * vect(L)) + (carry * L)
+            num = (100000 * vect(L)) + f(carry, L)
             d = ((L + L) - 1)
             carry = num / d
             vect(L) = num - (carry * d)
             end block
         end do
-        k = int(carry * 0.000010_real64, int64)
+        k = carry / 100000
         buffer(n+1) = more + k
-        more = carry - k * 100000
+        more = carry - f(100000_int64, k)
 
         carry = 0
         do concurrent (L = vmax: 1: -1)
             block
-            num = (100000 * vect(L)) + (carry * L)
+            num = (100000 * vect(L)) + f(carry, L)
             d = ((L + L) - 1)
             carry = num / d
             vect(L) = num - (carry * d)
             end block
         end do
-        k = int(carry * 0.000010_real64, int64)
+        k = carry / 100000
         buffer(n+2) = more + k
-        more = carry - k * 100000
+        more = carry - f(100000_int64, k)
 
         carry = 0
         do concurrent (L = vmax: 1: -1)
             block
-            num = (100000 * vect(L)) + (carry * L)
+            num = (100000 * vect(L)) + f(carry, L)
             d = ((L + L) - 1)
             carry = num / d
             vect(L) = num - (carry * d)
             end block
         end do
-        k = int(carry * 0.000010_real64, int64)
+        k = carry / 100000
         buffer(n+3) = more + k
-        more = carry - k * 100000
+        more = carry - f(100000_int64, k)
         end block
     end do
     !$ en = omp_get_wtime()
     open(11, file='data/pi.txt', status='replace')
-        write(11, "(1x, I1, '.'/(1x, 32I5.5))") buffer
+        write(11, "(1X, I1, '.'/(1X, 32I5.5))") buffer
         flush(11)
     close(11)
-    write(*, "(1x, I1, '.'/(1x, 12I5.5))") buffer
+    write(*, "(1X, I1, '.'/(1X, 12I5.5))") buffer
     !$ print *, "Elapsed time :", en - st
     deallocate(vect, buffer)
     print*, '\nEnterを押してください。'
     read *
+contains
+    pure integer(int64) function f(x, y) result(z)
+        implicit none
+        integer(int64), intent(in) :: x, y
+        integer(int64) i
+        z = 0
+        do i = 1, x
+            z = z + y
+        end do
+    end function f
 end subroutine ensyu
 
 subroutine heikin()
@@ -2090,7 +2100,7 @@ subroutine kaizyou()
     read (*, *, iostat=err) n
     if (err .eq. 0) then
         if (n >= 38 .or. n <= 0) then
-            print *, 'Error'
+            print*, char(7), '\nError!'
             read *
             return
         end if
@@ -2100,7 +2110,7 @@ subroutine kaizyou()
         print*, '\nEnterを押してください。'
         read *
     else
-        print*, '\nError!'
+        print*, char(7), '\nError!'
         read *
     end if
 contains
@@ -2139,7 +2149,7 @@ subroutine zetaf()
         print*, '\nEnterを押してください。'
         read *
     else
-        print*, '\nError!'
+        print*, char(7), '\nError!'
         read *
     end if
 end subroutine zetaf
@@ -2173,7 +2183,7 @@ subroutine collatz()
         print*, '\nEnterを押してください。'
         read *
     else
-        print*, '\nError!'
+        print*, char(7), '\nError!'
         read *
     end if
 end subroutine collatz
@@ -2182,15 +2192,15 @@ subroutine soinsubunkai()
     use m_usc, only: err
     use, intrinsic :: iso_fortran_env, only: real128
     implicit none
-    integer(16) n, c, i, j
+    integer(16) n, i, j!, k, L
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
     read (*, *, iostat=err) n
     if (err .eq. 0) then
         print*, '\n答え'
         j = 0
-        if (n .eq. 1) then
-            write (*, '("\t", A)', advance='no') '1 /= 1(Not a prime number.)'
+        if (n < 2) then
+            write (*, '("\t", A)', advance='no') 'Not a prime number.'
             goto 110
         end if
         write (*, '("\t", I0, A)', advance='no') n,' = '
@@ -2201,22 +2211,29 @@ subroutine soinsubunkai()
             write (*, '(I0)', advance='no') 2
             n = n / 2
             j = 1
+        else if (mod(n, 3) .eq. 0) then
+            write (*, '(I0)', advance='no') 3
+            n = n / 3
+            j = 1
         end if
         do while (mod(n, 2) .eq. 0)
             write (*, '(" * ", I0)', advance='no') 2
             n = n / 2
         end do
-        c  = int(sqrt(real(n, real128)), 16)
+        do while (mod(n, 3) .eq. 0)
+            write (*, '(" * ", I0)', advance='no') 3
+            n = n / 3
+        end do
         if (j .eq. 0) then
             write (*, '(I0)', advance='no') 1
         end if
-        do concurrent (i = 3: c: 2)
-            block
-            do while (mod(n, i) .eq. 0)
+        i = 5
+        do while (f(i, i) <= n)
+            do while (mod(n, i) .eq. 0 .or. mod(n, (i + 2)) .eq. 0)
                 write (*, '(" * ", I0)', advance='no') i
                 n = n / i
             end do
-            end block
+            i = i + 6
         end do
         if (n .ne. 1) then
             write (*, '(" * ", I0)', advance='no') n
@@ -2227,6 +2244,16 @@ subroutine soinsubunkai()
         print*, '\nError!'
         read *
     end if
+contains
+    pure integer(16) function f(x, y) result(z)
+        implicit none
+        integer(16), intent(in) :: x, y
+        integer(16) i
+        z = 0
+        do i = 1, x
+            z = z + y
+        end do
+    end function f
 end subroutine soinsubunkai
 
 subroutine sosuhantei()
@@ -2260,7 +2287,7 @@ subroutine sosuhantei()
             return
         end if
         i = 5
-        do while ((i * i) <= p)
+        do while (f(i, i) <= p)
             if (mod(p, i) .eq. 0 .or. mod(p, (i + 2)) .eq. 0) then
                 print*, '\n答え'
                 print '("\t", I0, "は素数ではありません。")', p
@@ -2278,6 +2305,16 @@ subroutine sosuhantei()
         print*, '\nError!'
         read *
     end if
+contains
+    pure integer(16) function f(x, y) result(z)
+        implicit none
+        integer(16), intent(in) :: x, y
+        integer(16) i
+        z = 0
+        do i = 1, x
+            z = z + y
+        end do
+    end function f
 end subroutine sosuhantei
 
 subroutine slot()
@@ -2341,6 +2378,17 @@ subroutine slot()
         L = L + 1
     end do loop
 contains
+    pure real(real64) function f(x, y) result(z)
+        implicit none
+        real(real64), intent(in) :: x
+        integer(int32), intent(in) :: y
+        integer(int32) i
+        z = 0.0_real64
+        do i = 1, y
+            z = z + x
+        end do
+    end function
+
     integer(int32) function randon()
         implicit none
         integer(int32) seedsize, c, rad
@@ -2354,7 +2402,7 @@ contains
             seed(1) = c
             call random_seed(put=seed)
             call random_number(x)
-            y = x * 10
+            y = f(x, 10)
             rad = int(y)
             if (rad .lt. 10) exit l
         end do l
@@ -2406,13 +2454,14 @@ contains
         select case(n)
         case (0, 1)
             is_prime = .false.
-        case (2)
+        case (2, 3)
             is_prime = .true.
         end select
-        if (mod(n, 2) .eq. 0) is_prime = .false.
+        if (mod(n, 2) .eq. 0 .or. mod(n, 3) .eq. 0) is_prime = .false.
+        i = 5
         do while((i * i) .le. n)
-            if (mod(n, i) .eq. 0) is_prime = .false.
-            i = i + 2
+            if (mod(n, i) .eq. 0 .or. mod(n, (i + 2)) .eq. 0) is_prime = .false.
+            i = i + 6
         end do
         is_prime = .true.
     end function
@@ -2535,7 +2584,8 @@ subroutine furie()
             end do
             write(2, '("\t", I0, "\t", F0.23)') j, ImF
             write(3, '("\t", I0, "\t", F0.23)') j, ReF
-            write(4, '("\t", I0, "\t", F0.23)') j, ((ReF * ReF + ImF * ImF) ** 0.50_real128) / (n / 2)
+            write(4, '("\t", I0, "\t", F0.23)') j, ((ReF * ReF + ImF * ImF) *&
+            &* 0.50_real128) / (n * 0.50_real128)
             end block
         end do
         deallocate(f)
@@ -3295,6 +3345,7 @@ program calculator
                 print '("現在のレベル:\t", I0)', level
                 print*, ''
                 stop
+                print*, char(7)
 111             error stop "\nError: 超戦略ゲームをプレイしてください。\n"
             end block
         case ('time')
