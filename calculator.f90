@@ -374,7 +374,7 @@ subroutine ensyuritu()
     use m_usc, only: err, z
     use, intrinsic :: iso_fortran_env, only: real128
     implicit none
-    real(real128), parameter :: pi = 4.0_real128*atan(1.0_real128)
+    real(real128), parameter :: pi = 4.0_real128 * atan(1.0_real128)
     real(real128) r
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
@@ -436,9 +436,9 @@ subroutine nizyou()
         else
             print '(F29.4, "  ^  ", F0.4, "\n")', x, y
         end if
-        print '(3X, F0.36)', x**y
+        print '(3X, F0.36)', x ** y
         write(*, '("\n", 3X, Z0)') int(x + y, 16)
-        z = x**y
+        z = x ** y
         print*, '\nEnterを押してください。'
         read *
     else
@@ -1168,24 +1168,24 @@ subroutine nizihoutei()
     use, intrinsic :: iso_fortran_env, only: real128
     implicit none
     real(real128) a, b, c
-    complex(real128) k1, k2, a_, b_, c_
+    complex(real128) k(2), a_, b_, c_
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '一般: ax^2 + bx + c = 0 (a /= 0)\n'
     print '(A)', 'a, b, c値(係数)を入力してください。'
     read (*, *, iostat=err) a, b, c
     if (err .eq. 0) then
         a_ = a; b_ = b; c_ = c
-        k1 = (-b_ + sqrt((b_ * b_) - 4 * a_ * c_)) / (a_ + a_)
-        k2 = (-b_ - sqrt((b_ * b_) - 4 * a_ * c_)) / (a_ + a_)
+        k(1) = (-b_ + sqrt((b_ * b_) - 4 * a_ * c_)) / (a_ + a_)
+        k(2) = (-b_ - sqrt((b_ * b_) - 4 * a_ * c_)) / (a_ + a_)
         open (11, file='data/nizihoutei.txt', status='replace')
-            write (11, *) k1
+            write (11, *) k(1)
             flush(11)
-            write (11, *) k2
+            write (11, *) k(2)
             flush(11)
         close (11)
         print '(A)', '\n答え'
-        print *, k1
-        print *, k2
+        print *, k(1)
+        print *, k(2)
         print '(A)', '\nEnterを押してください。'
         read *
     else
@@ -1462,7 +1462,7 @@ subroutine randsu()
         n = randon(x)
         print*, '\n出力'
         print*, n
-        write(*, '("\n   " ,Z0)') int(n, 16)
+        write (*, '("\n", 3X, Z0)') int(n, 16)
         z = n
         print*, '\nEnterを押してください。'
         read *
@@ -1852,8 +1852,7 @@ subroutine undouhouteisiki()
             w = V * sin(theta)
             open(11, file='data/output.txt', status='replace')
             write(11, '("\t", F0.23, "\t", F0.23)') x, y
-            zyu:&
-            &do
+            zyu:do
                 dxdt = u
                 dydt = w
                 x = x + 0.00050_real128 * dxdt
@@ -2110,7 +2109,7 @@ contains
         integer(16), intent(in) :: x
         integer(16) i
         y = 1
-        do concurrent (i = 1: x: 1)
+        do concurrent (i = 1: x)
             block
             y = y * i
             end block
@@ -2131,10 +2130,10 @@ subroutine zetaf()
         zeta = 0.0_real64
         do concurrent (i = 41943020_int64: 1: -1)
             block
-            zeta = zeta + (1.0_real64 / i**s)
+            zeta = zeta + (1.0_real64 / i ** s)
             end block
         end do
-        print*, '\n答え'
+        print*, '\n答え(精度悪いですm(--)m)\n'
         print*, zeta
         z = zeta
         print*, '\nEnterを押してください。'
@@ -2262,13 +2261,7 @@ subroutine sosuhantei()
         end if
         i = 5
         do while ((i * i) <= p)
-            if (mod(p, i) .eq. 0) then
-                print*, '\n答え'
-                print '("\t", I0, "は素数ではありません。")', p
-                print*, '\nEnterを押してください。'
-                read *
-                return
-            else if (mod(p, (i + 2)) .eq. 0) then
+            if (mod(p, i) .eq. 0 .or. mod(p, (i + 2)) .eq. 0) then
                 print*, '\n答え'
                 print '("\t", I0, "は素数ではありません。")', p
                 print*, '\nEnterを押してください。'
@@ -2710,7 +2703,7 @@ subroutine lumi_distance()
             midpoint = midpoint + f(a + h * (i - 0.50_real128))
         end do
         midpoint = midpoint * h
-        new_simpson = (trapezoid + 2 * midpoint) / 3
+        new_simpson = (trapezoid + (midpoint + midpoint)) / 3
         err_ = abs(new_simpson - simpson) / abs(new_simpson)
         simpson = new_simpson
         h = h * 0.50_real128
@@ -2731,7 +2724,7 @@ contains
         real(real128), parameter :: OMEGA_L = 0.70_real128
         real(real128), parameter :: H_0 = 70.0_real128
         real(real128), intent(in) :: x
-        f = C / H_0 / sqrt(OMEGA_M * ((1.0_real128 + x) ** 3) + OMEGA_L)
+        f = C / H_0 / sqrt(OMEGA_M * ((1.0_real128 + x) ** 3_int64) + OMEGA_L)
     end function
 end subroutine lumi_distance
 
@@ -2762,9 +2755,9 @@ subroutine pi_()
     prec = ceiling(n_ * 0.1250_real64) + 1
     allocate(pi(0:prec))
     pi = (Arctan(49_int64) .times. 48_int64) .&
-    &plus. (Arctan(57_int64) .times. 128_int64) .&
-    &minus. (Arctan(239_int64) .times. 20_int64) .&
-    &plus. (Arctan(110443_int64) .times. 48_int64)
+        &plus. (Arctan(57_int64) .times. 128_int64) .&
+        &minus. (Arctan(239_int64) .times. 20_int64) .&
+        &plus. (Arctan(110443_int64) .times. 48_int64)
     !$ time_end_s = omp_get_wtime()
     
     open (13, file='data/pi_.txt', status='replace')
