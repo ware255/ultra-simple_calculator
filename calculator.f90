@@ -3459,15 +3459,15 @@ contains
         integer, allocatable :: seed(:)
         call random_seed(size=seedsize)
         allocate(seed(seedsize))
-        do
+        l:do while (.true.)
             call random_seed(get=seed)
             call system_clock(count=c)
             seed(1) = c
             call random_seed(put=seed)
             call random_number(x)
             y = x * 100000_int64
-            if (y > 1000) exit
-        end do
+            if (y > 1000) exit l
+        end do l
         deallocate(seed)
         randon = int(y, 16)
     end function randon
@@ -3477,8 +3477,8 @@ contains
         integer(16) i, t, flg, num, a(4)
         a = [2, 3, 5, 7]
         flg = 0
-        l:do
-            num = randon()
+        l:do while (.true.)
+            num = randon()!num = num - 1
             z:do i = 1, 4
                 do while (modulo(num, a(i)) .eq. 0)
                     cycle l
