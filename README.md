@@ -38,6 +38,12 @@ CUIで機能します。「GUIの方がいい」と欲張らないでくださ�
      
      超戦略ゲームでのレベル
      $ ./calculator level
+
+     現在の時刻を表示
+     $ ./calculator time
+
+     簡易RSA暗号
+     $ ./calculator rsa
 ## 動作確認済みOS
      ・WSL Debian (64bit)
      ・Linux Mint (32bit)
@@ -47,7 +53,7 @@ CUIで機能します。「GUIの方がいい」と欲張らないでくださ�
       MIT License 
 <br><br><br>
 ## メモ
-2022 02/11 素因数分解を高速化<br>
+2022 02/11 素因数分解を高速化/簡易RSA暗号を実装<br>
 2022 02/09 フィボナッチ数列を追加<br>
 2022 02/06 円周率の計算をさらに高速化<br>
 2022 02/05 integer(LargeInt_K)をinteger(16)に変更<br>

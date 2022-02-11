@@ -3185,7 +3185,7 @@ end subroutine page_00
 
 program calculator
     !$ use omp_lib
-    use, intrinsic :: iso_fortran_env, only: int64, real64, real128
+    use, intrinsic :: iso_fortran_env, only: int32, int64, real64, real128
     implicit none
     character(256) str
     integer(int64) getuid, uid
@@ -3261,6 +3261,8 @@ program calculator
                 print '("Modified Julius Day :   ", F0.16)', MJD
                 print*, ''
             end block
+        case ('rsa', 'RSA')
+            call rsa()
         case default
             print '(A)', '\nこの引数はありません。\n'
         end select
@@ -3348,6 +3350,8 @@ program calculator
                 print '("Modified Julius Day :   ", F0.16)', MJD
                 print*, ''
             end block
+        case ('rsa', 'RSA')
+            call rsa()
         case default
             print '(A)', 'この引数はありません。\n'
         end select
@@ -3358,14 +3362,210 @@ contains
         print '(A)', '使用法: ./calculator [オプション]'
         print '(A)', 'オプションがない場合はそのまま実行します。\n'
         print '(A)', 'オプション:'
-        print*, 'page_00    -- 0ページ'
-        print*, 'page_01    -- 1ページ'
-        print*, 'page_02    -- 2ページ'
-        print*, 'page_03    -- 3ページ'
-        print*, 'help       -- 助けて'
-        print*, 'benchmark  -- ベンチマークのテスト'
-        print*, 'time       -- 現在の時刻\n'
+        print '(3X, A)', 'page_00    -- 0ページ'
+        print '(3X, A)', 'page_01    -- 1ページ'
+        print '(3X, A)', 'page_02    -- 2ページ'
+        print '(3X, A)', 'page_03    -- 3ページ'
+        print '(3X, A)', 'help       -- 助けて'
+        print '(3X, A)', 'benchmark  -- ベンチマークのテスト'
+        print '(3X, A)', 'level      -- 超戦略ゲームでのレベル'
+        print '(3X, A)', 'time       -- 現在の時刻'
+        print '(3X, A)', 'rsa        -- RSAによる暗号化, 復号\n'
         print '(A)', '例:'
         print '(A)', '$ ./calculator page_00'
     end subroutine help
+
+    subroutine rsa()
+        use m_usc, only: err
+        implicit none
+        character(256) str
+        l:do
+            write(*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+            print '(A)', '\nSimple RSA cryptography'
+            print '(A)', '-----------------------------------------'
+            print *, '1 encryption'
+            print *, '2 decryption'
+            print *, ''
+            print *, '99 終了'
+            print '(A)', '-----------------------------------------'
+            write (*, '(A)', advance='no') ': '
+            read (*, '(A)') str
+            z:select case (str)
+            case ('1')
+                block
+                integer(16) p, q, n, L_, e, d, plain_n, tmp, encryp_n
+                p = prime_N()
+                q = prime_N()
+                do while (p .eq. q)
+                    p = prime_N()
+                    q = prime_N()
+                end do
+                if (p < q) then
+                    tmp = p
+                    p = q
+                    q = tmp
+                endif
+                n = p * q
+                L_ = Lcm(p - 1, q - 1)
+                e = 2
+                do while (gcd(L_, e) .ne. 1)
+                    e = e + 1
+                end do
+                d = extEdrdm(e, L_)
+                do while (modulo((e * d), L_) .ne. 1)
+                    d = d + 1
+                end do
+                print '("\nP: ", I0, 3X, "Q: ", I0)', p, q
+                print '("N: ", I0, 3X, "L: ", I0, 3X, "E: ", I0, 3X, "D: ", I0)', n, L_, e, d
+                print '(A)', 'Enter the numbers you want to encrypt.'
+                read (*, *, iostat=err) plain_n
+                if (err .ne. 0) then
+                    print *, 'Error!'
+                    read *
+                    exit z
+                end if
+                encryp_n = extpower(plain_n, e, n)
+                print '("\nEncrypted number: ", I0)', encryp_n
+                read *
+                end block
+            case ('2')
+                block
+                integer(16) encryp_n, decryp_n, d, n
+                print '(A)', '\nEnter the ciphertext with your private key and public key.'
+                read (*, *, iostat=err) encryp_n, d, n
+                if (err .ne. 0) then
+                    print *, 'Error!'
+                    read *
+                    exit z
+                end if
+                decryp_n = extpower(encryp_n, d, n)
+                print '("\nDecrypted number: ", I0)', decryp_n
+                read *
+                end block
+            case ('99')
+                write(*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+                exit l
+            end select z
+        end do l
+    end subroutine rsa
+
+    integer(int64) function randon()
+        implicit none
+        integer(int32) c, seedsize
+        real(real64) y, x
+        integer, allocatable :: seed(:)
+        call random_seed(size=seedsize)
+        allocate(seed(seedsize))
+        do
+            call random_seed(get=seed)
+            call system_clock(count=c)
+            seed(1) = c
+            call random_seed(put=seed)
+            call random_number(x)
+            y = x * 100000_int64
+            if (y > 1000) exit
+        end do
+        deallocate(seed)
+        randon = int(y, int64)
+    end function
+
+    integer(int64) function prime_N()
+        implicit none
+        integer(int64) i, t, flg, num, a(4)
+        a = [2, 3, 5, 7]
+        flg = 0
+        l:do
+            num = randon()
+            z:do i = 1, 4
+                do while (modulo(num, a(i)) .eq. 0)
+                    cycle l
+                end do
+            end do z
+            t = int(sqrt(real(num, real128)), int64)
+            m:do i = 11, t, 2
+                if (modulo(i, 3) .eq. 0 .or. modulo(i, 5) .eq. 0 .or. modulo(i, 7) .eq. 0) then
+                    cycle m
+                else if (modulo(num, i) .eq. 0) then
+                    cycle l
+                end if
+            end do m
+            if (num .ne. 1) exit l
+            exit l
+        end do l
+        prime_N = num
+    end function
+
+    pure recursive integer(16) function gcd(x, y) result(z)
+        implicit none
+        integer(16), intent(in) :: x, y
+        if (y .eq. 0) then
+            z = x
+        else
+            z = gcd(y, modulo(x, y))
+        end if
+    end function gcd
+
+    integer(16) function Lcm(x, y)
+        implicit none
+        integer(16), intent(in) :: x, y
+        Lcm = x * y / gcd(x, y)
+    end function
+
+    integer(16) function extEdrdm(x, y)
+        implicit none
+        integer(16), intent(in) :: x, y
+        integer(16) :: x1 = 1, y1 = 0
+        integer(16) :: x2 = 0, y2 = 1
+        integer(16) d, r1, r2, q, r, a, b
+        r1 = y
+        r2 = x
+        l:do
+            q = r1 / r2
+            r = mod(r1, r2)
+            a = x1 - x2 * q
+            b = y1 - y2 * q
+
+            if (r .eq. 0) then
+                d = x2
+                exit l
+            end if
+
+            x1 = x2; y1 = y2; r1 = r2
+            x2 = x;  y2 = y;  r2 = r
+        end do l
+
+        do while (d <= 0)
+            d = d + b
+        end do
+
+        extEdrdm = d
+    end function
+
+    integer(16) function extpower(a, k, n)
+        implicit none
+        integer(16), intent(inout) :: a
+        integer(16), intent(in) :: k, n
+        integer(16) va, i
+
+        va = 1
+        a = modulo(a, n)
+
+        if (a .eq. 0 .or. n .eq. 0) then
+            extpower = 0
+        end if
+        if (k .eq. 0) then
+            extpower = modulo(1, n)
+        end if
+
+        i = 0
+        do while (i < k)
+            va = va * a
+            if (va >= n) then
+                va = modulo(va, n)
+            end if
+            i = i + 1
+        end do
+
+        extpower = va
+    end function
 end program calculator
