@@ -2189,10 +2189,12 @@ subroutine collatz()
 end subroutine collatz
 
 subroutine soinsubunkai()
+    !$ use omp_lib
     use m_usc, only: err
-    use, intrinsic :: iso_fortran_env, only: real128
+    use, intrinsic :: iso_fortran_env, only: real64, real128
     implicit none
-    integer(16) n, i, j!, k, L
+    integer(16) n, c, i, j, t(4)
+    t = [2, 3, 5, 7]
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
     read (*, *, iostat=err) n
@@ -2203,57 +2205,30 @@ subroutine soinsubunkai()
             write (*, '("\t", A)', advance='no') 'Not a prime number.'
             goto 110
         end if
-        write (*, '("\t", I0, A)', advance='no') n,' = '
-        if (n .eq. 2) then
-            write (*, '("1 * ", I0)', advance='no') 2
-            goto 110
-        else if (mod(n, 2) .eq. 0) then
-            write (*, '(I0)', advance='no') 2
-            n = n / 2
-            j = 1
-        else if (mod(n, 3) .eq. 0) then
-            write (*, '(I0)', advance='no') 3
-            n = n / 3
-            j = 1
-        end if
-        do while (mod(n, 2) .eq. 0)
-            write (*, '(" * ", I0)', advance='no') 2
-            n = n / 2
-        end do
-        do while (mod(n, 3) .eq. 0)
-            write (*, '(" * ", I0)', advance='no') 3
-            n = n / 3
-        end do
-        if (j .eq. 0) then
-            write (*, '(I0)', advance='no') 1
-        end if
-        i = 5
-        do while (f(i, i) <= n)
-            do while (mod(n, i) .eq. 0 .or. mod(n, (i + 2)) .eq. 0)
+        write (*, '(3X, I0, A)', advance='no') n,' = 1'
+        l:do i = 1, 4
+            z:do while (modulo(n, t(i)) .eq. 0)
+                write (*, '(" * ", I0)', advance='no') t(i)
+                n = n / t(i)
+            end do z
+        end do l
+        c = int(sqrt(real(n, real128)), 16)
+        m:do i = 11, c, 2
+            if (modulo(i, 3) .eq. 0 .or. modulo(i, 5) .eq. 0 .or. modulo(i, 7) .eq. 0) cycle
+            h:do while (modulo(n, i) .eq. 0)
                 write (*, '(" * ", I0)', advance='no') i
                 n = n / i
-            end do
-            i = i + 6
-        end do
+            end do h
+        end do m
         if (n .ne. 1) then
             write (*, '(" * ", I0)', advance='no') n
         end if
 110     print*, '\n\nEnterを押してください。'
         read *
     else
-        print*, '\nError!'
+        print*, char(7), '\nError!'
         read *
     end if
-contains
-    pure integer(16) function f(x, y) result(z)
-        implicit none
-        integer(16), intent(in) :: x, y
-        integer(16) i
-        z = 0
-        do i = 1, x
-            z = z + y
-        end do
-    end function f
 end subroutine soinsubunkai
 
 subroutine sosuhantei()
@@ -2311,7 +2286,7 @@ contains
         integer(16), intent(in) :: x, y
         integer(16) i
         z = 0
-        do i = 1, x
+        do concurrent (i = 1: x)
             z = z + y
         end do
     end function f
@@ -2481,7 +2456,6 @@ contains
 end subroutine kanzensu
 
 subroutine akkaman
-    !$ use omp_lib
     use m_usc, only: err, z
     use, intrinsic :: iso_fortran_env, only: real128, int64
     implicit none
@@ -2602,7 +2576,6 @@ subroutine furie()
 end subroutine furie
 
 subroutine tan_h()
-    !$ use omp_lib
     use m_usc, only: err, z, pi
     use, intrinsic :: iso_fortran_env, only: real128, int64
     implicit none
