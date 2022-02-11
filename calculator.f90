@@ -3392,6 +3392,7 @@ contains
             read (*, '(A)') str
             z:select case (str)
             case ('1')
+                write(*, '(A)', advance='no') '\nCalculating...'
                 block
                 integer(16) p, q, n, L_, e, d, plain_n, tmp, encryp_n
                 p = prime_N()
@@ -3415,7 +3416,7 @@ contains
                 do while (modulo((e * d), L_) .ne. 1)
                     d = d + 1
                 end do
-                print '("\nP: ", I0, 3X, "Q: ", I0)', p, q
+                print '("\r              \rP: ", I0, 3X, "Q: ", I0)', p, q
                 print '("N: ", I0, 3X, "L: ", I0, 3X, "E: ", I0, 3X, "D: ", I0)', n, L_, e, d
                 print '(A)', 'Enter the numbers you want to encrypt.'
                 read (*, *, iostat=err) plain_n
@@ -3432,14 +3433,16 @@ contains
                 block
                 integer(16) encryp_n, decryp_n, d, n
                 print '(A)', '\nEnter the ciphertext with your private key and public key.'
+                print '(A)', '(Encrypted_number, D, N)'
                 read (*, *, iostat=err) encryp_n, d, n
+                write(*, '(A)', advance='no') '\nCalculating...'
                 if (err .ne. 0) then
                     print *, 'Error!'
                     read *
                     exit z
                 end if
                 decryp_n = extpower(encryp_n, d, n)
-                print '("\nDecrypted number: ", I0)', decryp_n
+                print '("\r              \rDecrypted number: ", I0)', decryp_n
                 read *
                 end block
             case ('99')
@@ -3449,7 +3452,7 @@ contains
         end do l
     end subroutine rsa
 
-    integer(int64) function randon()
+    integer(16) function randon()
         implicit none
         integer(int32) c, seedsize
         real(real64) y, x
@@ -3466,12 +3469,12 @@ contains
             if (y > 1000) exit
         end do
         deallocate(seed)
-        randon = int(y, int64)
-    end function
+        randon = int(y, 16)
+    end function randon
 
-    integer(int64) function prime_N()
+    integer(16) function prime_N()
         implicit none
-        integer(int64) i, t, flg, num, a(4)
+        integer(16) i, t, flg, num, a(4)
         a = [2, 3, 5, 7]
         flg = 0
         l:do
@@ -3481,7 +3484,7 @@ contains
                     cycle l
                 end do
             end do z
-            t = int(sqrt(real(num, real128)), int64)
+            t = int(sqrt(real(num, real128)), 16)
             m:do i = 11, t, 2
                 if (modulo(i, 3) .eq. 0 .or. modulo(i, 5) .eq. 0 .or. modulo(i, 7) .eq. 0) then
                     cycle m
@@ -3493,7 +3496,7 @@ contains
             exit l
         end do l
         prime_N = num
-    end function
+    end function prime_N
 
     pure recursive integer(16) function gcd(x, y) result(z)
         implicit none
@@ -3508,8 +3511,8 @@ contains
     integer(16) function Lcm(x, y)
         implicit none
         integer(16), intent(in) :: x, y
-        Lcm = x * y / gcd(x, y)
-    end function
+        Lcm = f(x, y) / gcd(x, y)!x * y / gcd(x, y)
+    end function Lcm
 
     integer(16) function extEdrdm(x, y)
         implicit none
@@ -3539,7 +3542,7 @@ contains
         end do
 
         extEdrdm = d
-    end function
+    end function extEdrdm
 
     integer(16) function extpower(a, k, n)
         implicit none
@@ -3559,7 +3562,7 @@ contains
 
         i = 0
         do while (i < k)
-            va = va * a
+            va = f(va, a)!va * a
             if (va >= n) then
                 va = modulo(va, n)
             end if
@@ -3567,5 +3570,15 @@ contains
         end do
 
         extpower = va
-    end function
+    end function extpower
+
+    integer(16) function f(x, y) result(z)
+        implicit none
+        integer(16), intent(in) :: x, y
+        integer(16) i
+        z = 0
+        do concurrent (i = 1: x)
+            z = z + y
+        end do
+    end function f
 end program calculator
