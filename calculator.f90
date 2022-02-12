@@ -3402,7 +3402,7 @@ contains
                     p = prime_N()
                     q = prime_N()
                 end do
-                
+
                 if (p < q) then
                     tmp = p
                     p = q
@@ -3459,6 +3459,9 @@ contains
             case ('99')
                 write(*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
                 exit l
+            case default 
+                print *, 'Type miss!'
+                read *
             end select z
         end do l
     end subroutine rsa
