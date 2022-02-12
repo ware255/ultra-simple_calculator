@@ -3395,33 +3395,44 @@ contains
                 write(*, '(A)', advance='no') '\nCalculating...'
                 block
                 integer(16) p, q, n, L_, e, d, plain_n, tmp, encryp_n
+
                 p = prime_N()
                 q = prime_N()
                 do while (p .eq. q)
                     p = prime_N()
                     q = prime_N()
                 end do
+                
                 if (p < q) then
                     tmp = p
                     p = q
                     q = tmp
                 endif
+
                 n = p * q
+
                 L_ = Lcm(p - 1, q - 1)
-                e = 2
+
+                e = 65537
                 do while (gcd(L_, e) .ne. 1)
                     e = e + 1
                 end do
-                d = extEdrdm(e, L_)
-                do while (modulo((e * d), L_) .ne. 1)
+
+                d = exgcd(e, L_)
+                do while (modulo((e * d), L_) .ne. 1) !高速化しないとけないところ
                     d = d + 1
                 end do
-                print '("\r              \rP: ", I0, 3X, "Q: ", I0)', p, q
-                print '("N: ", I0, 3X, "L: ", I0, 3X, "E: ", I0, 3X, "D: ", I0)', n, L_, e, d
+
+                print '("\r              \rN: ", I0&
+                &, 3X, "E: ", I0, 3X, "D: ", I0)', n, e, d
                 print '(A)', 'Enter the numbers you want to encrypt.'
                 read (*, *, iostat=err) plain_n
                 if (err .ne. 0) then
                     print *, 'Error!'
+                    read *
+                    exit z
+                else if (plain_n > n) then
+                    print *, 'The number to be encrypted is greater than N.'
                     read *
                     exit z
                 end if
@@ -3455,30 +3466,26 @@ contains
     integer(16) function randon()
         implicit none
         integer(int32) c, seedsize
-        real(real64) y, x
+        real(real128) y, x
         integer, allocatable :: seed(:)
         call random_seed(size=seedsize)
         allocate(seed(seedsize))
-        l:do while (.true.)
-            call random_seed(get=seed)
-            call system_clock(count=c)
-            seed(1) = c
-            call random_seed(put=seed)
-            call random_number(x)
-            y = x * 100000_int64
-            if (y > 1000) exit l
-        end do l
+        call random_seed(get=seed)
+        call system_clock(count=c)
+        seed(1) = c
+        call random_seed(put=seed)
+        call random_number(x)
+        y = 100000_16 * x
         deallocate(seed)
         randon = int(y, 16)
     end function randon
 
     integer(16) function prime_N()
         implicit none
-        integer(16) i, t, flg, num, a(4)
+        integer(16) i, t, num, a(4)
         a = [2, 3, 5, 7]
-        flg = 0
         l:do while (.true.)
-            num = randon()!num = num - 1
+            num = randon()
             z:do i = 1, 4
                 do while (modulo(num, a(i)) .eq. 0)
                     cycle l
@@ -3511,38 +3518,43 @@ contains
     integer(16) function Lcm(x, y)
         implicit none
         integer(16), intent(in) :: x, y
-        Lcm = f(x, y) / gcd(x, y)!x * y / gcd(x, y)
+        Lcm = x * y / gcd(x, y)
     end function Lcm
 
-    integer(16) function extEdrdm(x, y)
+    integer(16) function exgcd(x, y)
         implicit none
         integer(16), intent(in) :: x, y
-        integer(16) :: x1 = 1, y1 = 0
-        integer(16) :: x2 = 0, y2 = 1
+        integer(16) :: a1 = 1, b1 = 1
+        integer(16) :: a2 = 0, b2 = 0
         integer(16) d, r1, r2, q, r, a, b
         r1 = y
         r2 = x
         l:do
             q = r1 / r2
-            r = mod(r1, r2)
-            a = x1 - x2 * q
-            b = y1 - y2 * q
+            r = modulo(r1, r2)
+            a = a1 - f(a2, q)!a2 * q
+            b = b1 - f(b2, q)!b2 * q
 
             if (r .eq. 0) then
-                d = x2
+                d = a2
                 exit l
             end if
 
-            x1 = x2; y1 = y2; r1 = r2
-            x2 = x;  y2 = y;  r2 = r
+            a1 = a2
+            b1 = b2
+            r1 = r2
+
+            a2 = a
+            b2 = b
+            r2 = r
         end do l
 
         do while (d <= 0)
             d = d + b
         end do
 
-        extEdrdm = d
-    end function extEdrdm
+        exgcd = d
+    end function exgcd
 
     integer(16) function extpower(a, k, n)
         implicit none
@@ -3550,19 +3562,18 @@ contains
         integer(16), intent(in) :: k, n
         integer(16) va, i
 
-        va = 1
         a = modulo(a, n)
 
         if (a .eq. 0 .or. n .eq. 0) then
             extpower = 0
-        end if
-        if (k .eq. 0) then
+        else if (k .eq. 0) then
             extpower = modulo(1, n)
         end if
 
         i = 0
+        va = 1
         do while (i < k)
-            va = f(va, a)!va * a
+            va = f(va, a)
             if (va >= n) then
                 va = modulo(va, n)
             end if
