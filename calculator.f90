@@ -3394,7 +3394,7 @@ contains
             case ('1')
                 write(*, '(A)', advance='no') '\nCalculating...'
                 block
-                integer(16) p, q, n, L_, e, d, plain_n, tmp, encryp_n
+                integer(16) p, q, n, L_, e, d, plain_n, tmp, encryp_n, i
 
                 p = prime_N()
                 q = prime_N()
@@ -3418,10 +3418,16 @@ contains
                     e = e + 1
                 end do
 
-                d = exgcd(e, L_)
-                do while (modulo((e * d), L_) .ne. 1) !高速化しないとけないところ
-                    d = d + 1
-                end do
+                !d = exgcd(e, L_)
+                m:do i = 3, L_, 2
+                    if (mod((e * (i-1)), L_) .eq. 1 .or. mod((e * i), L_) .eq. 1) then
+                        d = i
+                        exit m
+                    end if
+                end do m
+                !do while (modulo((e * d), L_) .ne. 1) !高速化しないとけないところ
+                !    d = d + 1
+                !end do
 
                 print '("\r              \rN: ", I0&
                 &, 3X, "E: ", I0, 3X, "D: ", I0)', n, e, d
