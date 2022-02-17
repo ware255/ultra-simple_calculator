@@ -113,18 +113,18 @@ contains
         end if
     end subroutine M_D
 
-    pure function add(x, y) result(z)
+    function add(x, y) result(z)
         implicit none
         integer(int64), intent(in) :: x(0:prec), y(0:prec)
         integer(int64) z(0:prec), i, zi, r
         r = 0
-        do concurrent (i = prec: 0: -1)
-            block
+        !$omp parallel do num_threads(4), private(i, zi)
+        do i = prec, 0, -1
             zi = x(i) + y(i) + r
             r = zi / mal
             z(i) = zi - r * mal
-            end block
         end do
+        !$omp end parallel do
     end function add
 
     pure function subtract(x, y) result(z)
@@ -141,19 +141,18 @@ contains
         end do
     end function subtract
 
-    function multiply(x, s) result(z)
-        !$ use omp_lib
+    pure function multiply(x, s) result(z)
         implicit none
         integer(int64), intent(in) :: x(0:prec), s
         integer(int64) z(0:prec), i, r, zi
         r = 0
-        !$omp parallel do num_threads(4), private(i, zi)
-        do i = prec, 0, -1
+        do concurrent (i = prec: 0: -1)
+            block
             zi = x(i) * s + r
             r = zi / mal
             z(i) = zi - r * mal
+            end block
         end do
-        !$omp end parallel do
     end function multiply
 
     pure function divide(x, s) result(z)
@@ -2128,20 +2127,20 @@ end subroutine kaizyou
 
 subroutine zetaf()
     use m_usc, only: err, z
-    use, intrinsic :: iso_fortran_env, only: int64, real64
+    use, intrinsic :: iso_fortran_env, only: int64, real128
     implicit none
-    real(real64) zeta, s
+    real(real128) zeta, s
     integer(int64) i
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
     read (*, *, iostat=err) s
     if (err .eq. 0) then
-        zeta = 0.0_real64
-        do concurrent (i = 41943020_int64: 1: -1)
-            block
-            zeta = zeta + (1.0_real64 / i ** s)
-            end block
+        zeta = 0.0_real128
+        !$omp parallel do num_threads(4), reduction(+:zeta), private(i), shared(s)
+        do i = 41943020_int64, 1, -1
+            zeta = zeta + (1.0_real128 / i ** s)
         end do
+        !$omp end parallel do
         print*, '\n答え(精度悪いですm(--)m)\n'
         print*, zeta
         z = zeta
@@ -2188,7 +2187,6 @@ subroutine collatz()
 end subroutine collatz
 
 subroutine soinsubunkai()
-    !$ use omp_lib
     use m_usc, only: err
     use, intrinsic :: iso_fortran_env, only: real64, real128
     implicit none
@@ -2794,14 +2792,14 @@ contains
     function Arctan(k) result(x)
         implicit none
         integer(int64), intent(in) :: k
-        integer(int64) x(0:prec), unity(0:prec), n, m, t
+        integer(int64) x(0:prec), unity(0:prec), n, t
         unity = [1, (0, n = 1, prec)]
         x = 0
         t = k * k
-        m = int(0.50_real64 * n_ / log10(real(k, real64))) + 1
-        do n = m, 1, -1
-            !x = ((unity / (n + n + 1)) - x) / t
+        do concurrent (n = int(0.50_real64 * n_ / log10(real(k, real64))) + 1: 1: -1)
+            block
             x = ((unity .div. (n + n + 1)) .minus. x) .div. t
+            end block
         end do
         x = (unity .minus. x) .div. k
     end function Arctan
@@ -3212,11 +3210,11 @@ program calculator
                 real(real128) :: s = 0.0_real128
                 !$ real(real64) :: time_begin_s, time_end_s
                 !$ time_begin_s = omp_get_wtime()
-                do concurrent (i = 100000000_int64: 0: -1)
-                    block
-                    s = s + ((-1.0_real128)**i) / (2.0_real128 * real(i, real128) + 1.0_real128)
-                    end block
+                !$omp parallel do num_threads(4), reduction(+:s), private(i)
+                do i = 100000000_int64, 0, -1
+                    s = s + ((-1.0_real128)**i) / ((real(i, real128) + real(i, real128)) + 1.0_real128)
                 end do
+                !$omp end parallel do
                 !$ time_end_s = omp_get_wtime()
                 print*, 'Answer:', s * 4.0_real128
                 !$ print '(A, F13.5, A)', '\ntime:', time_end_s - time_begin_s, ' [sec]\n'
@@ -3300,11 +3298,11 @@ program calculator
                 real(real128) :: s = 0.0_real128
                 !$ real(real64) :: time_begin_s, time_end_s
                 !$ time_begin_s = omp_get_wtime()
-                do concurrent (i = 100000000_int64: 0: -1)
-                    block
-                    s = s + ((-1.0_real128)**i) / (2.0_real128 * real(i, real128) + 1.0_real128)
-                    end block
+                !$omp parallel do num_threads(4), reduction(+:s), private(i)
+                do i = 100000000_int64, 0, -1
+                    s = s + ((-1.0_real128) ** i) / ((real(i, real128) + real(i, real128)) + 1.0_real128)
                 end do
+                !$omp end parallel do
                 !$ time_end_s = omp_get_wtime()
                 print*, 'Answer:', s * 4.0_real128
                 !$ print '(A, F13.5, A)', '\ntime:', time_end_s - time_begin_s, ' [sec]\n'
