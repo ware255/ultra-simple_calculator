@@ -141,27 +141,26 @@ contains
         end do
     end function subtract
 
-    pure function multiply(x, s) result(z)
+    function multiply(x, s) result(z)
+        !$ use omp_lib
         implicit none
         integer(int64), intent(in) :: x(0:prec), s
         integer(int64) z(0:prec), i, r, zi
         r = 0
-        do concurrent (i = prec: 0: -1)
-            block
+        !$omp parallel do num_threads(4), private(i, zi)
+        do i = prec, 0, -1
             zi = x(i) * s + r
             r = zi / mal
             z(i) = zi - r * mal
-            end block
         end do
+        !$omp end parallel do
     end function multiply
 
     pure function divide(x, s) result(z)
         implicit none
         integer(int64), intent(in) :: x(0:prec), s
         integer(int64) z(0:prec), i, r, zi, t
-        real(16) m
         r = 0
-        m = 1 / s
         if (mod(prec, 2) .eq. 0) then
             do concurrent (i = 1: prec: 2)
                 block
@@ -2795,14 +2794,14 @@ contains
     function Arctan(k) result(x)
         implicit none
         integer(int64), intent(in) :: k
-        integer(int64) x(0:prec), unity(0:prec), n, t
+        integer(int64) x(0:prec), unity(0:prec), n, m, t
         unity = [1, (0, n = 1, prec)]
         x = 0
         t = k * k
-        do concurrent (n = int(0.50_real64 * n_ / log10(real(k, real64))) + 1: 1: -1)
-            block
+        m = int(0.50_real64 * n_ / log10(real(k, real64))) + 1
+        do n = m, 1, -1
+            !x = ((unity / (n + n + 1)) - x) / t
             x = ((unity .div. (n + n + 1)) .minus. x) .div. t
-            end block
         end do
         x = (unity .minus. x) .div. k
     end function Arctan
@@ -3418,16 +3417,12 @@ contains
                     e = e + 1
                 end do
 
-                !d = exgcd(e, L_)
-                m:do i = 3, L_, 2
+                m:do i = 100000003, L_, 2!i = 3, L_, 2
                     if (mod((e * (i-1)), L_) .eq. 1 .or. mod((e * i), L_) .eq. 1) then
                         d = i
                         exit m
                     end if
                 end do m
-                !do while (modulo((e * d), L_) .ne. 1) !高速化しないとけないところ
-                !    d = d + 1
-                !end do
 
                 print '("\r              \rN: ", I0&
                 &, 3X, "E: ", I0, 3X, "D: ", I0)', n, e, d
@@ -3484,7 +3479,7 @@ contains
         seed(1) = c
         call random_seed(put=seed)
         call random_number(x)
-        y = 100000_16 * x
+        y = 1000000_16 * x
         deallocate(seed)
         randon = int(y, 16)
     end function randon
@@ -3529,41 +3524,6 @@ contains
         integer(16), intent(in) :: x, y
         Lcm = x * y / gcd(x, y)
     end function Lcm
-
-    integer(16) function exgcd(x, y)
-        implicit none
-        integer(16), intent(in) :: x, y
-        integer(16) :: a1 = 1, b1 = 1
-        integer(16) :: a2 = 0, b2 = 0
-        integer(16) d, r1, r2, q, r, a, b
-        r1 = y
-        r2 = x
-        l:do
-            q = r1 / r2
-            r = modulo(r1, r2)
-            a = a1 - f(a2, q)!a2 * q
-            b = b1 - f(b2, q)!b2 * q
-
-            if (r .eq. 0) then
-                d = a2
-                exit l
-            end if
-
-            a1 = a2
-            b1 = b2
-            r1 = r2
-
-            a2 = a
-            b2 = b
-            r2 = r
-        end do l
-
-        do while (d <= 0)
-            d = d + b
-        end do
-
-        exgcd = d
-    end function exgcd
 
     integer(16) function extpower(a, k, n)
         implicit none
