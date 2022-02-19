@@ -113,18 +113,18 @@ contains
         end if
     end subroutine M_D
 
-    function add(x, y) result(z)
+    pure function add(x, y) result(z)
         implicit none
         integer(int64), intent(in) :: x(0:prec), y(0:prec)
         integer(int64) z(0:prec), i, zi, r
         r = 0
-        !$omp parallel do num_threads(4), private(i, zi)
-        do i = prec, 0, -1
+        do concurrent (i = prec: 0: -1)
+            block
             zi = x(i) + y(i) + r
             r = zi / mal
             z(i) = zi - r * mal
+            end block
         end do
-        !$omp end parallel do
     end function add
 
     pure function subtract(x, y) result(z)
@@ -141,47 +141,32 @@ contains
         end do
     end function subtract
 
-    pure function multiply(x, s) result(z)
+    function multiply(x, s) result(z)
         implicit none
         integer(int64), intent(in) :: x(0:prec), s
         integer(int64) z(0:prec), i, r, zi
         r = 0
-        do concurrent (i = prec: 0: -1)
-            block
+        !$omp parallel do num_threads(4), private(i, zi)
+        do i = prec, 0, -1
             zi = x(i) * s + r
             r = zi / mal
             z(i) = zi - r * mal
-            end block
         end do
+        !$omp end parallel do
     end function multiply
 
     pure function divide(x, s) result(z)
         implicit none
         integer(int64), intent(in) :: x(0:prec), s
-        integer(int64) z(0:prec), i, r, zi, t
+        integer(int64) z(0:prec), i, r, zi
         r = 0
-        if (mod(prec, 2) .eq. 0) then
-            do concurrent (i = 1: prec: 2)
-                block
-                t = i - 1
-                zi = (x(t) + r * mal)
-                z(t) = zi / s
-                r = zi - s * z(t)
-
-                zi = (x(i) + r * mal)
-                z(i) = zi / s
-                r = zi - s * z(i)
-                end block
-            end do
-        else
-            do concurrent (i = 0: prec: 1)
-                block
-                zi = (x(i) + r * mal)
-                z(i) = zi / s
-                r = zi - s * z(i)
-                end block
-            end do
-        end if
+        do concurrent (i = 0: prec: 1)
+            block
+            zi = x(i) + r * mal
+            z(i) = zi / s
+            r = zi - s * z(i)
+            end block
+        end do
     end function divide
 end module m_usc
 
@@ -2647,7 +2632,7 @@ subroutine lifegame()
     read *
 contains
     subroutine p(cells)
-        logical(int64), intent(inout) :: cells(:,:)
+        logical(int64), intent(in) :: cells(:,:)
         do concurrent (i = 1: size(cells, 1))
             block
             do concurrent (j = 1: size(cells, 2))
@@ -2665,25 +2650,24 @@ contains
     end subroutine p
 
     pure subroutine n(cells)
-        logical(int64), intent(inout) :: cells(:,:)
+        logical(int64), intent(out) :: cells(:,:)
         integer(int64) :: buffer(1:size(cells, 1) - 2, 1:size(cells, 2) - 2)
         integer(int64) gridsize, i, j
         gridsize = size(cells, 1)
         buffer = 0
-        do concurrent (j = -1: 1)
-            block
-            do concurrent (i = -1: 1)
-                block
+        l:do j = -1, 1
+            z:do i = -1, 1
                 if (i .eq. 0 .and. j .eq. 0) then
-                    cycle
+                    cycle l
                 end if
-                where (cells(i + 2:gridsize - i - 1, j + 2:gridsize - j - 1)) buffer = buffer + 1
-                end block
-            end do
-            end block
-        end do
-        where (buffer .lt. 2 .or. buffer .gt. 3) cells(2:gridsize - 1, 2:gridsize - 1) = .false.
-        where (buffer .eq. 3) cells(2:gridsize - 1, 2:gridsize - 1) = .true.
+                where (cells((i + 2):(gridsize - i - 1), (j + 2):(gridsize - j - 1))) buffer = buffer + 1
+            end do z
+        end do l
+        where (buffer .lt. 2 .or. buffer .gt. 3)
+            cells(2:gridsize - 1, 2:gridsize - 1) = .false.
+        else where (buffer .eq. 3)
+            cells(2:gridsize - 1, 2:gridsize - 1) = .true.
+        end where
     end subroutine n
 end subroutine lifegame
 
@@ -2839,7 +2823,7 @@ subroutine fibonattisuretu()
     read *
 end subroutine fibonattisuretu
 
-!subroutine test() ! template
+!subroutine test() !テンプレート
 !    use, intrinsic :: iso_fortran_env, only: real128, int64
 !    implicit none
 !    write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
@@ -3415,7 +3399,7 @@ contains
                     e = e + 1
                 end do
 
-                m:do i = 100000003, L_, 2!i = 3, L_, 2
+                m:do i = 100000005, L_, 2
                     if (mod((e * (i-1)), L_) .eq. 1 .or. mod((e * i), L_) .eq. 1) then
                         d = i
                         exit m
@@ -3517,7 +3501,7 @@ contains
         end if
     end function gcd
 
-    integer(16) function Lcm(x, y)
+    pure integer(16) function Lcm(x, y)
         implicit none
         integer(16), intent(in) :: x, y
         Lcm = x * y / gcd(x, y)
@@ -3537,26 +3521,16 @@ contains
             extpower = modulo(1, n)
         end if
 
-        i = 0
         va = 1
-        do while (i < k)
-            va = f(va, a)
+        do concurrent (i = 0: k - 1)
+            block
+            va = va * a
             if (va >= n) then
                 va = modulo(va, n)
             end if
-            i = i + 1
+            end block
         end do
 
         extpower = va
     end function extpower
-
-    integer(16) function f(x, y) result(z)
-        implicit none
-        integer(16), intent(in) :: x, y
-        integer(16) i
-        z = 0
-        do concurrent (i = 1: x)
-            z = z + y
-        end do
-    end function f
 end program calculator
