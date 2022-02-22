@@ -3,11 +3,11 @@ module m_usc
     implicit none
     real(real128), parameter :: pi = 3.1415926535897932384626433832795028840_real128
     real(real128), parameter :: g = 9.806650_real128
-    integer(int64), parameter, private :: mal = 10 ** 8
+    integer(int64), parameter, private :: mal = 100000000!10 ** 8
     integer(int64) prec
     integer(int64) err
     real(real128) z
-    character(256), private :: str
+    character(len=256), private :: str
     real(real128), private :: x
 
     interface operator(.plus.)    ! +
@@ -341,9 +341,9 @@ subroutine heihoukon()
         print*, sqrt(x)
         z = sqrt(x)
         if (x .eq. 2.) then
-            print*, '　一夜一夜に月見ごろ          <= 覚え方'
+            print*, '  一夜一夜に月見ごろ          <= 覚え方'
         else if (x .eq. 3.) then
-            print*, '　人並みにおごれや            <= 覚え方'
+            print*, '  人並みにおごれや            <= 覚え方'
         end if
         print*, '\nEnterを押してください。'
         read *
@@ -2259,7 +2259,7 @@ subroutine sosuhantei()
         print*, '\nEnterを押してください。'
         read *
     else
-        print*, '\nError!'
+        print*, char(7), '\nError!'
         read *
     end if
 contains
@@ -2379,7 +2379,7 @@ subroutine kanzensu()
     read (*, *, iostat=err) x
     if (err .eq. 0) then
         if (0 .ge. x .or. 1025 .le. x) then
-            print*, '変域にしたがってください。'
+            print*, char(7), '変域にしたがってください。'
             read *
             return
         end if
@@ -2399,7 +2399,7 @@ subroutine kanzensu()
         print*, '\n\nEnterを押してください。'
         read *
     else
-        print*, '\nError!'
+        print*, char(7), '\nError!'
         read *
     end if
 contains
@@ -2468,7 +2468,7 @@ subroutine akkaman
         print*, '\nEnterを押してください。'
         read *
     else
-        print*, '\nError!'
+        print*, char(7), '\nError!'
         read *
     end if
 end subroutine akkaman
@@ -2493,7 +2493,7 @@ subroutine sigmoid()
         print*, '\nEnterを押してください。'
         read *
     else
-        print*, '\nError!'
+        print*, char(7), '\nError!'
         read *
     end if
 end subroutine sigmoid
@@ -2569,7 +2569,7 @@ subroutine tan_h()
         print '(A)', '仰角(0 < θ < 90) [deg]'
         read (*, *, iostat=err) angle
         if (err .ne. 0) then
-            print*, '\nError!'
+            print*, char(7), '\nError!'
             read *
             return
         else if (0 .ge. angle .or. angle .ge. 90) then
@@ -2584,7 +2584,7 @@ subroutine tan_h()
         print*, '\nEnterを押してください。'
         read *
     else
-        print*, '\nError!'
+        print*, char(7), '\nError!'
         read *
     end if
 end subroutine tan_h
@@ -2684,7 +2684,7 @@ subroutine lumi_distance()
     print '(A)', '赤方偏移xを入力してください。(0 < x < 1000)'
     read (*, *, iostat=err) x
     if (err .ne. 0) then
-        print*, '\nError!'
+        print*, char(7), '\nError!'
         read *
         return
     else if (x <= 0.0_real128 .or. x >= 1000.0_real128) then
@@ -2745,11 +2745,11 @@ subroutine pi_()
     print '(A)', 'n桁まで表示(50 < n < 1000000)'
     read (*, *, iostat=err) n_
     if (err .ne. 0) then
-        print*, '\nError!'
+        print*, char(7), '\nError!'
         read *
         return
     else if (n_ < 50) then
-        print*, '\nError!'
+        print*, char(7), '\nError!'
         read *
         return
     end if
@@ -2798,11 +2798,11 @@ subroutine fibonattisuretu()
     print '(A)', 'xを入力してください。(0 < x < 185)'
     read (*, *, iostat=err) x
     if (err .ne. 0) then
-        print*, '\nError!'
+        print*, char(7), '\nError!'
         read *
         return
     else if (x <= 0 .or. x >= 185) then
-        print*, '\nError!'
+        print*, char(7),'\nError!'
         read *
         return
     end if
@@ -2897,7 +2897,7 @@ subroutine page_03()
         case ('M', 'm')
             call Memory()
         case default
-            print*, 'そんなもんねぇよｗ'
+            print*, char(7), 'type miss!'
             read *
         end select
     end do
@@ -2968,7 +2968,7 @@ subroutine page_02()
         case ('M', 'm')
             call Memory()
         case default
-            print*, 'そんなもんねぇよｗ'
+            print*, char(7), 'type miss!'
             read *
         end select
     end do
@@ -3056,7 +3056,7 @@ subroutine page_01()
         case ('M', 'm')
             call Memory()
         case default
-            print*, 'そんなもんねぇよｗ'
+            print*, char(7), 'type miss!'
             read *
         end select
     end do
@@ -3158,7 +3158,7 @@ subroutine page_00()
         case ('M', 'm')
             call Memory()
         case default
-            print*, 'そんなもんねぇよｗ'
+            print*, char(7), 'type miss!'
             read *
         end select
     end do
@@ -3200,7 +3200,7 @@ program calculator
                 end do
                 !$omp end parallel do
                 !$ time_end_s = omp_get_wtime()
-                print*, 'Answer:', s * 4.0_real128
+                print*, 'Answer:', s + s + s + s!s * 4.0_real128
                 !$ print '(A, F13.5, A)', '\ntime:', time_end_s - time_begin_s, ' [sec]\n'
             end block
         case ('level')
@@ -3288,7 +3288,7 @@ program calculator
                 end do
                 !$omp end parallel do
                 !$ time_end_s = omp_get_wtime()
-                print*, 'Answer:', s * 4.0_real128
+                print*, 'Answer:', s + s + s + s!s * 4.0_real128
                 !$ print '(A, F13.5, A)', '\ntime:', time_end_s - time_begin_s, ' [sec]\n'
             end block
         case ('level')
@@ -3443,7 +3443,7 @@ contains
                 write(*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
                 exit l
             case default 
-                print *, 'Type miss!'
+                print *, char(7), 'Type miss!'
                 read *
             end select z
         end do l
