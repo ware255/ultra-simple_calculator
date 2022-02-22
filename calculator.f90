@@ -2785,7 +2785,18 @@ contains
         integer(int64) x(0:prec), unity(0:prec), n, t
         unity = [1, (0, n = 1, prec)]
         x = 0
-        t = pow(k)!k * k
+
+        select case (k) !t = k * k
+        case (49_int64)
+            t = 2401_int64
+        case (57_int64)
+            t = 3249_int64
+        case (239_int64)
+            t = 57121_int64
+        case (110443_int64)
+            t = 12197656249_int64
+        end select
+
         do concurrent (n = int(0.50_real64 * n_ / log10(real(k, real64))) + 1: 1: -1)
             block
             x = ((unity .div. (n + n + 1)) .minus. x) .div. t
@@ -2793,23 +2804,6 @@ contains
         end do
         x = (unity .minus. x) .div. k
     end function Arctan
-
-    integer(int64) function pow(x)
-        implicit none
-        integer(int64), intent(in) :: x
-        select case (x)
-        case (49)
-            pow = 2401
-        case (57)
-            pow = 3249
-        case (239)
-            pow = 57121
-        case (110443)
-            pow = 12197656249_int64
-        case default
-            error stop "\nError!"
-        end select
-    end function pow
 end subroutine pi_
 
 subroutine fibonattisuretu()
