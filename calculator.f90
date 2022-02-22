@@ -2807,7 +2807,7 @@ contains
         case (110443)
             pow = 12197656249_int64
         case default
-            error stop "Error"
+            error stop "\nError!"
         end select
     end function pow
 end subroutine pi_
