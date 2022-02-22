@@ -2112,18 +2112,18 @@ end subroutine kaizyou
 
 subroutine zetaf()
     use m_usc, only: err, z
-    use, intrinsic :: iso_fortran_env, only: int64, real128
+    use, intrinsic :: iso_fortran_env, only: int64, real64
     implicit none
-    real(real128) zeta, s
+    real(real64) zeta, s
     integer(int64) i
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', '値を入力してください。'
     read (*, *, iostat=err) s
     if (err .eq. 0) then
-        zeta = 0.0_real128
+        zeta = 0.0_real64
         !$omp parallel do num_threads(4), reduction(+:zeta), private(i), shared(s)
         do i = 41943020_int64, 1, -1
-            zeta = zeta + (1.0_real128 / i ** s)
+            zeta = zeta + (1.0_real64 / i ** s)
         end do
         !$omp end parallel do
         print*, '\n答え(精度悪いですm(--)m)\n'
@@ -2263,14 +2263,16 @@ subroutine sosuhantei()
         read *
     end if
 contains
-    pure integer(16) function f(x, y) result(z)
+    integer(16) function f(x, y) result(z)
         implicit none
         integer(16), intent(in) :: x, y
         integer(16) i
         z = 0
-        do concurrent (i = 1: x)
+        !$omp parallel do num_threads(4), reduction(+:z), shared(y)
+        do i = 1, x
             z = z + y
         end do
+        !$omp end parallel do
     end function f
 end subroutine sosuhantei
 
@@ -2335,15 +2337,17 @@ subroutine slot()
         L = L + 1
     end do loop
 contains
-    pure real(real64) function f(x, y) result(z)
+    real(real64) function f(x, y) result(z)
         implicit none
         real(real64), intent(in) :: x
         integer(int32), intent(in) :: y
         integer(int32) i
         z = 0.0_real64
+        !$omp parallel do num_threads(4), reduction(+:z), shared(x)
         do i = 1, y
             z = z + x
         end do
+        !$omp end parallel do
     end function
 
     integer(int32) function randon()
@@ -2423,16 +2427,18 @@ contains
         is_prime = .true.
     end function
 
-    pure real(real128) function pow(x, n)
+    real(real128) function pow(x, n)
         implicit none
         real(real128), intent(in) :: x
         integer(16), intent(in) :: n
         real(real128) k
         integer(16) i
         k = 1
+        !$omp parallel do num_threads(4), reduction(*:k), shared(x)
         do i = 1, n
             k = k * x
         end do
+        !$omp end parallel do
         pow = k
     end function pow
 end subroutine kanzensu
@@ -2779,7 +2785,7 @@ contains
         integer(int64) x(0:prec), unity(0:prec), n, t
         unity = [1, (0, n = 1, prec)]
         x = 0
-        t = k * k
+        t = pow(k)!k * k
         do concurrent (n = int(0.50_real64 * n_ / log10(real(k, real64))) + 1: 1: -1)
             block
             x = ((unity .div. (n + n + 1)) .minus. x) .div. t
@@ -2787,6 +2793,23 @@ contains
         end do
         x = (unity .minus. x) .div. k
     end function Arctan
+
+    integer(int64) function pow(x)
+        implicit none
+        integer(int64), intent(in) :: x
+        select case (x)
+        case (49)
+            pow = 2401
+        case (57)
+            pow = 3249
+        case (239)
+            pow = 57121
+        case (110443)
+            pow = 12197656249_int64
+        case default
+            error stop "Error"
+        end select
+    end function pow
 end subroutine pi_
 
 subroutine fibonattisuretu()
