@@ -2840,6 +2840,63 @@ subroutine fibonattisuretu()
     read *
 end subroutine fibonattisuretu
 
+subroutine sosukaizyou()
+    use m_usc, only: err, z
+    implicit none
+    integer(16) x, y, i
+    write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    print '(A)', 'xを入力してください。(0 < x < 97)'
+    read (*, *, iostat=err) x
+    if (err .ne. 0) then
+        print*, char(7),'\nError!'
+        read *
+        return
+    else if (0 >= x .or. x >= 97) then
+        print*, char(7),'\nError!'
+        read *
+        return
+    end if
+    y = 1
+    do i = 1, x
+        if (f(i)) then
+            y = y * i
+        end if
+    end do
+    print*, '\n答え'
+    z = y
+    print *, z
+    print*, '\nEnterを押してください。'
+    read *
+contains
+    pure logical function f(x)
+        implicit none
+        integer(16), intent(in) :: x
+        integer(16) i
+        select case(x)
+        case (0, 1)
+            f = .false.
+            return
+        case (2, 3)
+            f = .true.
+            return
+        end select
+        if (mod(x, 2) .eq. 0 .or. mod(x, 3) .eq. 0) then
+            f = .false.
+            return
+        end if
+        i = 5
+        do while (i * i <= x)
+            if (mod(x, i) .eq. 0 .or. mod(x, (i + 2)) .eq. 0) then
+                f = .false.
+                return
+            end if
+            i = i + 6
+        end do
+        f = .true.
+    end function f
+end subroutine sosukaizyou
+
 !subroutine test() !テンプレート
 !    use, intrinsic :: iso_fortran_env, only: real128, int64
 !    implicit none
@@ -2848,6 +2905,49 @@ end subroutine fibonattisuretu
 !    print*, '\nEnterを押してください。'
 !    read *
 !end subroutine test
+
+subroutine page_04()
+    use m_usc, only: M_A, M_S, M_M, M_D, Memory
+    implicit none
+    character(256) str
+    do
+        write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+        print '(A)', '\n-----------------------------------------'
+        print*, '1 素数階乗'
+        print*, '99 終了           03 Back'
+        print '(A)', '-----------------------------------------'
+        write (*, '(A)', advance='no') ': '
+        read (*, '(A)') str
+        select case(str)
+        case ('1')
+            call sosukaizyou()
+        case ('00')
+            call page_00()
+        case ('01')
+            call page_01()
+        case ('02')
+            call page_02()
+        case ('03')
+            call page_03()
+        case ('99')
+            write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+            stop
+        case ('M+', 'm+')
+            call M_A()
+        case ('M-', 'm-')
+            call M_S()
+        case ('M*', 'm*')
+            call M_M()
+        case ('M/', 'm/')
+            call M_D()
+        case ('M', 'm')
+            call Memory()
+        case default
+            print*, char(7), 'type miss!'
+            read *
+        end select
+    end do
+end subroutine page_04
 
 subroutine page_03()
     use m_usc, only: M_A, M_S, M_M, M_D, Memory
@@ -2867,7 +2967,7 @@ subroutine page_03()
         print*, '9 円周率その２(任意の桁数)'
         print*, '10 フィボナッチ数列'
         print*, '11 スロットゲーム\n'
-        print*, '99 終了           02 Back'
+        print*, '99 終了       02 Back       04 Next_page'
         print '(A)', '-----------------------------------------'
         write (*, '(A)', advance='no') ': '
         read (*, '(A)') str
@@ -2900,6 +3000,8 @@ subroutine page_03()
             call page_01()
         case ('02')
             call page_02()
+        case ('04')
+            call page_04()
         case ('99')
             write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             stop
@@ -2971,6 +3073,8 @@ subroutine page_02()
             call page_01()
         case ('03')
             call page_03()
+        case ('04')
+            call page_04()
         case ('99')
             write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             stop
@@ -3062,6 +3166,8 @@ subroutine page_01()
             call page_02()
         case ('03')
             call page_03()
+        case ('04')
+            call page_04()
         case ('M+', 'm+')
             call M_A()
         case ('M-', 'm-')
@@ -3164,6 +3270,8 @@ subroutine page_00()
             call page_02()
         case ('03')
             call page_03()
+        case ('04')
+            call page_04()
         case ('M+', 'm+')
             call M_A()
         case ('M-', 'm-')
