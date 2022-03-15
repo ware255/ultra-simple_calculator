@@ -2897,6 +2897,38 @@ contains
     end function f
 end subroutine sosukaizyou
 
+subroutine rokubunnoiti_1()
+    use m_usc, only: err, z
+    use, intrinsic :: iso_fortran_env, only: real128, int64
+    implicit none
+    real(real128) a, b
+    write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    print '(A)', 'a, bを入力してください。'
+    read (*, *, iostat=err) a, b
+    print*, '計算中'
+    z = ((b - a)**3) / 6.0_real128
+    print*, '\n答え'
+    print *, z
+    print*, '\nEnterを押してください。'
+    read *
+end subroutine rokubunnoiti_1
+
+subroutine rokubunnoiti_2()
+    use m_usc, only: err, z
+    use, intrinsic :: iso_fortran_env, only: real128, int64
+    implicit none
+    real(real128) a, b, c
+    write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    print '(A)', 'a, b, Aを入力してください。'
+    read (*, *, iostat=err) a, b, c
+    print*, '計算中'
+    z = -c * ((b - a)**3) / 6.0_real128
+    print*, '\n答え'
+    print *, z
+    print*, '\nEnterを押してください。'
+    read *
+end subroutine rokubunnoiti_2
+
 !subroutine test() !テンプレート
 !    use, intrinsic :: iso_fortran_env, only: real128, int64
 !    implicit none
@@ -2914,6 +2946,8 @@ subroutine page_04()
         write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
         print '(A)', '\n-----------------------------------------'
         print*, '1 素数階乗'
+        print*, '2 1/6公式(∫a~b (x-a)(x-b) dx)'
+        print*, '3 1/6公式(∫a~b A(x-a)(x-b) dx)'
         print*, '99 終了           03 Back'
         print '(A)', '-----------------------------------------'
         write (*, '(A)', advance='no') ': '
@@ -2921,6 +2955,10 @@ subroutine page_04()
         select case(str)
         case ('1')
             call sosukaizyou()
+        case ('2')
+            call rokubunnoiti_1()
+        case ('3')
+            call rokubunnoiti_2()
         case ('00')
             call page_00()
         case ('01')
