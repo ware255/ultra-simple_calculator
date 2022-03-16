@@ -2024,8 +2024,10 @@ contains
         integer(int64), intent(in) :: x, y
         integer(int64) i
         z = 0
-        do i = 1, x
+        do concurrent (i = 1: x)
+            block
             z = z + y
+            end block
         end do
     end function f
 end subroutine ensyu
@@ -2869,7 +2871,7 @@ subroutine sosukaizyou()
     print*, '\nEnterを押してください。'
     read *
 contains
-    pure logical function f(x)
+    pure logical(8) function f(x)
         implicit none
         integer(16), intent(in) :: x
         integer(16) i
@@ -2906,7 +2908,7 @@ subroutine rokubunnoiti_1()
     print '(A)', 'a, bを入力してください。'
     read (*, *, iostat=err) a, b
     print*, '計算中'
-    z = ((b - a)**3) / 6.0_real128
+    z = ((b - a)**3_int64) / 6.0_real128
     print*, '\n答え'
     print *, z
     print*, '\nEnterを押してください。'
@@ -2922,7 +2924,7 @@ subroutine rokubunnoiti_2()
     print '(A)', 'a, b, Aを入力してください。'
     read (*, *, iostat=err) a, b, c
     print*, '計算中'
-    z = -c * ((b - a)**3) / 6.0_real128
+    z = -c * ((b - a)**3_int64) / 6.0_real128
     print*, '\n答え'
     print *, z
     print*, '\nEnterを押してください。'
