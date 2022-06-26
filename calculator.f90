@@ -9,6 +9,7 @@ module m_usc
     real(real128) z
     character(len=256), private :: str
     real(real128), private :: x
+    integer(int64), save :: seed(4) = [123456789, 362436069, 521288629, 88675123]
 
     interface operator(.plus.)    ! +
         module procedure add
@@ -113,58 +114,58 @@ contains
         end if
     end subroutine M_D
 
-    pure function add(x, y) result(z)
+    function add(x_, y) result(z_)
         implicit none
-        integer(int64), intent(in) :: x(0:prec), y(0:prec)
-        integer(int64) z(0:prec), i, zi, r
+        integer(int64), intent(in) :: x_(0:prec), y(0:prec)
+        integer(int64) z_(0:prec), i, zi, r
         r = 0
         do concurrent (i = prec: 0: -1)
             block
-            zi = x(i) + y(i) + r
+            zi = x_(i) + y(i) + r
             r = zi / mal
-            z(i) = zi - r * mal
+            z_(i) = zi - r * mal
             end block
         end do
     end function add
 
-    pure function subtract(x, y) result(z)
+    pure function subtract(x_, y) result(z_)
         implicit none
-        integer(int64), intent(in) :: x(0:prec), y(0:prec)
-        integer(int64) z(0:prec), i, zi, r
+        integer(int64), intent(in) :: x_(0:prec), y(0:prec)
+        integer(int64) z_(0:prec), i, zi, r
         r = 1
         do concurrent (i = prec: 0: -1)
             block
-            zi = x(i) + (mal - 1 - y(i)) + r
+            zi = x_(i) + (mal - 1 - y(i)) + r
             r = zi / mal
-            z(i) = zi - r * mal
+            z_(i) = zi - r * mal
             end block
         end do
     end function subtract
 
-    function multiply(x, s) result(z)
+    function multiply(x_, s) result(z_)
         implicit none
-        integer(int64), intent(in) :: x(0:prec), s
-        integer(int64) z(0:prec), i, r, zi
+        integer(int64), intent(in) :: x_(0:prec), s
+        integer(int64) z_(0:prec), i, r, zi
         r = 0
         !$omp parallel do num_threads(4), private(i, zi)
         do i = prec, 0, -1
-            zi = x(i) * s + r
+            zi = x_(i) * s + r
             r = zi / mal
-            z(i) = zi - r * mal
+            z_(i) = zi - r * mal
         end do
         !$omp end parallel do
     end function multiply
 
-    pure function divide(x, s) result(z)
+    pure function divide(x_, s) result(z_)
         implicit none
-        integer(int64), intent(in) :: x(0:prec), s
-        integer(int64) z(0:prec), i, r, zi
+        integer(int64), intent(in) :: x_(0:prec), s
+        integer(int64) z_(0:prec), i, r, zi
         r = 0
         do concurrent (i = 0: prec: 1)
             block
-            zi = x(i) + r * mal
-            z(i) = zi / s
-            r = zi - s * z(i)
+            zi = x_(i) + r * mal
+            z_(i) = zi / s
+            r = zi - s * z_(i)
             end block
         end do
     end function divide
@@ -611,11 +612,11 @@ subroutine game_1()
         end if
     end do j
 contains
-    integer(int32) function add(n)
+    integer(int32) function add(n_)
         implicit none
-        integer(int32) rad, n
+        integer(int32) rad, n_
         integer(int32) seedsize, c
-        real(real64) y, x
+        real(real64) y_, x_
         integer, allocatable :: seed(:)
         call random_seed(size=seedsize)
         allocate(seed(seedsize))
@@ -624,10 +625,10 @@ contains
             call system_clock(count=c)
             seed(1) = c
             call random_seed(put=seed)
-            call random_number(x)
-            y = x * 100
-            rad = int(y)
-            if (rad .lt. n) exit f
+            call random_number(x_)
+            y_ = x_ * 100
+            rad = int(y_)
+            if (rad .lt. n_) exit f
         end do f
         deallocate(seed)
         add = rad
@@ -815,11 +816,11 @@ subroutine game_2()
         end if
     end do j
 contains
-    integer(int32) function add(n)
+    integer(int32) function add(n_)
         implicit none
-        integer(int32) rad, n
+        integer(int32) rad, n_
         integer(int32) seedsize, c
-        real(real64) y, x
+        real(real64) y_, x_
         integer, allocatable :: seed(:)
         call random_seed(size=seedsize)
         allocate(seed(seedsize))
@@ -828,10 +829,10 @@ contains
             call system_clock(count=c)
             seed(1) = c
             call random_seed(put=seed)
-            call random_number(x)
-            y = x*100
-            rad = int(y)
-            if (rad .lt. n) exit f
+            call random_number(x_)
+            y_ = x_ * 100
+            rad = int(y_)
+            if (rad .lt. n_) exit f
         end do f
         deallocate(seed)
         add = rad
@@ -1078,11 +1079,11 @@ subroutine game_3()
         end if
     end do j
 contains
-    integer(int32) function add(n)
+    integer(int32) function add(n_)
         implicit none
-        integer(int32) rad, n
+        integer(int32) rad, n_
         integer(int32) seedsize, c
-        real(real64) y, x
+        real(real64) y_, x_
         integer, allocatable :: seed(:)
         call random_seed(size=seedsize)
         allocate(seed(seedsize))
@@ -1091,10 +1092,10 @@ contains
             call system_clock(count=c)
             seed(1) = c
             call random_seed(put=seed)
-            call random_number(x)
-            y = x * 100
-            rad = int(y)
-            if (rad .lt. n) exit l
+            call random_number(x_)
+            y_ = x_ * 100
+            rad = int(y_)
+            if (rad .lt. n_) exit l
         end do l
         deallocate(seed)
         add = rad
@@ -1430,8 +1431,7 @@ subroutine randsu()
     use m_usc, only: err, z
     use, intrinsic :: iso_fortran_env, only: int32, int64, real128
     implicit none
-    integer(int64) n
-    real(real128) x
+    integer(int64) n, x, seed
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', 'xを入力してください。(1～x)'
     read (*, *, iostat=err) x
@@ -1442,7 +1442,9 @@ subroutine randsu()
             read *
             return
         end if
-        n = randon(x)
+        seed = time()
+        call init_xor128(seed)
+        n = mod(xor128(), x + 1)
         print*, '\n出力'
         print*, n
         write (*, '("\n", 3X, Z0)') int(n, 16)
@@ -1454,117 +1456,32 @@ subroutine randsu()
         read *
     end if
 contains
-    integer(int64) function randon(n)
+    subroutine init_xor128(s)
+        use m_usc, only: seed
         implicit none
-        integer(int64) rad
-        integer(int32) seedsize, c
-        real(real128) y, x, n
-        integer, allocatable :: seed(:)
-        call random_seed(size=seedsize)
-        allocate(seed(seedsize))
-        if (n .le. 1024) then
-            do
-                call random_seed(get=seed)
-                call system_clock(count=c)
-                seed(1) = c
-                call random_seed(put=seed)
-                call random_number(x)
-                y = x * 1024
-                rad = int(y)
-                if (rad .lt. n) exit
-            end do
-        else if (n .le. 7812524) then
-            do
-                call random_seed(get=seed)
-                call system_clock(count=c)
-                seed(1) = c
-                call random_seed(put=seed)
-                call random_number(x)
-                y = x * 7812524
-                rad = int(y)
-                if (rad .lt. n) exit
-            end do
-        else if (n .le. 15625024) then
-            do
-                call random_seed(get=seed)
-                call system_clock(count=c)
-                seed(1) = c
-                call random_seed(put=seed)
-                call random_number(x)
-                y = x * 15625024
-                rad = int(y)
-                if (rad .lt. n) exit
-            end do
-        else if (n .le. 31250024) then
-            do
-                call random_seed(get=seed)
-                call system_clock(count=c)
-                seed(1) = c
-                call random_seed(put=seed)
-                call random_number(x)
-                y = x * 31250024
-                rad = int(y)
-                if (rad .lt. n) exit
-            end do
-        else if (n .le. 62500024) then
-            do
-                call random_seed(get=seed)
-                call system_clock(count=c)
-                seed(1) = c
-                call random_seed(put=seed)
-                call random_number(x)
-                y = x * 62500024
-                rad = int(y)
-                if (rad .lt. n) exit
-            end do
-        else if (n .le. 125000024) then
-            do
-                call random_seed(get=seed)
-                call system_clock(count=c)
-                seed(1) = c
-                call random_seed(put=seed)
-                call random_number(x)
-                y = x * 125000024
-                rad = int(y)
-                if (rad .lt. n) exit
-            end do
-        else if (n .le. 250000024) then
-            do
-                call random_seed(get=seed)
-                call system_clock(count=c)
-                seed(1) = c
-                call random_seed(put=seed)
-                call random_number(x)
-                y = x * 250000024
-                rad = int(y)
-                if (rad .lt. n) exit
-            end do
-        else if (n .le. 500000024) then
-            do
-                call random_seed(get=seed)
-                call system_clock(count=c)
-                seed(1) = c
-                call random_seed(put=seed)
-                call random_number(x)
-                y = x * 500000024
-                rad = int(y)
-                if (rad .lt. n) exit
-            end do
-        else
-            do
-                call random_seed(get=seed)
-                call system_clock(count=c)
-                seed(1) = c
-                call random_seed(put=seed)
-                call random_number(x)
-                y = x * 9223372036854775807_8
-                rad = int(y, 8)
-                if (rad .lt. n) exit
-            end do
-        end if
-        deallocate(seed)
-        randon = rad
-    end function
+        integer(int64), intent(inout) :: s
+        integer i
+        do i = 1, 4
+            seed(i) = 1812433253 * xor(s, rshift(s, 30)) + i
+            s = 1812433253 * xor(s, rshift(s, 30)) + i
+        end do
+    end subroutine
+
+    integer(int64) function xor128()
+        use m_usc, only: seed
+        implicit none
+        integer(int64) a(4)
+        integer(int64) t, i
+        do i = 1, 4
+            a(i) = seed(i)
+        end do
+        t = xor(a(1), lshift(a(1), 11))
+        a(1) = a(2)
+        a(2) = a(3)
+        a(3) = a(4)
+        a(3) = xor(xor(a(3), rshift(a(3), 19)), xor(t, rshift(t, 8)))
+        xor128 = a(3)
+    end function xor128
 end subroutine randsu
 
 subroutine neipia() ! e = lim n->Infinity (1+1/n)**n | Σn=0 ∞ 1/n!
@@ -1781,7 +1698,7 @@ contains
         implicit none
         integer(int32) rad, c
         integer(int32) seedsize
-        real(real64) y, x
+        real(real64) y, x_
         integer, allocatable :: seed(:)
         call random_seed(size=seedsize)
         allocate(seed(seedsize))
@@ -1790,8 +1707,8 @@ contains
             call system_clock(count=c)
             seed(1) = c
             call random_seed(put=seed)
-            call random_number(x)
-            y = x * 10
+            call random_number(x_)
+            y = x_ * 10
             rad = int(y)
             if (rad .lt. 5) exit
         end do
@@ -2268,10 +2185,10 @@ contains
     integer(16) function f(x, y) result(z)
         implicit none
         integer(16), intent(in) :: x, y
-        integer(16) i
+        integer(16) j
         z = 0
         !$omp parallel do num_threads(4), reduction(+:z), shared(y)
-        do i = 1, x
+        do j = 1, x
             z = z + y
         end do
         !$omp end parallel do
@@ -2282,8 +2199,9 @@ subroutine slot()
     use, intrinsic :: iso_fortran_env, only: int32, int64, real64
     implicit none
     character char
-    integer(int64) i, j, x, a, b, c, k, L
+    integer(int64) i, j, x, a, b, c, k, L, w_
     i = 0; a = 0; b = 0; c = 0; k = 0; L = 0
+    w_ = time()
 11  loop :&
     &do j = 0, 3
         write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
@@ -2292,7 +2210,7 @@ subroutine slot()
         print '(A)', '└─────────────────┘'
         print '(A)', '\nEnterを押してください。'
         read (*, '(A)') char
-        x = randon()
+        x = randon(w_)
         select case (j)
         case (0)
             a = x
@@ -2339,38 +2257,15 @@ subroutine slot()
         L = L + 1
     end do loop
 contains
-    real(real64) function f(x, y) result(z)
+    integer(int64) function randon(w)
         implicit none
-        real(real64), intent(in) :: x
-        integer(int32), intent(in) :: y
-        integer(int32) i
-        z = 0.0_real64
-        !$omp parallel do num_threads(4), reduction(+:z), shared(x)
-        do i = 1, y
-            z = z + x
-        end do
-        !$omp end parallel do
-    end function
-
-    integer(int32) function randon()
-        implicit none
-        integer(int32) seedsize, c, rad
-        real(real64) y, x
-        integer, allocatable :: seed(:)
-        call random_seed(size=seedsize)
-        allocate(seed(seedsize))
-        l:do
-            call random_seed(get=seed)
-            call system_clock(count=c)
-            seed(1) = c
-            call random_seed(put=seed)
-            call random_number(x)
-            y = f(x, 10)
-            rad = int(y)
-            if (rad .lt. 10) exit l
-        end do l
-        deallocate(seed)
-        randon = rad
+        integer(int64), intent(inout) :: w
+        integer(int64), save :: x_=123456789, y=362436069, z=521288629
+        integer(int64) t
+        t = xor(x_, lshift(x_, 11))
+        x_ = y; y = z; z = w;
+        w = xor(xor(w, rshift(w, 19)), xor(t, rshift(t, 8)))
+        randon = mod(w, 10)
     end function
 end subroutine slot
 
@@ -2409,36 +2304,36 @@ subroutine kanzensu()
         read *
     end if
 contains
-    pure logical(int64) function is_prime(n)
+    pure logical(int64) function is_prime(n_)
         implicit none
-        integer(16), intent(in) :: n
-        integer(16) i
-        i = 3
-        select case(n)
+        integer(16), intent(in) :: n_
+        integer(16) i_
+        i_ = 3
+        select case(n_)
         case (0, 1)
             is_prime = .false.
         case (2, 3)
             is_prime = .true.
         end select
-        if (mod(n, 2) .eq. 0 .or. mod(n, 3) .eq. 0) is_prime = .false.
-        i = 5
-        do while((i * i) .le. n)
-            if (mod(n, i) .eq. 0 .or. mod(n, (i + 2)) .eq. 0) is_prime = .false.
-            i = i + 6
+        if (mod(n_, 2) .eq. 0 .or. mod(n_, 3) .eq. 0) is_prime = .false.
+        i_ = 5
+        do while((i_ * i_) .le. n_)
+            if (mod(n_, i_) .eq. 0 .or. mod(n_, (i_ + 2)) .eq. 0) is_prime = .false.
+            i_ = i_ + 6
         end do
         is_prime = .true.
     end function
 
-    real(real128) function pow(x, n)
+    real(real128) function pow(a, b)
         implicit none
-        real(real128), intent(in) :: x
-        integer(16), intent(in) :: n
+        real(real128), intent(in) :: a
+        integer(16), intent(in) :: b
         real(real128) k
-        integer(16) i
+        integer(16) i_
         k = 1
-        !$omp parallel do num_threads(4), reduction(*:k), shared(x)
-        do i = 1, n
-            k = k * x
+        !$omp parallel do num_threads(4), reduction(*:k), shared(a)
+        do i_ = 1, b
+            k = k * a
         end do
         !$omp end parallel do
         pow = k
@@ -2874,7 +2769,7 @@ contains
     pure logical(8) function f(x)
         implicit none
         integer(16), intent(in) :: x
-        integer(16) i
+        integer(16) j
         select case(x)
         case (0, 1)
             f = .false.
@@ -2887,13 +2782,13 @@ contains
             f = .false.
             return
         end if
-        i = 5
-        do while (i * i <= x)
-            if (mod(x, i) .eq. 0 .or. mod(x, (i + 2)) .eq. 0) then
+        j = 5
+        do while (j * j <= x)
+            if (mod(x, j) .eq. 0 .or. mod(x, (j + 2)) .eq. 0) then
                 f = .false.
                 return
             end if
-            i = i + 6
+            j = j + 6
         end do
         f = .true.
     end function f
