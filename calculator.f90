@@ -2497,81 +2497,84 @@ subroutine lifegame()
     use, intrinsic :: iso_fortran_env, only: int32, int64, real64
     implicit none
     integer(int64), parameter :: gridsize = 15
-    logical(int64) :: cells(0:gridsize + 1, 0:gridsize + 1) = .false.
-    integer(int32), allocatable :: seed(:)
-    integer(int64) i, j, k, max
-    integer(int32) seedsize
-    real(real64) rnums(gridsize, gridsize)
+    integer(int64), allocatable :: field(:, :)
+    integer(int64), allocatable :: neighbors(:, :)
+    integer(int64) max, i
 
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
     print '(A)', 'n世代まで(数値を入力)'
     read (*, *, iostat=err) max
     print *, 'お待ちください。'
 
-    call random_seed(size=seedsize)
-    allocate(seed(seedsize))
-    do i = 1, seedsize
-        call system_clock(count=seed(i))
-    end do
-    call random_seed(put=seed(:))
-    call random_number(rnums)
-    where (rnums .gt. 0.80_real64) cells(1:gridsize, 1:gridsize) = .true.
-    deallocate(seed)
-    
     write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-    write (*, '(A)', advance='no') '-----------------\n'
-    call p(cells(1:gridsize, 1:gridsize))
-    write (*, '(A)', advance='no') '-----------------'
+    write (*, '(A)', advance='no') '---------------------------\n'
+    call init_field(0.50_8)
+    call print_field()
+    write (*, '(A)', advance='no') '---------------------------'
     call sleep(1)
-    do k = 2, max
+
+    do i = 2, max
         write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
-        write (*, '(A)', advance='no') '-----------------\n'
-        call n(cells)
-        call p(cells(1:gridsize, 1:gridsize))
-        write (*, '(A)', advance='no') '-----------------'
+        write (*, '(A)', advance='no') '---------------------------\n'
+        call one_epoch()
+        call print_field()
+        write (*, '(A)', advance='no') '---------------------------'
         call sleep(1)
     end do
     print '(A)', '\nThe End.'
     read *
 contains
-    subroutine p(cells)
-        logical(int64), intent(in) :: cells(:,:)
-        do concurrent (i = 1: size(cells, 1))
-            block
-            do concurrent (j = 1: size(cells, 2))
-                block
-                if (cells(i,j)) then
+    subroutine init_field(start_ratio)
+        real(real64), intent(in) :: start_ratio
+        real(real64), allocatable :: s(:, :)
+        integer(int32), allocatable :: seed(:)
+        integer(int32) c, sz
+        allocate(field(gridsize, gridsize+10))
+        allocate(s(gridsize, gridsize+10))
+        allocate(neighbors(gridsize, gridsize+10))
+        call random_seed(size=sz)
+        allocate(seed(sz))
+        call random_seed(get=seed)
+        call system_clock(count=c)
+        seed(1) = c
+        call random_seed(put=seed)
+        call random_number(s)
+        field = int(s + start_ratio)
+    end subroutine init_field
+
+    subroutine print_field()
+        implicit none
+        integer(int64) j, k, l
+        do l = 1, gridsize
+            do j = 1, gridsize+10
+                k = field(l, j)
+                if (k .ne. 0)  then
                     write (*, '(A)', advance='no') '*'
                 else
                     write (*, '(A)', advance='no') ' '
                 end if
-                end block
             end do
             print *, '|'
-            end block
         end do
-    end subroutine p
+    end subroutine print_field
 
-    pure subroutine n(cells)
-        logical(int64), intent(out) :: cells(:,:)
-        integer(int64) :: buffer(1:size(cells, 1) - 2, 1:size(cells, 2) - 2)
-        integer(int64) gridsize, i, j
-        gridsize = size(cells, 1)
-        buffer = 0
-        l:do j = -1, 1
-            z:do i = -1, 1
-                if (i .eq. 0 .and. j .eq. 0) then
-                    cycle l
-                end if
-                where (cells((i + 2):(gridsize - i - 1), (j + 2):(gridsize - j - 1))) buffer = buffer + 1
-            end do z
-        end do l
-        where (buffer .lt. 2 .or. buffer .gt. 3)
-            cells(2:gridsize - 1, 2:gridsize - 1) = .false.
-        else where (buffer .eq. 3)
-            cells(2:gridsize - 1, 2:gridsize - 1) = .true.
-        end where
-    end subroutine n
+    subroutine one_epoch()
+        implicit none
+        integer(int64) dx, dy
+        
+        neighbors = 0
+        do concurrent (dx = -1: 1, dy = -1: 1)
+            neighbors = neighbors + cshift(cshift(field, dx, 1), dy, 2)
+        end do
+        
+        where (neighbors .eq. 3)
+            field = 1
+        else where (neighbors .eq. 4)
+            field = field
+        else where
+            field = 0
+        endwhere
+    end subroutine one_epoch
 end subroutine lifegame
 
 subroutine lumi_distance()
@@ -2624,14 +2627,14 @@ subroutine lumi_distance()
     print*, '\nEnterを押してください。'
     read *
 contains
-    pure real(real128) function f(x) !関数
+    pure real(real128) function f(x_) !関数
         implicit none
         real(real128), parameter :: C = 299792.4580_real128
         real(real128), parameter :: OMEGA_M = 0.30_real128
         real(real128), parameter :: OMEGA_L = 0.70_real128
         real(real128), parameter :: H_0 = 70.0_real128
-        real(real128), intent(in) :: x
-        f = C / H_0 / sqrt(OMEGA_M * ((1.0_real128 + x) ** 3_int64) + OMEGA_L)
+        real(real128), intent(in) :: x_
+        f = C / H_0 / sqrt(OMEGA_M * ((1.0_real128 + x_) ** 3_int64) + OMEGA_L)
     end function
 end subroutine lumi_distance
 
@@ -2738,6 +2741,7 @@ subroutine fibonattisuretu()
 end subroutine fibonattisuretu
 
 subroutine sosukaizyou()
+    use iso_fortran_env, only: int64
     use m_usc, only: err, z
     implicit none
     integer(16) x, y, i
@@ -2766,11 +2770,11 @@ subroutine sosukaizyou()
     print*, '\nEnterを押してください。'
     read *
 contains
-    pure logical(8) function f(x)
+    pure logical(int64) function f(x_)
         implicit none
-        integer(16), intent(in) :: x
+        integer(16), intent(in) :: x_
         integer(16) j
-        select case(x)
+        select case(x_)
         case (0, 1)
             f = .false.
             return
@@ -2778,13 +2782,13 @@ contains
             f = .true.
             return
         end select
-        if (mod(x, 2) .eq. 0 .or. mod(x, 3) .eq. 0) then
+        if (mod(x_, 2) .eq. 0 .or. mod(x_, 3) .eq. 0) then
             f = .false.
             return
         end if
         j = 5
-        do while (j * j <= x)
-            if (mod(x, j) .eq. 0 .or. mod(x, (j + 2)) .eq. 0) then
+        do while (j * j <= x_)
+            if (mod(x_, j) .eq. 0 .or. mod(x_, (j + 2)) .eq. 0) then
                 f = .false.
                 return
             end if
@@ -3381,7 +3385,7 @@ contains
     subroutine rsa()
         use m_usc, only: err
         implicit none
-        character(256) str
+        character(256) str_
         l:do
             write(*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
             print '(A)', '\nSimple RSA cryptography'
@@ -3392,12 +3396,12 @@ contains
             print *, '99 終了'
             print '(A)', '-----------------------------------------'
             write (*, '(A)', advance='no') ': '
-            read (*, '(A)') str
-            z:select case (str)
+            read (*, '(A)') str_
+            z:select case (str_)
             case ('1')
                 write(*, '(A)', advance='no') '\nCalculating...'
                 block
-                integer(16) p, q, n, L_, e, d, plain_n, tmp, encryp_n, i
+                integer(16) p, q, n, L_, e, d, plain_n, tmp, encryp_n!, i
 
                 p = prime_N()
                 q = prime_N()
@@ -3417,16 +3421,20 @@ contains
                 L_ = Lcm(p - 1, q - 1)
 
                 e = 65537
-                do while (gcd(L_, e) .ne. 1)
+                do while (extGCD(L_, e) .ne. 1)
                     e = e + 1
                 end do
 
-                m:do i = 100000005, L_, 2
-                    if (mod((e * (i-1)), L_) .eq. 1 .or. mod((e * i), L_) .eq. 1) then
-                        d = i
-                        exit m
-                    end if
-                end do m
+                d = extGCD(e, L_)
+                do while (mod(e * d, L_) .ne. 1)
+                    d = d + 1
+                end do
+                !m:do i = 100005, L_, 2
+                !    if (mod((e * (i-1)), L_) .eq. 1 .or. mod((e * i), L_) .eq. 1) then
+                !        d = i
+                !        exit m
+                !    end if
+                !end do m
 
                 print '("\r              \rN: ", I0&
                 &, 3X, "E: ", I0, 3X, "D: ", I0)', n, e, d
@@ -3483,7 +3491,7 @@ contains
         seed(1) = c
         call random_seed(put=seed)
         call random_number(x)
-        y = 1000000_16 * x
+        y = 100000_16 * x
         deallocate(seed)
         randon = int(y, 16)
     end function randon
@@ -3512,6 +3520,22 @@ contains
         end do l
         prime_N = num
     end function prime_N
+
+    pure recursive integer(16) function extGCD(a, b) result(d)
+        implicit none
+        integer(16), intent(in) :: a, b
+        integer(16) x, y
+        x = 1; y = 1;
+        if (b .eq. 0) then
+            x = 1
+            y = 0
+            d = a
+            return
+        end if
+        d = extGCD(b, mod(a, b))
+        y = y - a / b * x
+        d = d
+    end function extGCD
 
     pure recursive integer(16) function gcd(x, y) result(z)
         implicit none
