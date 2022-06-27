@@ -2494,7 +2494,7 @@ end subroutine tan_h
 
 subroutine lifegame()
     use m_usc, only: err
-    use, intrinsic :: iso_fortran_env, only: int32, int64, real64
+    use, intrinsic :: iso_fortran_env, only: int64, real64
     implicit none
     integer(int64), parameter :: gridsize = 15
     integer(int64), allocatable :: field(:, :)
@@ -2524,21 +2524,28 @@ subroutine lifegame()
     print '(A)', '\nThe End.'
     read *
 contains
+    integer(int64) function xor128(w)
+        implicit none
+        integer(int64), intent(inout) :: w
+        integer(int64), save :: x=123456789, y=362436069, z=521288629
+        integer(int64) t
+        t = xor(x, lshift(x, 11))
+        x = y; y = z; z = w;
+        w = xor(xor(w, rshift(w, 19)), xor(t, rshift(t, 8)))
+        xor128 = w
+    end function xor128
+
     subroutine init_field(start_ratio)
         real(real64), intent(in) :: start_ratio
         real(real64), allocatable :: s(:, :)
-        integer(int32), allocatable :: seed(:)
-        integer(int32) c, sz
+        integer(int64) seed
+        real(real64) u
         allocate(field(gridsize, gridsize+10))
         allocate(s(gridsize, gridsize+10))
         allocate(neighbors(gridsize, gridsize+10))
-        call random_seed(size=sz)
-        allocate(seed(sz))
-        call random_seed(get=seed)
-        call system_clock(count=c)
-        seed(1) = c
-        call random_seed(put=seed)
-        call random_number(s)
+        seed = time()
+        u = mod(xor128(seed), 10)
+        s = u / 10
         field = int(s + start_ratio)
     end subroutine init_field
 
@@ -3479,43 +3486,36 @@ contains
         end do l
     end subroutine rsa
 
-    integer(16) function randon()
+    integer(int64) function xor128(w)
         implicit none
-        integer(int32) c, seedsize
-        real(real128) y, x
-        integer, allocatable :: seed(:)
-        call random_seed(size=seedsize)
-        allocate(seed(seedsize))
-        call random_seed(get=seed)
-        call system_clock(count=c)
-        seed(1) = c
-        call random_seed(put=seed)
-        call random_number(x)
-        y = 100000_16 * x
-        deallocate(seed)
-        randon = int(y, 16)
-    end function randon
+        integer(int64), intent(inout) :: w
+        integer(int64), save :: x=123456789, y=362436069, z=521288629
+        integer(int64) t
+        t = xor(x, lshift(x, 11))
+        x = y; y = z; z = w;
+        w = xor(xor(w, rshift(w, 19)), xor(t, rshift(t, 8)))
+        xor128 = w
+    end function xor128
 
     integer(16) function prime_N()
         implicit none
-        integer(16) i, t, num, a(4)
-        a = [2, 3, 5, 7]
+        integer(16) i, num
+        integer(int64) u
+        u = time()
         l:do while (.true.)
-            num = randon()
-            z:do i = 1, 4
-                do while (modulo(num, a(i)) .eq. 0)
-                    cycle l
-                end do
-            end do z
-            t = int(sqrt(real(num, real128)), 16)
-            m:do i = 11, t, 2
-                if (modulo(i, 3) .eq. 0 .or. modulo(i, 5) .eq. 0 .or. modulo(i, 7) .eq. 0) then
-                    cycle m
-                else if (modulo(num, i) .eq. 0) then
+            num = mod(xor128(u), 100000)
+            if (num < 2) then
+                cycle l
+            else if (mod(num, 2) .eq. 0 .or. mod(num, 3) .eq. 0) then
+                cycle l
+            end if
+            i = 5
+            m:do while (i * i <= num)
+                if (mod(num, i) .eq. 0 .or. mod(num, (i + 2)) .eq. 0) then
                     cycle l
                 end if
+                i = i + 6
             end do m
-            if (num .ne. 1) exit l
             exit l
         end do l
         prime_N = num
