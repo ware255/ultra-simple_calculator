@@ -2691,7 +2691,7 @@ contains
         integer(int64), intent(in) :: k
         integer(int64) x(0:prec), unity(0:prec), n, t
         unity = [1, (0, n = 1, prec)]
-        x = 0
+        x = 0; t = 0
 
         select case (k) !t = k * k
         case (49_int64)
@@ -2805,6 +2805,80 @@ contains
     end function f
 end subroutine sosukaizyou
 
+subroutine nPr() ! n!/(n-r)!
+    use m_usc, only: err, z
+    use, intrinsic :: iso_fortran_env, only: real128, int64
+    implicit none
+    integer(int64) n, r
+    n = 0; r = 0
+    write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    print '(A)', 'nの値を入力してください。'
+    write (*, *, iostat=err) n
+    if (err .ne. 0) then
+        print*, '\nError'
+        read *
+    end if
+    print '(A)', 'rの値を入力してください。'
+    write (*, *, iostat=err) r
+    if (err .ne. 0) then
+        print*, '\nError'
+        read *
+    end if
+    print*, '\n答え'
+    z = kaizyou(n) / kaizyou(n - r)
+    print*, int(z, 16)
+    print*, '\nEnterを押してください。'
+    read *
+contains
+    pure integer(int64) function kaizyou(x)
+        implicit none
+        integer(int64), intent(in) :: x
+        integer(int64) k, y
+        y = 1
+        do k = 1, x
+            y = y * k
+        end do
+        kaizyou = y
+    end function kaizyou
+end subroutine nPr
+
+subroutine nCr() ! n!/(n-r)!r!
+    use m_usc, only: err, z
+    use, intrinsic :: iso_fortran_env, only: real128, int64
+    implicit none
+    integer(int64) n, r
+    n = 0; r = 0
+    write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
+    print '(A)', 'nの値を入力してください。'
+    write (*, *, iostat=err) n
+    if (err .ne. 0) then
+        print*, '\nError'
+        read *
+    end if
+    print '(A)', 'rの値を入力してください。'
+    write (*, *, iostat=err) r
+    if (err .ne. 0) then
+        print*, '\nError'
+        read *
+    end if
+    print*, '\n答え'
+    z = kaizyou(n) / kaizyou(n - r) * kaizyou(r)
+    print*, int(z, 16)
+    print*, '\nEnterを押してください。'
+    read *
+contains
+    pure integer(int64) function kaizyou(x)
+        implicit none
+        integer(int64), intent(in) :: x
+        integer(int64) k, y
+        y = 1
+        do k = 1, x
+            y = y * k
+        end do
+        kaizyou = y
+    end function kaizyou
+end subroutine nCr
+
 !subroutine test() !テンプレート
 !    use, intrinsic :: iso_fortran_env, only: real128, int64
 !    implicit none
@@ -2822,6 +2896,8 @@ subroutine page_04()
         write (*, '(A)', advance='no') '\x1b[2J\x1b[3J\x1b[H'
         print '(A)', '\n-----------------------------------------'
         print*, '1 素数階乗'
+        print*, '2 nPr'
+        print*, '2 nCr'
         print*, '99 終了           03 Back'
         print '(A)', '-----------------------------------------'
         write (*, '(A)', advance='no') ': '
@@ -2829,6 +2905,8 @@ subroutine page_04()
         select case(str)
         case ('1')
             call sosukaizyou()
+        case ('2')
+        case ('3')
         case ('00')
             call page_00()
         case ('01')
